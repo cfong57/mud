@@ -1,0 +1,64 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("A large Chain-Chomp"); 
+  set_long(wrap("This interesting monster consists of a head, about one meter "+
+  "in diameter, attached to a short chain. The head is spherical in shape and "+
+  "made entirely of some unknown metal. It is extremely hard and is almost "+
+  "impossible to damage. It has two eyes and an enormous set of "+
+  "lethal-looking teeth. The Chain-Chomp moves by hopping and bouncing, "+
+  "dragging its chain behind it. Aside from having astronomical defence, "+
+  "Chain-Chomps are nearly impervious to all types of damage due to their "+
+  "metallic bodies. Of course, that means they are weak to lightning and "+
+  "especially acid; they don't have great magic resistance either. This one "+
+  "is tethered to a mithril stake and it leaps at you, baring its teeth and "+
+  "letting out 'Yip yip!' sounds. It would almost look cute if it wasn't "+
+  "trying to bite your leg off. Seems like Allanon is very careful about "+
+  "guarding her workroom...Chain-Chomps are extremely expensive to import, "+
+  "since they come all the way from 'Mario Land 3'.\n"));
+  set_name("Chain-Chomp");
+  set_id(({"large chain-chomp", "chain-chomp", "chomp"}));
+  set_level(100); 
+  set_species("Chain-Chomp");
+  set_body_parts(({"body", 70, 0.01, "body", "chain", 30, 0.01, "chain"}));         
+  set_stat("size",100);
+  add_natural_weapon("teeth", "slashing", 1);
+  add_natural_weapon("bite", "piercing", 0);
+  natural_weapon_damage(3500+random(750), "teeth");
+  natural_weapon_damage(5000+random(1250), "bite");
+  set_gender("neuter");
+  set_agrochance(100);
+  set_skin_data("type", "none");
+  set_speed(0);
+  set_wealth( ([ "mithril" : 0, "platinum" : 0, "gold" : 0, "silver" : 0 ]) ); 
+  set_random_resistances(0);
+  set_resistance("fire",99); 
+  set_resistance("cold",99); 
+  set_resistance("lightning",-75); 
+  set_resistance("acid",-100); 
+  set_resistance("poison",99); 
+  set_resistance("psionic",99); 
+  set_resistance("sonic",99); 
+  set_resistance("asphyxiation",99); 
+  set_resistance("magical",25); 
+  set_resistance("physical",99); 
+  set_natural_ac(10000);
+  set_following(0);
+  set_heartless(1);
+  set_alt_corpse("/u/a/allanon/monsters/chomp"); 
+  set_chat_chance(10);
+  set_chat_output(({
+  "The Chain-Chomp makes a mad leap at you, just narrowly avoiding your "+
+  "head.\n",
+  "The Chain-Chomp eyes you hungrily and snarls.\n",
+  "The Chain-Chomp bounces up and down and goes 'Yip! Yip! Yip yip!'.\n",
+  "The Chain-Chomp lunges at you, and only its short chain keeps you from "+
+  "losing a limb.\n"}));
+  set_inquiry((["$GREET": "Yip yip!", "$DEFAULT" : "Grr! Yip! Yip!"]));
+  set_blocking_dirs(([
+  "other" : "The Chain-Chomp lunges at you, blocking your way.\n"]));
+  set_exp_mod(1); 
+}

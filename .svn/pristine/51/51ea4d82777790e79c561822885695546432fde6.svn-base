@@ -1,0 +1,40 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+void extra_create()
+{
+  set_short("At the Granite Arch");
+  add_monster("/u/a/allanon/areas/necropolis/mon/scholar.c");
+  set_long(wrap("You are standing in front of a huge arch, made of granite. "+
+  "You've heard legends about this place: it was supposedly formed when two "+
+  "giant stalagtites fused at the top, creating an arch. Strangely, the "+
+  "arch was later covered with granite, and no one knows if the original two "+
+  "stalagtites are still in its foundation. There is a massive door set into "+
+  "the arch, made of plated bone. The road from here only leads back in the "+
+  "same direction, namely, south.\n"));
+  set_item_desc(([({"granite", "granite arch", "arch"}) : "It is an amazing "+
+  "sight to behold. You think it would make a great tourist attraction if "+
+  "this place wasn't full of undead.\n"]));
+  set_light(50); 
+  set_sounds(120,({ 
+	              "You can't help but wonder in awe at the size of the arch.\n", 
+	              "The door has no lock, which seems curious...\n"})); 
+  set_exits(([
+  "south" : "/u/a/allanon/areas/necropolis/rooms/hallway_1.c",  
+  "north" : "/u/a/allanon/areas/necropolis/rooms/citadel.c"]));
+  create_door("north", "south", 
+  (["short" : "massive door made of bone", 
+  "long" : "The huge door is made of plated bone. There is no lock on it, at "+
+  "least none that you can see. Even though bone is not a very strong "+
+  "material, the door looks quite sturdy.\n", 
+  "key" : "/u/a/allanon/areas/necropolis/obj/necrolamp.c", 
+  "status" : "locked", 
+  "autolock" : 1, 
+  "autoclose" : 15, 
+  "quality" : 1000, //unbreakable 
+  "material" : "bone", 
+  "close_msg" : "You close the massive door of bone.\n", 
+  "open_msg" : "You open the massive door of bone.\n"]));
+}

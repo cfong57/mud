@@ -1,0 +1,75 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+void extra_create()
+{
+  set_no_teleport(1); 
+  set_short( "Outside a cottage, deep in the woods" );
+  set_long(wrap("You are standing outside of a cottage, hidden away here "+
+  "deep in the woods. The trees and bushes all around form a perfect wall to "+
+  "deter prying eyes; this would be a great place to conduct clandestine "+
+  "business. A dull glow emanates from a crack under the door of the cottage, "+
+  "and a thin stream of smoke comes from its chimney: someone is clearly "+
+  "at home. You wonder what they could be doing in such a remote place. A "+
+  "woodpile in a corner of the otherwise bare yard is stacked high with "+
+  "well-cut logs. Maybe whoever lives here has been stealing from the goblin "+
+  "lumberjacks.\n"));
+  set_outdoors("p");
+  set_outside("p");
+  set_item_desc(([
+  "cottage" : "The cottage is of a simple design, stone and brick "+
+  "fitted together with some sort of mortar. While it is no architectural "+
+  "masterpiece, it looks sturdy enough, and one could surely live in comfort "+
+  "here regardless of the weather.\n", 
+  ({"trees", "bushes", "wall", "woods", "green"}) : "The vegetation forms an "+
+  "impenetrable wall of green. Even from just a meter outside the cleared "+
+  "space of the yard, you would not be able to see this cottage at all.\n",
+  ({"dull glow", "glow", "crack"}) : "The dull glow of a low "+
+  "fireplace leaks through a crack beneath the door, letting you know that "+
+  "this place is inhabited.\n",
+  ({"smoke", "chimney"}) : "Small wisps of smoke come out of the cottage's "+
+  "chimney, which is made of bricks. It looks too narrow to climb down, and "+
+  "with the fire going, it would be a poor idea anyway.\n",
+  "yard" : "The yard is just a barren space carved out of the surrounding "+
+  "plants. It must take a fair amount of maintenance to keep the space clear, "+
+  "since the forest is constantly trying to reclaim its ground.\n"]));  
+  add_item(({"woodpile", "logs", "corner"}), "Upon closer inspection you find "+
+  "that the 'woodpile' is not actually made of wood at all, but rather it is "+
+  "a very cleverly designed illusion of a woodpile, much like a mage's "+
+  "'Mirror Image' spell generates an illusory copy. You try to touch it, but "+
+  "you meet with no resistance. It is realistic down to the last detail, but "+
+  "in the end, you know that imaginary logs won't burn. Since it isn't even "+
+  "here in the first place, you wonder if maybe it is concealing something "+
+  "underneath.\n");
+  add_item_search( ({ "woodpile", "logs" }), "search_woodpile");
+  set_hidden_exits( ({ "ladder" }) );            
+  set_exits((["in" : "/u/a/allanon/areas/lumber_camp/rooms/cottage.c",
+  "forest" : "/u/a/allanon/areas/lumber_camp/rooms/lostwoods.c",
+  "ladder" : "/u/a/allanon/areas/lumber_camp/rooms/dungeon_entrance.c"]));
+  set_exit_msg( ([ "ladder" : 
+  "$N approaches the woodpile and suddenly disappears into it." ]));
+  create_door("in", "out",
+  (["short" : "door, made out of a solid slab of oak",
+  "long" : "The door is made of a solid slab of oak. There is no lock, but "+
+  "you suspect there would be a beam on the inside to brace against "+
+  "unwanted visitors.\n",
+  "status" : "closed",
+  "ids" : ({ "door", "wood door", "wooden door" }),
+  "autoclose" : 60,
+  "quality" : 350,
+  "material" : "wood",
+  "close_msg" : "The heavy oaken door swings shut.\n",
+  "open_msg" : "You open the wooden door.\n"  ]) ); 
+}
+
+void search_woodpile()
+{
+  message("search", "You closely examine the woodpile, moving through it "+
+  "as if it weren't there. Eventually you feel what seems to be a ladder "+
+  "leading down somewhere.\n", this_player());
+  message("search", ""+this_player()->query_cap_name()+" searches the "+
+  "woodpile carefully, seeming to move right through it. How strange.\n",
+  environment(this_player()), this_player());
+}

@@ -1,0 +1,67 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+string hookfunc()
+{
+  string returnme = "Some steel hooks have been set into the walls near the "+
+  "doors. Patrons could hang their coats here while they dine.\n";
+  string temp = query_contents("foyer");
+  if(temp != "")
+  {
+    returnme += temp;
+  }
+  else
+  {
+    returnme += "The hooks are empty right now.\n";		  
+  }
+  return returnme;
+}
+
+void extra_create()
+{
+  set_no_teleport(1);
+  set_short("Dining room of Wildcat Cafe");
+  set_long(wrap("This is the foyer of Wildcat Cafe. There are some hooks set "+
+  "into the walls near the doors for patrons to hang their coats on. Lush red "+
+  "carpeting covers the floor, and there are some pleasant potted ferns in "+
+  "the corners of the room. A receptionist's desk is set up in the middle. "+
+  "There are two arrow-shaped signs attached to the receptionist's desk, one "+
+  "pointing west and one pointing east. To the west is a spacious-looking "+
+  "dining room; a door to the east hides whatever is in that room.\n"));
+  set_item_desc(([
+  ({"hooks", "walls", "coats"}) : (: hookfunc :),
+  ({"lush red carpeting", "red carpeting", "carpeting", "lush carpeting"}) : 
+  "The carpet is very plush; it looks brand-new. You are not sure what type "+
+  "of fiber it is made of, but it is dyed a familiar blood-red.\n",
+  "floor" : "The floor is covered with red carpet in most places. The exposed "+
+  "areas are richly done with tiles, also in red.\n",
+  ({"exposed areas", "areas", "tiles", "tile"}) : "You are not sure what kind "+
+  "of rock was used to make these tiles so red. It certainly seems to be a "+
+  "popular color with the decorators here.\n",
+  ({"potted ferns", "ferns"}) : "There are some pots in the corners of the "+
+  "room, housing nondescript ferns. The green of the ferns is a welcome "+
+  "contrast to the red covering much of the room.\n",
+  "corners": "Some potted ferns reside in the corners of the room. Otherwise, "+
+  "they are empty - and immaculately dust-free.\n",
+  ({"receptionist's desk", "receptionist desk", "desk"}) : "This desk is made "+
+  "of maple, and it has been polished to a shiny finish. A book of records "+
+  "lies open on top, with a quill and inkwell sitting next to it. There are "+
+  "two arrow-shaped signs attached to the receptionist's desk.\n",
+  ({"book of records", "book", "records"}) : "The book is full of names. Next "+
+  "to each name is written a time and date, and sometimes the word 'member'. "+
+  "Looks like this is the log of all the comings and goings of patrons.\n",
+  ({"quill", "inkwell"}) : "A quill and inkwell sit next to the book of "+
+  "records. The quill is from some bird with red plumage, and the ink in the "+
+  "inkwell is, unsurprisingly, also red.\n",
+  "ink" : "The ink has the same shade as blood.\n",
+  ({"arrow-shaped signs", "signs"}) : "The sign pointing to the west says "+
+  "'Dining'. The sign pointign to the east says 'Members Only'.\n"]));
+  set_sounds(180 + random(15), ({ 
+  "The receptionist flips through the book of records, checking for any "+
+  "inaccuracies.\n", 
+  "The smell of meat is in the air. It is coming from both the west and the "+
+  "east, but the aroma from the east is somehow more...appetizing. You wonder "+
+  "what kind of meat is in there.\n"})); 
+  set_exits((["east" : "/u/a/allanon/area/cafe/rooms/foyer.c"]));
+}

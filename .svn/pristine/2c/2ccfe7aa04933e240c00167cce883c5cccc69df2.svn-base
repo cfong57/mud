@@ -1,0 +1,122 @@
+/* Contains Allanon's armour set, located at her workroom. */
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit CONTAINER;
+
+object amulet;
+object armour;
+object bandana;
+object belt;
+object boots;
+object bracelet1;
+object bracelet2;
+object cloak;
+object clothes;
+object earrings;
+object gauntlets;
+object helm;
+object necklace;
+object pants;
+object ring1;
+object ring2;
+
+int refill_command(string cmd)
+{
+	if ( cmd == "rack" )
+	{
+        object p = this_player();
+        object b = this_object(); 
+        {
+      message("info","You poke the armour rack, and suddenly a new set of "+
+      "armours appears on it.\n",p); 
+      message("info",""+p->query_cap_name()+" pokes the armour rack and "+
+      "suddenly a new set of armours appears on it.\n",environment(p),p);
+      amulet = new("/u/a/allanon/objects/amulet.c");
+      amulet->move(b,1);
+      armour = new("/u/a/allanon/armours/armour.c");
+      armour->move(b,1);
+      bandana = new("/u/a/allanon/armours/bandana.c");
+      bandana->move(b,1);
+      belt = new("/u/a/allanon/armours/belt.c");
+      belt->move(b,1);
+      boots = new("/u/a/allanon/armours/boots.c");
+      boots->move(b,1);
+      bracelet1 = new("/u/a/allanon/armours/bracelet.c"); 
+      bracelet1->move(b,1);
+      bracelet2 = new("/u/a/allanon/armours/bracelet.c");
+      bracelet2->move(b,1);
+      cloak = new("/u/a/allanon/armours/cloak.c");
+      cloak->move(b,1);
+      clothes = new("/u/a/allanon/armours/blouse.c");
+      clothes->move(b,1);
+      earrings = new("/u/a/allanon/armours/earrings.c");
+      earrings->move(b,1);
+      gauntlets = new("/u/a/allanon/armours/gauntlets.c");
+      gauntlets->move(b,1);
+      helm = new("/u/a/allanon/armours/helm.c");
+      helm->move(b,1);
+      necklace = new("/u/a/allanon/armours/necklace.c");
+      necklace->move(b,1);
+      pants = new("/u/a/allanon/armours/pants.c");
+      pants->move(b,1);
+      ring1 = new("/u/a/allanon/armours/ring.c");
+      ring1->move(b,1);
+      ring2 = new("/u/a/allanon/armours/ring2.c");
+      ring2->move(b,1);
+	  return 1;
+       }
+  return notify_fail("Refill what?\n");  
+    }
+}  
+
+int clear_command(string cmd) 
+{        
+ if ( cmd == "rack" ) 
+ { 
+        object p = this_player();
+        object b = this_object(); 
+        mapping rack = ([ ]);  
+        foreach( object o in all_inventory(b))
+        {
+	    rack[ file_name(o)] = o; 
+        message("info","You clear the armour rack.\n",p); 
+        message("info",""+p->query_cap_name()+" clears the armour rack.\n",
+        environment(p),p);
+        foreach(string k, object r in rack) if ( r != this_object())r->remove();
+        deep_inventory(this_object())->remove();
+        return 1; 
+        }           
+ } 
+    return notify_fail("Clear what? -OR- The armour rack is already empty.\n");        
+} 
+
+void extra_init() 
+{ 
+    add_action("refill_command","refill"); 
+    add_action("clear_command","clear"); 
+} 
+
+/* Ie....Use Clear to clear the rack, and Refill to fill it up again. */
+
+void extra_create()
+{
+  set_short("An armour rack");
+  set_long(wrap("It's a rack, bolted to the wall. Various armours are "+
+  "attached to it.\n"+
+  "TO REFILL: 'refill rack'.\n"+
+  "TO EMPTY: 'empty rack'.\n"+
+  "Note: Technically you could put other stuff in the rack, but 'empty' will "+
+  "still delete them.\n"));
+  set_name("armour rack");
+  set_id( ({ "armour rack", "rack"}) );
+  set_mass(1);
+  set_bulk(1);
+  set_possible_to_close(1);
+  set_capacity(2147483647);
+  set_volume(2147483647);
+  set_dynamic_bulk(100);
+  set_prevent_get(1);
+  set_prevent_drop(1);
+}

@@ -1,0 +1,361 @@
+//#pragma save_types
+
+#include <mudlib.h>
+//#include "chess.h"
+
+inherit ROOM;
+
+#define A1 CHESSBOARD["A1"]
+#define B1 CHESSBOARD["B1"]
+#define C1 CHESSBOARD["C1"]
+#define D1 CHESSBOARD["D1"]
+#define E1 CHESSBOARD["E1"]
+#define F1 CHESSBOARD["F1"]
+#define G1 CHESSBOARD["G1"]
+#define H1 CHESSBOARD["H1"]
+#define A2 CHESSBOARD["A2"]
+#define B2 CHESSBOARD["B2"]
+#define C2 CHESSBOARD["C2"]
+#define D2 CHESSBOARD["D2"]
+#define E2 CHESSBOARD["E2"]
+#define F2 CHESSBOARD["F2"]
+#define G2 CHESSBOARD["G2"]
+#define H2 CHESSBOARD["H2"]
+#define A3 CHESSBOARD["A3"]
+#define B3 CHESSBOARD["B3"]
+#define C3 CHESSBOARD["C3"]
+#define D3 CHESSBOARD["D3"]
+#define E3 CHESSBOARD["E3"]
+#define F3 CHESSBOARD["F3"]
+#define G3 CHESSBOARD["G3"]
+#define H3 CHESSBOARD["H3"]
+#define A4 CHESSBOARD["A4"]
+#define B4 CHESSBOARD["B4"]
+#define C4 CHESSBOARD["C4"]
+#define D4 CHESSBOARD["D4"]
+#define E4 CHESSBOARD["E4"]
+#define F4 CHESSBOARD["F4"]
+#define G4 CHESSBOARD["G4"]
+#define H4 CHESSBOARD["H4"]
+#define A5 CHESSBOARD["A5"]
+#define B5 CHESSBOARD["B5"]
+#define C5 CHESSBOARD["C5"]
+#define D5 CHESSBOARD["D5"]
+#define E5 CHESSBOARD["E5"]
+#define F5 CHESSBOARD["F5"]
+#define G5 CHESSBOARD["G5"]
+#define H5 CHESSBOARD["H5"]
+#define A6 CHESSBOARD["A6"]
+#define B6 CHESSBOARD["B6"]
+#define C6 CHESSBOARD["C6"]
+#define D6 CHESSBOARD["D6"]
+#define E6 CHESSBOARD["E6"]
+#define F6 CHESSBOARD["F6"]
+#define G6 CHESSBOARD["G6"]
+#define H6 CHESSBOARD["H6"]
+#define A7 CHESSBOARD["A7"]
+#define B7 CHESSBOARD["B7"]
+#define C7 CHESSBOARD["C7"]
+#define D7 CHESSBOARD["D7"]
+#define E7 CHESSBOARD["E7"]
+#define F7 CHESSBOARD["F7"]
+#define G7 CHESSBOARD["G7"]
+#define H7 CHESSBOARD["H7"]
+#define A8 CHESSBOARD["A8"]
+#define B8 CHESSBOARD["B8"]
+#define C8 CHESSBOARD["C8"]
+#define D8 CHESSBOARD["D8"]
+#define E8 CHESSBOARD["E8"]
+#define F8 CHESSBOARD["F8"]
+#define G8 CHESSBOARD["G8"]
+#define H8 CHESSBOARD["H8"]
+
+#define R "%^BOLD%^%^RED%^R%^RESET%^" //enemy rook
+#define N "%^BOLD%^%^RED%^N%^RESET%^" //enemy knight
+#define B "%^BOLD%^%^RED%^B%^RESET%^" //enemy bishop
+#define Q "%^BOLD%^%^RED%^Q%^RESET%^" //enemy queen
+#define K "%^BOLD%^%^RED%^K%^RESET%^" //enemy king
+#define P "%^BOLD%^%^RED%^P%^RESET%^" //enemy pawn
+#define r "%^BOLD%^%^MAGENTA%^r%^RESET%^" //player rook
+#define n "%^BOLD%^%^MAGENTA%^n%^RESET%^" //player knight
+#define b "%^BOLD%^%^MAGENTA%^b%^RESET%^" //player bishop
+#define q "%^BOLD%^%^MAGENTA%^q%^RESET%^" //player queen
+#define k "%^BOLD%^%^MAGENTA%^k%^RESET%^" //player king
+#define p "%^BOLD%^%^MAGENTA%^p%^RESET%^" //player pawn
+
+#define LINE " |-+-+-+-+-+-+-+-|\n"
+
+string theboard = "foo";
+
+void do_board()
+{
+  theboard = "\n"+
+  "  A B C D E F G H\n"+
+  " ,---------------.\n"+
+  "8|"+R+"|"+N+"|"+B+"|"+Q+"|"+K+"|"+B+"|"+N+"|"+R+"|\n"+
+  ""+LINE+""+
+  "7|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|\n"+
+  ""+LINE+""+
+  "6| | | | | | | | |\n"+
+  ""+LINE+""+
+  "5| | | | | | | | |\n"+
+  ""+LINE+""+
+  "4| | | | | | | | |\n"+
+  ""+LINE+""+
+  "3| | | | | | | | |\n"+
+  ""+LINE+""+
+  "2|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|\n"+
+  ""+LINE+""+
+  "1|"+r+"|"+n+"|"+b+"|"+q+"|"+k+"|"+b+"|"+n+"|"+r+"|\n"+
+  "`---------------'\n";
+}
+
+mapping CHESSBOARD = ([
+"A8" : 0, "B8" : 0, "C8" : 0, "D8" : 0, "E8" : 0, "F8" : 0, "G8" : 0, "H8" : 0,
+"A7" : 0, "B7" : 0, "C7" : 0, "D7" : 0, "E7" : 0, "F7" : 0, "G7" : 0, "H7" : 0,
+"A6" : 0, "B6" : 0, "C6" : 0, "D6" : 0, "E6" : 0, "F6" : 0, "G6" : 0, "H6" : 0,
+"A5" : 0, "B5" : 0, "C5" : 0, "D5" : 0, "E5" : 0, "F5" : 0, "G5" : 0, "H5" : 0,
+"A4" : 0, "B4" : 0, "C4" : 0, "D4" : 0, "E4" : 0, "F4" : 0, "G4" : 0, "H4" : 0,
+"A3" : 0, "B3" : 0, "C3" : 0, "D3" : 0, "E3" : 0, "F3" : 0, "G3" : 0, "H3" : 0,
+"A2" : 0, "B2" : 0, "C2" : 0, "D2" : 0, "E2" : 0, "F2" : 0, "G2" : 0, "H2" : 0,
+"A1" : 0, "B1" : 0, "C1" : 0, "D1" : 0, "E1" : 0, "F1" : 0, "G1" : 0, "H1" : 0
+]);
+
+//0 for empty square
+//1 for space under attack by player 1 (magenta)
+//2 for space under attack by player 2 (red)
+
+object *players = ({}); //alternative to making a chess shadow
+
+int game_in_progress = 0;
+
+int query_game_in_progress()
+{
+  return game_in_progress;	
+}
+
+int reset_command(string str)
+{
+  if(str == "board")
+  {
+    foreach(string foo in keys(CHESSBOARD))
+    {
+	  if(objectp(CHESSBOARD[foo]))
+	  {
+	    CHESSBOARD[foo]->remove();	  
+	  }
+	  CHESSBOARD[foo] = 0;
+    }
+    A1 = new("/u/a/allanon/chess/chesspiece.c");
+    A1->initialize("magenta rook");
+    B1 = new("/u/a/allanon/chess/chesspiece.c");
+    B1->initialize("magenta knight");	
+    C1 = new("/u/a/allanon/chess/chesspiece.c");
+    C1->initialize("magenta bishop");	
+    D1 = new("/u/a/allanon/chess/chesspiece.c");
+    D1->initialize("magenta queen");	
+    E1 = new("/u/a/allanon/chess/chesspiece.c");
+    E1->initialize("magenta king");	
+    F1 = new("/u/a/allanon/chess/chesspiece.c");
+    F1->initialize("magenta bishop");	
+    G1 = new("/u/a/allanon/chess/chesspiece.c");
+    G1->initialize("magenta knight");	
+    H1 = new("/u/a/allanon/chess/chesspiece.c");
+    H1->initialize("magenta rook"); 
+    A2 = new("/u/a/allanon/chess/chesspiece.c");
+    A2->initialize("magenta pawn");
+    B2 = new("/u/a/allanon/chess/chesspiece.c");
+    B2->initialize("magenta pawn");	
+    C2 = new("/u/a/allanon/chess/chesspiece.c");
+    C2->initialize("magenta pawn");	
+    D2 = new("/u/a/allanon/chess/chesspiece.c");
+    D2->initialize("magenta pawn");	
+    E2 = new("/u/a/allanon/chess/chesspiece.c");
+    E2->initialize("magenta pawn");	
+    F2 = new("/u/a/allanon/chess/chesspiece.c");
+    F2->initialize("magenta pawn");	
+    G2 = new("/u/a/allanon/chess/chesspiece.c");
+    G2->initialize("magenta pawn");	
+    H2 = new("/u/a/allanon/chess/chesspiece.c");
+    H2->initialize("magenta pawn");
+    A7 = new("/u/a/allanon/chess/chesspiece.c");
+    A7->initialize("red pawn");
+    B7 = new("/u/a/allanon/chess/chesspiece.c");
+    B7->initialize("red pawn");	
+    C7 = new("/u/a/allanon/chess/chesspiece.c");
+    C7->initialize("red pawn");	
+    D7 = new("/u/a/allanon/chess/chesspiece.c");
+    D7->initialize("red pawn");	
+    E7 = new("/u/a/allanon/chess/chesspiece.c");
+    E7->initialize("red pawn");	
+    F7 = new("/u/a/allanon/chess/chesspiece.c");
+    F7->initialize("red pawn");	
+    G7 = new("/u/a/allanon/chess/chesspiece.c");
+    G7->initialize("red pawn");	
+    H7 = new("/u/a/allanon/chess/chesspiece.c");
+    H7->initialize("red pawn");    
+    A8 = new("/u/a/allanon/chess/chesspiece.c");
+    A8->initialize("red rook");
+    B8 = new("/u/a/allanon/chess/chesspiece.c");
+    B8->initialize("red knight");	
+    C8 = new("/u/a/allanon/chess/chesspiece.c");
+    C8->initialize("red bishop");	
+    D8 = new("/u/a/allanon/chess/chesspiece.c");
+    D8->initialize("red queen");	
+    E8 = new("/u/a/allanon/chess/chesspiece.c");
+    E8->initialize("red king");	
+    F8 = new("/u/a/allanon/chess/chesspiece.c");
+    F8->initialize("red bishop");	
+    G8 = new("/u/a/allanon/chess/chesspiece.c");
+    G8->initialize("red knight");	
+    H8 = new("/u/a/allanon/chess/chesspiece.c");
+    H8->initialize("red rook"); 	
+    message("chess","The chessboard has been reset.\n",this_object());  
+    return 1;
+  }
+}
+
+int play_command(string str)
+{
+  if(str == "1")
+  {
+    return 1;
+  }
+  else if(str == "2")
+  {
+    return 1;	  
+  }
+  else if(str == "npc")
+  {
+    return 1;	  
+  }
+  else
+  {
+    return notify_fail("Usage: 'play <1|2|npc>'\n");	  
+  }
+}
+
+int move_command(string str)
+{
+  if(str)
+  {
+    return 1;
+  }
+  return notify_fail("Usage: move <piece> <dir> <num>\n");
+}
+
+int view_command(string str)
+{
+  if(!str)
+  {
+    message("chess",""+theboard+"",this_player());
+    return 1;
+  }
+  return notify_fail("Usage: 'view'\n");
+}
+
+int giveup_command(string str)
+{
+  if(!str)
+  {	  
+    return 1;
+  }
+  return notify_fail("Usage: 'giveup'\n");
+}
+
+int nocontest_command(string str)
+{
+  if(!str)
+  {	  
+    return 1;
+  }
+  return notify_fail("Usage: 'nocontest'\n");
+}
+  
+string signfunc()
+{
+  return
+  "\nCHESS\n"+
+  "=====\n"+
+  "\n"+
+  "Rules of Chess:\n"+
+  "  The goal of chess is to force the opponent's king ("+k+" or "+K+") \n"+
+  "  into a 'check' position, whereby he cannot move without being put into \n"+
+  "  capture range of one of your pieces. Players take turns moving one \n"+
+  "  piece per turn. For a description of the various pieces, look at the \n"+
+  "  plaque.\n"+
+  "\n"+
+  "Commands available in this room:\n"+
+  "  play <1|2|npc>\t\t\tPlay by yourself, with another player, or against an NPC\n"+
+  "  move <piece> <dir> <num>\t\t\tMove your <piece> <dir> <num> times\n"+
+  "  view\t\t\tView the board (brief mode)\n"+
+  "  look,l\t\t\tView the board (verbose mode)\n"+
+  "  giveup\t\t\tGive up, lose the game\n"+
+  "  nocontest\t\t\tMatch ends in a draw if all players agree\n"+
+  "\n"+
+  "  reset board\t\t\tReset the board\n";
+}
+
+string plaquefunc()
+{
+  return
+  "\nCHESS PIECES\n"+
+  "============\n"+
+  "\n"+
+  "Pawns:\n"+
+  "  Pawns can move forward one square (two from their starting position)\n"+
+  "  and they capture pieces diagonally in front of them by one square.\n"+
+  "  ...";
+}
+
+string query_look()
+{
+  string look;
+  look = "\n"+
+  "   == CHESS ==   \n"+
+  "\n"+
+  ""+theboard+""+
+  "There is a wooden sign hanging on the wall.\n"+
+  "There's also a small golden plaque on the opposite wall.\n"+
+  "\n\n"+
+  "        The only obvious exit is %^BOLD%^%^GREEN%^out%^RESET%^.\n"+
+  ""+this_object()->query_look_contents()+"";
+  return look;
+}
+
+void extra_init()
+{
+  add_action("play_command","play");
+  add_action("move_command","move");
+  add_action("view_command","view");
+  add_action("giveup_command","giveup");
+  add_action("reset_command","reset");
+  add_action("nocontest_command","nocontest");
+}
+
+void extra_create()
+{
+  set_short( "Chessboard" );
+  set_long(wrap("This long desc should not be seeable.\n"));
+  set_item_desc(([
+  ({"wooden sign", "sign"}) : (: signfunc :),
+  ({"small golden plaque", "small plaque", "golden plaque", "plaque"}) :
+  (: plaquefunc :)]));
+  set_safe_room(1);
+  set_no_teleport(1);
+  set_pre_exit_function("out", "playing_check");
+  set_exits(([
+  "out" : "/u/a/allanon/workroom/connector.c"]));
+  do_board();
+}
+
+int playing_check()
+{
+  if(this_player()->member_array(players))
+  {
+    message("info","You are in the middle of a chess game, you can't "+
+    "just up and leave.\n",this_player());
+    return 1;
+  }
+  return 0;
+}

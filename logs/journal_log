@@ -1,0 +1,73 @@
+Mon Jul  3 01:08:01 2006: Pimpelipom, the Jukebox is not on. This should not happen.
+
+Mon Jul  3 01:11:03 2006: The large LCD display of the jukebox swirls in different colours for a moment, and some text forms there.
+
+Mon Jul  3 01:11:03 2006: BoomBox Jukebox
+=================
+Commands:
+
+%^BOLD%^WHITE%^jukebox list
+jukebox_tune <tune>
+jukebox stop
+jukebox pause
+jukebox play
+jukebox_echoto <player>%^RESET%^
+
+Mon Jul  3 01:11:03 2006: jukebox help
+Mon Jul  3 01:11:31 2006: jukebox play
+Mon Jul  3 01:11:33 2006:  'Oh noh, I was just idling by the riiiiiveerrrr when they came and humdidumdi... '
+
+Mon Jul  3 01:11:46 2006:  'Later I found a mithril coin from my backpack and haaaaaappppy I waaaasss'..
+
+Mon Jul  3 01:12:01 2006:  'My love was idling by the riiiiveeeerrrr and I went to say hi..'
+
+Mon Jul  3 01:12:17 2006: 'Aaaa-aaaaa goood byeeeeeeeee..'
+
+Mon Jul  3 01:12:32 2006: The music fades as the song ends. Suddenly the Jukebox hums loudly and selects another, random tune, and starts to play it!
+
+Mon Jul  3 01:15:57 2006: You send a voiceless command to the Jukebox to shut up. After a slight hum the music fades away.
+
+Mon Jul  3 01:15:57 2006: jukebox stop
+Mon Jul  3 01:42:23 2006: Allanon gives a small pile of silver coins and pile of platinum coins to you.
+
+Mon Jul  3 01:42:51 2006: You pay 6000 silver and have now a large locker at your disposal.
+
+Mon Jul  3 01:42:51 2006: buy large
+Mon Jul  3 01:43:07 2006: You don't have enough money!
+
+Mon Jul  3 01:43:07 2006: pay 1
+Mon Jul  3 01:43:15 2006: You have a large locker that you have paid rent until Tue Jul  4 01:42:51 2006 (23 hours 59 minutes 36 seconds to go).
+
+Mon Jul  3 01:43:15 2006: check
+Mon Jul  3 01:43:35 2006: down
+Mon Jul  3 01:43:37 2006: A dust mite floats in from up and transforms into Allanon.
+
+Mon Jul  3 01:46:31 2006: Allanon looks at you.
+
+Mon Jul  3 01:46:59 2006: You no longer have a locker.
+
+Mon Jul  3 01:46:59 2006: release
+Mon Jul  3 01:47:09 2006: Strange magical forces stop you from going down.
+
+Mon Jul  3 01:47:09 2006: down
+Mon Jul  3 01:47:27 2006: up
+Mon Jul  3 01:47:29 2006: A dust mite floats in from down and transforms into Allanon.
+
+Mon Jul  3 01:57:05 2006: The Jukebox hums slightly and starts to play amis music.
+
+Mon Jul  3 01:57:05 2006: jukebox play
+Thu Aug 10 10:55:55 2006: You slap Dyaros across his face.
+
+Thu Aug 10 10:55:55 2006: slap dyaros
+Thu Aug 10 10:56:17 2006: Allanon suddenly disappears with a 'poof'.
+
+Thu Aug 10 11:56:29 2006: Allanon suddenly appears with a 'poof'.
+
+Thu Aug 10 11:56:31 2006: Allanon pierces Dyaros [disconnected], negating Dyaros resistances and armour class!
+
+Thu Aug 10 11:56:33 2006: Allanon suddenly disappears with a 'poof'.
+
+Thu Aug 10 11:57:37 2006: Suddenly, 0 walks near the trap, and steps into it! 0 withers and screams in pain as  the jaws of the trap bite deep into it's leg!
+
+Thu Aug 10 11:58:15 2006: Allanon suddenly disappears with a 'poof'.
+

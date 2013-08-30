@@ -1,0 +1,27 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+void extra_create()
+{
+  set_short( "The royal bedchambers of the Bastion" );
+  set_long(wrap("Temporary room to make floor 2 work properly.\n"));
+  set_exits(([
+  "south" : "/u/a/allanon/area/ity/rooms/guardroom.c"]));
+  create_door("south", "north",
+  (["short" : "strongly reinforced iron door",
+  "long" : "This door must be at least 30 centimeters of solid iron. The "+
+  "lock is an odd one; it looks like a pinhole. What sort of key would "+
+  "fit in that?\n",
+  "ids" : ({ "strongly reinforced iron door", "strongly reinforced door",
+  "reinforced door", "iron door", "door" }),
+  "status" : "locked",
+  "key" : "/u/a/allanon/area/ity/obj/kingkey.c",
+  "autoclose" : 15,
+  "autolock" : 1,
+  "quality" : 1001,
+  "material" : "iron",
+  "close_msg" : "The iron door swings shut.\n",
+  "open_msg" : "You open the iron door.\n"]) );
+}

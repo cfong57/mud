@@ -1,0 +1,41 @@
+#include <mudlib.h>
+#include <damage.h>
+#include <daemons.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Lightning lance (crackling)");
+  set_id(({"lightning lance", "lance", "spear"}));
+  set_long(wrap("This spear has a simple enough wooden shaft, but the blade "+
+  "is something else. It is made of titanium, and it seems positively alive "+
+  "with electrical energy. Arcs and sparks leap off it to nearby objects, "+
+  "shocking them and leaving a singed spot behind. Oddly enough, as you "+
+  "hold the spear, it feels like a current of electricity runs through you, "+
+  "and the discharges stop.\n"));
+  set_name("lightning lance");
+  set_wtype("spear");
+  set_material("titanium");
+  add_magic_property("lightning damage", 5);
+  add_magic_property("skill cast lightning", 5);
+  set_quality(90);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{return "This weapon's blade is alive with electricity.";} 
+
+int special_hit(object target)
+{
+  message("lightning", "%^BOLD%^%^YELLOW%^", target);
+  DAMAGE_D->add_special_state(target, "shocking", 30 + random(45), 
+  35 + random(15), target->choose_body_part());
+  message("lightning", "%^RESET%^", target);
+} 
+
+mixed * query_dtypes() 
+{
+  return ({LIGHTNING, 100});
+} 

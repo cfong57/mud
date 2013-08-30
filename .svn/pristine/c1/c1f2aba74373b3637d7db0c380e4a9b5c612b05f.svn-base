@@ -1,0 +1,138 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+int clean_up(int inh) { return 1; }
+void reset() { return; }
+
+int searched = 0;
+int card_taken = 0;
+int stabbed = 0;
+int hallway = 1;
+
+int query_hallway()
+{
+  return hallway;	
+}
+
+void thaw_ice()
+{
+  remove_item(({"patch", "wall", "small hole", "hole", "sheet"}));
+  add_item(({"place", "wall", "shattered ice", "sheet"}),
+  "What was once a solid sheet of transparent ice is now just a shattered "+
+  "border surrounding a small hole in the wall.\n");
+  add_item(({"hole", "small hole"}),
+  "There is a small hole in the wall, behind where the ice used to be. "+
+  "Something sparkles within the hole.\n");
+  add_item_search(({"small hole", "hole"}), "search_hole");
+  this_object()->set_long(wrap("The first thing you notice about this hallway "+
+  "is the complete lack of a ceiling. Snow and ice kept piling onto this "+
+  "section until eventually it simply collapsed inwards, leaving a gaping "+
+  "hole exposed to the weather. This makes the passage somewhat hard to "+
+  "navigate, but enough of the debris have melted over time that a general "+
+  "path to the west is clearly visible. There is a place on the wall where "+
+  "some shattered ice outlines a small hole.\n"));
+  stabbed = 1;
+}
+
+void extra_create()
+{
+  seteuid( getuid() );
+  set_short( "Southwestern hallway in the Bastion" );
+  set_outside("-");
+  set_outdoors("-");
+  set_long(wrap("The first thing you notice about this hallway is the "+
+  "complete lack of a ceiling. Snow and ice kept piling onto this section "+
+  "until eventually it simply collapsed inwards, leaving a gaping hole "+
+  "exposed to the weather. This makes the passage somewhat hard to navigate, "+
+  "but enough of the debris have melted over time that a general path to the "+
+  "west is clearly visible. There is one particular patch of wall where the "+
+  "ice has yet to thaw; it looks like there is a small hole behind it.\n"));
+  set_item_desc(([
+  "ceiling" : "Where the ceiling ought to be, there is just empty "+
+  "space and an outline of broken stone. You can see straight to the sky "+
+  "above.\n",
+  ({"snow", "ice", "debris", "chunks", "stone", "chunks of stone"}) : "Snow, "+
+  "ice, and chunks of stone from the ceiling litter this room in "+
+  "various-sized heaps, obstructing the passageway.\n"]));
+  add_item( ({ "heap", "heaps" }), 
+  "There are heaps of stone, ice, and/or chunks of stone scattered all along "+
+  "the hallway. Some have partially melted into slush, but others are still "+
+  "cold and solid.\n");
+  add_item(({"patch", "wall", "small hole", "hole", "sheet"}),
+  "Some ice has formed a transparent sheet across a section of the wall, "+
+  "covering what seems to be a small hole. Something sparkles within the "+
+  "hole. The ice is very thick and very cold; probably the only way to "+
+  "break it would be to stab it forcefully with something.\n");             
+  add_item_search( ({ "heap", "heaps" }), "search_heap");
+  set_sounds(150 + random(45), ({ 
+  "You hear the far-off squeak of a rodent echoing down the hallway.\n"}) ); 
+  set_exits(([
+  "east" : "/u/i/ity/area/town/room/bastion.c",
+  "west" : "/u/a/allanon/area/ity/rooms/towersw1.c"]));
+  create_door("east", "west",
+  (["short" : "gilded door",
+  "long" : "This door is made of iron, but has some superb detailing done "+
+  "in gold. The material seems to positively flow down the surface like a "+
+  "shining river. Since the door is easily tall enough for a b'rogh to use, "+
+  "it must have cost a pretty penny to make.\n",
+  "status" : "unlocked",
+  "autoclose" : 45,
+  "quality" : 50,
+  "material" : "iron",
+  "close_msg" : "The gilded door swings shut.\n",
+  "open_msg" : "You open the gilded door.\n"]) );
+  ::reset();
+}
+
+void search_heap()
+{
+  if(searched == 0)
+  {
+	object sword;
+    message("info","You rummage around in the heaps for awhile. Eventually, "+
+    "you find something very, very cold. Pulling it out, you are presented "+
+    "with a brilliant iceron blade.\n",this_player());
+    message("info",""+this_player()->query_cap_name()+" rummages around in "+
+    "the heaps for awhile. Eventually, "+subjective(this_player())+" finds "+
+    "a brilliant iceron blade.\n",this_object(),this_player());
+    sword = new("u/a/allanon/area/ity/obj/ice_sword.c");
+    sword->move(this_player(),1);
+    searched = 1;
+  }
+  else
+  {
+    message("info","You rummage around in the heaps for awhile, but find "+
+    "nothing of interest.\n",this_player());
+    message("info",""+this_player()->query_cap_name()+" rummages around in "+
+    "the heaps for awhile, but finds nothing of interest.\n",this_object(),
+    this_player());	  
+  }
+}
+
+void search_hole()
+{
+  if(card_taken == 0)
+  {
+	object card;
+    message("info","You reach into the hole and pull out some kind of card.\n",
+    this_player());
+    message("info",""+this_player()->query_cap_name()+" reaches into the hole "+
+    "and pulls out some kind of card.\n",this_object(),this_player());
+    card = new("u/a/allanon/area/ity/obj/mage_card.c");
+    card->move(this_player(),1);
+    card_taken = 1;
+    remove_item(({"small hole", "hole"}));
+    add_item(({"small hole", "hole"}), 
+    "There is a small hole in the wall, behind where the ice used to be. It "+
+    "is empty.\n");
+  }
+  else
+  {
+    message("info","You reach into the hole, but find nothing.\n",
+    this_player());
+    message("info",""+this_player()->query_cap_name()+" reaches into the "+
+    "hole, but finds nothing.\n",this_object(),this_player());	  
+  }
+}

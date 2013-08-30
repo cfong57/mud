@@ -1,0 +1,8 @@
+#include <mudlib.h> 
+#include <damage.h> 
+
+inherit SHADOW; 
+
+int query_runic_shadow() { return 1; } 
+
+mixed * query_dtypes()  { return ({ FIRE, 16, COLD, 16, LIGHTNING, 16, ACID, 16, MAGICAL, 36 }); } 

@@ -1,0 +1,23 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "Smooth-walled tunnel" );
+  set_long( wrap("Here the caves get quite a bit smaller, narrowing into a small "+
+  "tunnel just large enough for an upright human-sized being. The walls are glassy-looking "+
+  "and surprisingly smooth after the generally rough rock of the previous rooms. You "+
+  "wonder if perhaps this is an artificial tunnel, since you've never seen such a "+
+  "smooth one before. Surely, only a formidable beast could make such a thing.\n"));
+  add_monster("/u/a/allanon/areas/caverns_of_slime/mon/robber3.c");   
+  set_item_desc((["walls" : "Perhaps they are made of obsidian, or some other glasslike "+
+                  "rock. Or maybe the walls really are smooth because this is an artificially "+
+                  "made tunnel...who knows?\n"]));
+  set_light(50); 
+  set_sounds(120, ({"The smooth walls reflect light back in dazzling stars of brilliance.\n"}) ); 
+  set_exits(
+  ([
+    "east" : "/u/a/allanon/areas/caverns_of_slime/rooms/pool3.c",
+    "west" : "/u/a/allanon/areas/caverns_of_slime/rooms/intersection.c"]));
+}

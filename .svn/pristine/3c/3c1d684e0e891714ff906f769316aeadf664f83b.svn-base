@@ -1,0 +1,127 @@
+#pragma save_types
+#include <mudlib.h>
+
+inherit OBJECT;
+
+string type = "pawn";
+string *moves = ({ "n", "nw", "ne", "passant"});
+string color = "magenta";
+int has_moved = 0; //for castling, pawn's initial charge
+
+string * query_moves()
+{
+  return moves;	
+}
+
+void set_type(string str)
+{
+  type = str;	
+}
+
+string query_type()
+{
+  return type;	
+}
+
+void set_color(string str)
+{
+  color = str;
+}
+
+string query_color()
+{
+  return color;	
+}
+
+int query_has_moved()
+{
+  return has_moved;	
+}
+
+void set_has_moved(int i)
+{
+  has_moved = i;	
+}
+
+void initialize(string str)
+{
+  string a = ""; //color
+  string b = ""; //piece type
+  sscanf(str,"%s %s",a,b);
+  switch(a)
+  {
+    case "red":
+	  set_color("red");
+	break;
+	case "blue":
+	  set_color("magenta");
+	break;
+	default:
+      message("error","Error: invalid color.\n",this_player());
+    break;
+  }
+  switch(b)
+  {
+    case "pawn":
+    type = "pawn";
+    moves = ({ "n", "nw", "ne", "passant"});
+    break;
+    case "rook":
+    type = "rook";
+    moves = ({ "n", "s", "e", "w", "castle"});
+    break;
+    case "knight":
+    type = "knight";
+    moves = ({ "nnw", "nne", "ssw", "sse", "wwn", "wws", "een", "ees" });
+    break;
+    case "bishop": 
+    type = "bishop";
+    moves = ({"nw", "ne", "sw", "se"});
+    break;
+    case "queen":
+    type = "queen";
+    moves = ({"nw", "n", "ne", "e", "se", "s", "sw", "w"});
+    case "king":
+    type = "king";
+    moves = ({"nw", "n", "ne", "e", "se", "s", "sw", "w", "castle"});
+    default:
+    message("error","Error: invalid piece type to initialize().\n",
+    this_player();
+    break;
+  }	
+}
+
+void promote_me(string str)
+{
+  if(type != "pawn")
+  {
+    message("error","Error: promote_me() was called on a non-pawn piece.\n",
+    this_player());	  
+  }
+  else
+  {
+    switch(str)
+    {
+      case "rook":
+      initialize(""+query_color()+" rook");
+      break;
+      case "knight":
+      initialize(""+query_color()+" knight");
+      break;
+      case "bishop": 
+      initialize(""+query_color()+" bishop");
+      break;
+      case "queen":
+      initialize(""+query_color()+" queen");
+      break;
+      default:
+      message("error","Error: bad piece type to promote_me().\n",this_player());
+      break;  
+    }
+  }
+}
+
+void extra_create()
+{
+  initialize("magenta pawn");	
+}

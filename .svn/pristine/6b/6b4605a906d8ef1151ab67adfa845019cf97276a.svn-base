@@ -1,0 +1,36 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "A little ways along the harbor" );
+  set_long(wrap("The busy harbor is full of activity, and you're standing in the "+
+  "midst of it all. Sailors rush back and forth, sometimes shouting orders to shipmates, "+
+  "sometimes rolling barrels of goods up gangplanks, sometimes heading back towards the +"
+  "tavern. Quite a few fishing vessels are moored around the harbor, and many of "+
+  "the fishermen seem content to simply hawk their wares. You notice an empty dock "+
+  "nearby - it is the only empty space left in the harbor. The harbor goes "+
+  "further to the north and west, and you spot the harbormaster's office to "+
+  "the south.\n"));
+  set_item_desc(([
+                  "sailors" : "Burly seamen. They seem competent in their tasks.\n", 
+                  "fishermen" : "Men, young and old alike, are hawking their "+
+                  "catches of the day from their ships.\n", 
+                  ({"empty dock", "dock"}) : "There's no ship in this particular dock "+
+                  "at the moment.\n", 
+                  ({"fishing vessels", "vessels"}) : "Cheaply made boats of wood. "+
+                  "While cheap, they are of fair quality, and look sturdy enough "+
+                  "to be seaworthy.\n"]) );
+  set_sounds(120, ({ 
+	                "The smell of the sea is strong here.\n", 
+	                "People swarm around you, all intent on their own business.\n",
+	                "More than a few sailors run around, checking to make sure everything "+
+	                "is in working order.\n" }) ); 
+  set_exits(([
+       "dock" : "/u/a/allanon/areas/saith/rooms/dock.c",
+       "east"  : "/u/a/allanon/areas/saith/rooms/path.c",
+       "west" : "/u/a/allanon/areas/saith/rooms/harbor2.c",
+       "north" : "/u/a/allanon/areas/saith/rooms/harbor4.c",
+       "south" : "/u/a/allanon/areas/saith/rooms/office.c"]));
+}

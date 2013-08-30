@@ -1,0 +1,141 @@
+#include <mudlib.h>
+#include <damage.h>
+
+inherit ARMOR;
+
+int charges = 2;
+
+int summon_command(string cmd)
+{
+	if ( cmd == "lightning" )
+	   {
+{
+object plr = this_player(); 
+object *inventory; 
+inventory = filter_array(all_inventory(environment(plr)), (:living($1):)); 
+foreach(object ob in inventory) 
+  { 
+  message("info",""+plr->query_cap_name()+" raises "+possessive(plr)+" Storm Gauntlets and "+
+  "shouts some strange words. An electric charge begins to build up in the air...\n",ob,plr); 
+  message("info","You raise your Storm Gauntlets and shout the ritual words "+
+  "to summon lightning. An electric charge begins to build up in the air...\n",plr); 
+  message("info","You get the feeling that something dangerous is about to "+
+  "happen, maybe you should leave now!\n",ob,plr); 
+  message("info","You get the odd feeling that maybe this wasn't such a smart "+
+  "idea after all...\n",plr); 
+  call_out("lightning_dam",7);
+  call_out("check_charges",10);
+  return 1;
+  } 
+}
+       }
+    else if ( cmd == "wind" )
+	   {
+{
+object plr = this_player(); 
+object *inventory; 
+inventory = filter_array(all_inventory(environment(plr)), (:living($1):)); 
+foreach(object ob in inventory) 
+  { 
+  message("info",""+plr->query_cap_name()+" raises "+possessive(plr)+" Storm Gauntlets and "+
+  "shouts some strange words. A strong wind begins to blow through the room...\n",ob,plr); 
+  message("info","You raise your Storm Gauntlets and shout the ritual words "+
+  "to summon wind. A strong wind begins to blow through the room...\n",plr); 
+  message("info","You get the feeling that something dangerous is about to "+
+  "happen, maybe you should leave now!\n",ob,plr); 
+  message("info","You get the odd feeling that maybe this wasn't such a smart "+
+  "idea after all...\n",plr); 
+  call_out("wind_dam",7);
+  call_out("check_charges",10);
+  return 1;
+  } 
+}
+       }
+  return notify_fail("Summon what?\n");  
+}  
+
+void extra_init() 
+{ 
+    add_action("summon_command","summon"); 
+} 
+
+void extra_create() 
+{
+  set_short("A pair of black iron gauntlets");
+  set_id( ({"pair of black iron gauntlets", "pair of gauntlets", 
+  "black iron gauntlets", "black gauntlets", "iron gauntlets", "gauntlets"}) );
+  set_name("storm gauntlets");
+  set_identified(1);
+  set_long(wrap("This is a pair of iron gauntlets, which are singed almost all"+
+  " black, seemingly from intense electrical discharge. A strong, heavy smell "+
+  "of ozone surrounds them, and every now and then small arcs of energy whip "+
+  "across the surface. There are also runes of wind and lightning, "+
+  "surrounded by a dim, electric-blue glow, adorning each gauntlet. Aside from"+
+  " all this, the gauntlets seem to be made of ordinary materials by plain "+
+  "methods.\n"));
+  set_slots( ({"hand", "hand"}) );
+  set_material("iron");
+  set_type("full plate");
+  set_type_desc("gauntlets");
+  set_quality(25+random(15));
+  add_magic_property("resist lightning",5);
+  set_size(250);
+  armour_setup();
+}
+
+string query_special_feature() 
+{ 
+return "It can be used to summon the powers of the storm, but only a limited "+
+"number of times.";
+} 
+
+void check_charges()
+{
+	if(charges < 1)
+	{
+	message("info","The gauntlets suddenly seem to have lost their power to "+
+	"summon...you can feel a strong wave of magic flowing out and away "+
+	"from them.\n",this_player()); 
+	remove_action("summon_command","summon");
+	set_quality(1);
+	set_short("A pair of black iron gauntlets (drained)");
+    }
+    else
+    {
+    message("info","The gauntlets seem to become a little weaker.\n",this_player()); 
+    charges--;
+    }
+} 
+
+void lightning_dam()
+{
+object plr = this_player(); 
+object *inventory; 
+inventory = filter_array(all_inventory(environment(plr)), (:living($1):)); 
+foreach(object ob in inventory) 
+{
+	message("info","The %^YELLOW%^electrical charge%^RESET%^ in the room "+
+	"suddenly %^BOLD%^%^RED%^ERUPTS%^RESET%^, causing powerful surges of "+
+	"lightning to shoot around the room, %^BOLD%^%^CYAN%^SHOCKING%^RESET%^ "+
+	"everything in their path and creating an "+
+	"%^BOLD%^%^CYAN%^IMPRESSIVE%^RESET%^ electrical field!\n",ob); 
+	ob->receive_damage(9000+random(1000), LIGHTNING); 
+	ob->kill_ob(plr); 
+}
+}
+
+void wind_dam()
+{
+object plr = this_player(); 
+object *inventory; 
+inventory = filter_array(all_inventory(environment(plr)), (:living($1):)); 
+foreach(object ob in inventory) 
+{
+	message("info","The %^BLUE%^freezing wind%^RESET%^ in the room is suddenly"+
+	" filled with razor-sharp shards of ice, %^BOLD%^%^RED%^SHREDDING%^RESET%^"+
+	" everything in their way and causing the ground to become covered in red "+
+	"ice!\n",ob); 
+	ob->receive_damage(7500+random(2500), COLD); 
+	ob->kill_ob(plr); 
+}
+}

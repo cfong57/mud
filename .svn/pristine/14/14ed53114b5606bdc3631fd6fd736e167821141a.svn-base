@@ -1,0 +1,95 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit OBJECT;
+object mshadow;
+
+int slotfix_command(string cmd)
+{ 
+  {
+  object p = this_player();	 
+  object *inventory;  
+  inventory=all_inventory(environment(p));
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+     {
+	  message("fix","Slots reset.\n",({this_player(),ob}));
+	  ob->set_slots(([
+      "cloak" : ([ "cloak" : 0 ]), "leg" : ([ "right leg" : 0, 
+      "left leg" : 0 ]), "clothes" : ([ "clothes" : 0 ]), "finger" : 
+      ([ "right finger" : 0, "left finger" : 0 ]), "hand" : ([ "left hand" : 0, 
+      "right hand" : 0 ]), "amulet" : ([ "amulet" : 0 ]), "ear" : 
+      ([ "right ear" : 0, "left ear" : 0 ]), "torso" : ([ "torso" : 0 ]), 
+      "arm" : ([ "right arm" : 0, "left arm" : 0 ]), "head" : ([ "head" : 0 ]), 
+      "foot" : ([ "left foot" : 0, "right foot" : 0 ]), "belt" : 
+      ([ "belt" : 0 ]), "neck" : ([ "neck" : 0 ]), "miscellaneous" : 
+      ([ "miscellaneous" : 0 ]) ]));
+	  return 1;
+     }
+  return notify_fail("Fix whose slots?\n"); 
+  } 
+}
+
+int longfix_command(string cmd)
+{ 
+  {
+  object p = this_player();	 
+  object *inventory;  
+  inventory=all_inventory(environment(p));
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+     {
+	  message("fix","Long desc reset.\n",({this_player(),ob}));
+ob->set_long(wrap("Before you stands a tall human female of 21. Unlike most "+
+"other young women of her age, Allanon appears to be nearly invincible. "+
+"Undoubtably she is skilled in the ways of combat. However, you see that she "+
+"isn't asinine, either. You even notice that she is, in fact, quite "+
+"attractive...Allanon dresses a bit strangely, garbed in a mix of ordinary "+
+"clothing and battle armour; her ponytail of blonde hair escapes from under "+
+"her helmet. She has piercing green eyes, and you discern that her garments "+
+"conceal an athletically fit, but well-endowed figure.\n"));
+     }
+  return notify_fail("Fix whose long?\n"); 
+  } 
+}  
+
+int modify_command(string cmd)
+{ 
+  {
+  object p = this_player();	 
+  object *inventory;  
+  inventory=all_inventory(environment(p));
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+     {
+	  message("change","Ob shadowed with modify_shadow.\n",
+	  ({this_player(),ob}));
+	  mshadow = new("/u/a/allanon/shadows/modify_shadow.c");
+	  mshadow->move(ob,1);
+	  mshadow->shadow_object(ob);
+	  return 1;
+     }
+  return notify_fail("Modify what?\n"); 
+  } 
+}  
+
+void extra_init()
+{
+  add_action("slotfix_command","slotfix");
+  add_action("longfix_command","longfix");
+  add_action("modify_command","modify");
+}
+
+void extra_create()
+{
+  set_short("A short stick labeled 'Test'");
+  set_long(wrap("A stick used for testing purposes. It is used to try out "+
+  "shadows on monsters, to make certain queries return different values in "+
+  "lieu of a set command to do the same. The command is just 'modify foo'.\n"+
+  "(Foo is an id of the target object.)\n"));
+  set_name("test stick");
+  set_id( ({ "a short stick", "short stick", "stick", "test stick", "test" }) );
+  set_mass(1);
+  set_bulk(1);
+  set_light(-200);
+}

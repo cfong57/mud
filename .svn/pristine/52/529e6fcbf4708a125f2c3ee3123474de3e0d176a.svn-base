@@ -1,0 +1,98 @@
+#include <mudlib.h>
+
+inherit CONTAINER;
+
+int lit = 0;
+
+int query_lit()
+{
+  return lit;	
+}
+
+int light_command(string cmd) 
+{ 
+  if (this_object()->id(cmd)) 
+  {
+	if(lit == 0)
+	{
+	  message("info","You ignite large stone brazier.\n",this_player());
+	  lit = 1;
+	  set_short("Large stone brazier (lit)");
+	  set_long(wrap("A large stone brazier sits here in the tower, looking "+
+	  "rather incongruous. It is filled with coals, wood, and other flammable "+
+	  "things, so it should burn for a long time.\n"+
+      "The brazier is lit.\n"));
+      set_light(300);
+      call_out("burn_out",7200);
+      environment(this_object())->brazier_lit();
+    }
+    else
+    {
+	  message("info","It is already lit!\n",this_player());   
+    }
+    return 1; 
+  }
+}
+
+int extinguish_command(string cmd) 
+{ 
+  if (this_object()->id(cmd)) 
+  {
+	if(lit == 1)
+	{
+	  message("info","You extinguish large stone brazier (lit).\n",
+	  this_player());
+	  lit = 0;
+	  set_short("Large stone brazier (unlit)");
+	  set_long(wrap("A large stone brazier sits here in the tower, looking "+
+	  "rather incongruous. It is filled with coals, wood, and other flammable "+
+	  "things, so it should burn for a long time.\n"+
+      "The brazier is unlit.\n"));
+      set_light(0);
+      remove_call_out();
+      environment(this_object())->brazier_extinguished();
+    }
+    else
+    {
+	  message("info","You fail to extinguish large stone brazier.\n",
+	  this_player());   
+    }
+    return 1; 
+  }
+}  
+
+void extra_init()
+{
+  add_action("light_command", "light");
+  add_action("extinguish_command", "extinguish");
+}
+
+void extra_create() 
+{
+  set_short("Large stone brazier (unlit)");
+  set_long(wrap("A large stone brazier sits here in the tower, looking rather "+
+  "incongruous. It is filled with coals, wood, and other flammable things, so "+
+  "it should burn for a long time.\n"+
+  "The brazier is unlit.\n"));
+  set_id( ({"large stone brazier", "large brazier", "stone brazier", 
+  "brazier" }) );
+  set_name("large stone brazier");
+  set_value(0);
+  set_mass(100000);
+  set_bulk(500000);
+  set_prevent_get(1);
+}
+
+void burn_out()
+{
+  message("info","The brazier flickers and goes out.\n",
+  environment(this_object()));
+  lit = 0;
+  set_short("Large stone brazier (unlit)");
+  set_long(wrap("A large stone brazier sits here in the tower, looking "+
+  "rather incongruous. It is filled with coals, wood, and other flammable "+
+  "things, so it should burn for a long time.\n"+
+  "The brazier is unlit.\n"));
+  set_light(0);
+  environment(this_object())->brazier_extinguished();
+}

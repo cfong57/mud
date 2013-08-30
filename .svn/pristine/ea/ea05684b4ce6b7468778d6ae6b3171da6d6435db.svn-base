@@ -1,0 +1,122 @@
+/*Inspired by Space Balls. Coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit ARMOR;
+inherit UNIQUE;
+
+object schwartz;
+mapping wslots;
+int slotcount;
+string myslots;
+
+void extra_create() 
+{
+  set_identified(1);
+  set_id(({"ring of the schwartz", "ring", "schwartz ring", "s ring", "S ring",
+  "Ring of the Schwartz", "ring of the Schwartz", "ring"}));
+  set_name("Schwartz ring");
+  set_short("Ring of the Schwartz %^ORANGE%^<phony glow>%^RESET%^");
+  set_long(wrap("A false-looking ring with a few cheesy plastic diamonds "+
+  "stuck onto its surface with SuperGlue. There are some caramel stains on "+
+  "it, you think it came out of a CrackerJack box...A big letter 'S' is "+
+  "stamped to the ring.\n"+
+  "Some mystic lettering has been carved on the ring's surface by none other "+
+  "than the legendary sage, %^RESET%^%^BOLD%^%^WHITE%^Yogurt%^RESET%^! You "+
+  "read it with reverance...\n"+
+  "%^BOLD%^You must have all your weapon slots free if you wish to use the "+
+  "Schwartz! And it requires the use of hands or ridges!%^RESET%^\n"+
+  "\n"+
+  "Tinier, more generic-looking type has been engraved a bit below that:\n"+
+  "%^CYAN%^May the Schwartz be with you!%^RESET%^\n"));
+  set_slots(({"finger"}));
+  set_material("steel");
+  set_type("full plate");
+  set_type_desc("ring");
+  set_quality(75);
+  set_size(175);
+  set_prevent_drop(1);
+  set_wear_func("wear_me");
+  set_remove_func("deactivate_schwartz");
+  armour_setup();
+}
+
+int wear_me()
+{ 
+  if(this_player()->query_race() == "beholder")
+  {
+  message("wear_fail","Yogurt's voice booms in your head: 'Beholders cannot "+
+  "master the Schwartz!'\n",this_player());
+  message("wear_fail","You cannot wear the Ring of the Schwartz.\n",
+  this_player());
+  message("wear_fail",""+this_player()->query_cap_name()+" tries and fails to "+
+  "wear "+possessive(this_player())+" Ring of the Schwartz.\n",
+  environment(this_player()),this_player());
+  return -1;
+  }
+  if(this_player()->query_weapon_slots() != 
+  (["left hand" : 0,"right hand" : 0 ]) || this_player()->
+  query_weapon_slots() != (["right ridge" : 0, "left ridge" : 0,
+  "mandibles" : 0 ]) || this_player()->query_weapon_slots() != ([ 
+  "lower right hand" : 0, "left hand" : 0, "lower left hand" : 0, 
+  "right hand" : 0 ]) || this_player()->query_weapon_slots() != ([
+  "left hand" : 0, "front hooves" : 0, "right hand" : 0, "back hooves" : 0 ]))
+  {
+  call_out("create_schwartz",0);
+  return 1;
+  }
+  message("schwartz_fail",wrap("As you don't have enough free weapon slots to "+
+  "wield The Schwartz, it fizzles out and dies. The Ring of the Schwartz "+
+  "sparks a bit and emits a static-like sound before cracking in half and "+
+  "disappearing in a puff of 0's and 1's...\n"),this_player());
+  message("schwartz_fail",wrap("As "+this_player()->query_cap_name()+" "+
+  "doesn't have enough free weapon slots to wield The Schwartz, it fizzles "+
+  "out and dies. "+capitalize(possessive(this_player()))+" Ring of the "+
+  "Schwartz sparks a bit and emits a static-like sound before cracking in "+
+  "half and disappearing in a puff of 0's and 1's...\n"),
+  environment(this_player()),this_player());
+  this_object()->remove();
+  return -1;  
+}
+
+int deactivate_schwartz()
+{
+  this_object()->set_prevent_drop(0);
+  schwartz->set_remove_func("can_remove");
+  schwartz->set_prevent_drop(0);
+  this_player()->force_me("remove schwartz");
+  call_out("reset_drop",0);
+  return 1;
+}
+
+void reset_drop()
+{
+  this_object()->set_prevent_drop(1);	
+}
+
+void create_schwartz()
+{
+  schwartz = new("/u/a/allanon/objects/schwartz.c");
+  schwartz->move(this_player(),1);
+  schwartz->set_remove_func("cant_remove");
+  message("schwartz","You hear Yogurt's voice inside your head...\n"+
+  "%^BOLD%^May the Schwartz be with you!%^RESET%^\n",this_player());
+  message("schwartz","You feel a surge of power as you summon forth The "+
+  "Schwartz!\n",this_player());
+  message("schwartz","You watch in awe as "+this_player()->query_cap_name()+" "+
+  "calls forth The Schwartz!\n",environment(this_player()),this_player());
+  switch(this_player()->query_race())
+  {
+  case "chitine":  
+  this_player()->force_me(
+  "wield schwartz in lower right hand,right hand,lower left hand,left hand");
+  break;
+  case "thri-kreen":
+  this_player()->force_me("wield schwartz in right ridge,left ridge");
+  break;
+  default:
+  this_player()->force_me("wield schwartz in left hand,right hand");
+  break;
+  }
+}

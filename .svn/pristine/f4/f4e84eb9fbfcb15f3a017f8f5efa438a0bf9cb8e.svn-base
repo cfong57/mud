@@ -1,0 +1,27 @@
+#include <mudlib.h> 
+
+inherit SHADOW; 
+
+int check_status()
+{
+  if(!shadowed_object()) 
+  destruct(this_object()); 
+
+  if(shadowed_object()->query_dead()) 
+  destruct(this_object()); 
+
+  call_out("check_status",5);
+}
+
+int query_barbed() {return 1;} 
+
+int barb_me()
+{
+	remove_call_out("check_status");
+	message("barb","You feel a faint tingle as your soul separates from your "+
+	"body!\n",shadowed_object());
+	message("barb",""+shadowed_object()->query_cap_name()+" suddenly falls "+
+	"down, dead...\n",environment(shadowed_object()),shadowed_object());   	
+  	shadowed_object()->set_hp(-1);
+  	destruct(this_object()); 
+}

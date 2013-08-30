@@ -1,0 +1,132 @@
+Puuh, done with the QC. The whole area is a big disappointment. The whole area
+is just a big shooting range for low level players filled with identical descs
+and only few different kind of mobs. Didn't even bother to check typos.
+
+This area will not get game without some major changes. At least these need to 
+be done in addition to all what is said below in MOBS/OBJS/QUESTS/ROOMS:
+ - Room layout needs to be changed. It is too symmetric and similar.
+ - All rooms need to have different descs
+ - Amount of mobs needs to be severely reduced and more interesting mobs
+   are needed
+ - More content into the area. Basically now it's just army of non-agro mobs 
+   (players can just walk around, get the key, unlock the door, blast king
+    return the heart and quest is done, voila. no sweat for even the dummest
+    players and very low level players can kill these mobs and get huge 
+    rewards) in a boring rooms.
+ - Serious downtuning here and there
+ - Change all paths to start with /u/blablabla instead of u/blablabala.
+
+MOBS
+Remove the A/An from the beginging of short descs and descs in lower case 
+unless the start with a name. Bodyparts are fucked up in some mobs. Those 
+second numbers after the bodypart need to add up to 100 or something WILL bug.
+You also need to add some random to movement speed of mobs.
+
+bluefire_bat.c:
+Remove the \n's from the start of messages. Short desc is a bit too plain.
+The idea of this mob on the other hand is superb. Also the skin bonuses 
+are TOO good. Lose some of them or make a switch that randomly gives one 
+of them. -100 fire resistance is horrible. 
+
+gel.c & gslime.c:
+Remove the \n's from the start of messages and the short desc needs some 
+work.
+
+ghost.c:
+Remove "The" from the start of short desc. 
+
+hellbat.c:
+Everything that was in bluefire_bat.c is true in here also but there's even
+a bigger problem here, the refence to hell in the name. There's no hell in 
+Icesus so basically there can't be hellbats either. Something needs to be 
+done for that fact :)
+
+kslime.c:
+This slime is way too easy for the breastplate and for the quest reward. 
+Remove the \n's from the start of messages. This mob needs serious uptune.
+
+murin.c:
+This mob is a mess. The level is WAY too high and the eqs are absolutely
+too good for anything. Lower the level a lot, do something to the eqs and
+there is no ranger combat kit. Combat kit 5 is too high anyway.
+
+oslime.c:
+Remove the \n's from the start of messages.
+
+shade_r.c:
+Short desc is really boring, it definitely needs some more work.
+And why is there ! in the agrochance and set_speed?
+
+shade_s.c:
+Short desc is a bit boring. Also all of that stuff what he has 
+adds up to over 15k in money and the mob itself is only 12k.
+
+
+OBJS
+Remove the A/An from the beginging of short descs and the descs
+should be in lowercase.
+
+acidaxe.c & acidrapier.c & acidsword.c:
+Why is long desc in a single line?
+
+dagger.c:
+Long desc should be longer.
+
+kingbplate.c:
+Why is long desc in a single line?
+
+knife.c:
+Long desc needs some work.
+
+murinboots.c & murinclothes.c & muringloves.c & murinshirt.c &
+murinthights.c:
+You got to be kidding me with these eqs. Short descs are a bit boring
+but the real problem is that these eqs are THE BEST EQS in game.
+Quality needs to be lowered seriously to somewhere around 20-30.
+Magical stats are way too good. Even lowered to 1/1/1 and chitinium
+silk is too good too.
+
+scimitar.c & scimitar2.c:
+These need to have different descs and their magical stats are way
+too good. Also fine steel seems a bit too good with that quality.
+
+shashadegauntlets.c & shadehelmet.c:
+Require a lot longer long desc and different kind. Currently all of
+these have basicly the same desc.
+
+QUESTS
+help_alchemist_ghost.c:
+query_info() bugs. And why the two blank lines? You need to use \n if
+you want to have that space between those two blocks.
+
+ROOMS
+Rooms are boring, they don't have anything in them except the pool 
+searches which aren't that interesting. Identical room descs need to be
+changed as the whole area consist only identical descs.
+
+barren_clearing.c:
+Remove set_signs, we don't do things like this. This is Batmud(tm) way.
+\n is missing from the end of the long desc. Add exit to out world from 
+here.
+
+b2w.c:
+Do something to "(right/left)" in descs here and other rooms.
+
+down_in_a_hole.c:
+You don't need to put descs separately if they are same. You can use
+({ "slime", "trails", "slugs", "ooze" }) instead of putting them separately.
+
+outworld.c:
+This rooms is useless. Just add the exit from barren_clearing.c to 
+outworld.
+
+secret.c:
+Crest is a bit boring as it serves really no purpose and it cannot even be 
+examined in anyway. Better remove it totally.
+
+t_inter_2.c:
+No adamantium doors.
+
+Allanon replies:
+-Almost all rooms scrapped. Remaking new area layout.
+-Fixed all abovementioned problems.

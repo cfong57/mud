@@ -1,0 +1,4 @@
+#include <mudlib.h>  
+
+inherit SHADOW; 
+inherit "/d/guilds/sorcerer/shadows/sorc_shadow.c";

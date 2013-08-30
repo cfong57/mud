@@ -1,0 +1,68 @@
+#include <mudlib.h>
+
+inherit FOOD;
+
+void extra_create()
+{
+  switch(random(12))
+    {
+    case 0:
+    set_short("Fruit parafait");
+    break;
+    case 1:
+    set_short("Wooly watermelon");
+    break;
+    case 2:
+    set_short("Chocolate bar");
+    break;
+    case 3:
+    set_short("Turbo pepper");
+    break;
+    case 4:
+    set_short("Qwik Chicken");
+    break;
+    case 5:
+    set_short("Keelhaul mango");
+    break;
+    case 6:
+    set_short("Peachy peach");
+    break;
+    case 7:
+    set_short("Banana peel");
+    break;
+    case 8:
+    set_short("Striped apple");
+    break;
+    case 9:
+    set_short("Rainbow grapes");
+    break;
+    case 10:
+    set_short("Coffee beans");
+    break;
+    case 11:
+    set_short("Ice cube");
+    break;  
+    }
+  set_long("Strength-boosting "+this_object()->query_short()+".\n");
+  set_name(""+this_object()->query_short()+"");
+  set_id( ({ ""+this_object()->query_name()+""}) );
+  set_edible(1);
+  set_food_value(999);
+  set_ep_value(1000);
+  set_mass(1);
+  set_bulk(1);
+  set_rot_time(0);
+  set_eat_func("eat_me"); 
+}
+
+int eat_me()
+{
+ message("delicious","Wow, the "+this_object()->query_short()+" tasted REALLY good!\n",this_player());
+ message("delicious",""+this_player()->query_cap_name()+" looks really pleased as they eat the "+this_object()->query_short()+".\n",environment(this_player()),this_player());
+ this_player()->set_stat("strength",(this_player()->query_stat("strength")+5));
+ this_player()->set_stat("constitution",(this_player()->query_stat("constitution")+5));
+ this_player()->set_stat("dexterity",(this_player()->query_stat("dexterity")+5));
+ this_player()->set_stat("intelligence",(this_player()->query_stat("intelligence")+5));
+ this_player()->set_stat("wisdom",(this_player()->query_stat("wisdom")+5));
+ this_player()->set_stat("charisma",(this_player()->query_stat("charisma")+5));	
+}

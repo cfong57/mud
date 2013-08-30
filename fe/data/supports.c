@@ -1,0 +1,290 @@
+//supports.c
+//database of all the support relationships in the game
+
+mapping supports = ([
+"eliwood" : ([
+  "hector" : (["start" : 72, "gain" : 3]),
+  "lyn" : (["start" : 10, "gain" : 2]),
+  "ninian" : (["start" : 0, "gain" : 5]),
+  "marcus" : (["start" : 25, "gain" : 2]),
+  "lowen" : (["start" : 20, "gain" : 2]),
+  "harken" : (["start" : 25, "gain" : 3]),
+  "fiora" : (["start" : 0, "gain" : 2])]),
+"lowen" : ([
+  "eliwood" : (["start" : 20, "gain" : 2]),
+  "marcus" : (["start" : 20, "gain" : 3]),
+  "isadora" : (["start" : 10, "gain" : 3]),
+  "harken" : (["start" : 15, "gain" : 3]),
+  "rebecca" : (["start" : 5, "gain" : 2])]),
+"marcus" : ([
+  "eliwood" : (["eliwood" : 25, "gain" : 2]),
+  "merlinus" : (["start" : 0, "gain" : 2]),
+  "lowen" : (["start" : 20, "gain" : 3]),
+  "isadora" : (["start" : 15, "gain" : 3]),
+  "harken" : (["start" : 20, "gain" : 2])]),
+"rebecca" : ([
+  "wil" : (["start" : 30, "gain" : 3]),
+  "lowen" : (["start" : 5, "gain" : 2]),
+  "sain" : (["start" : 0, "gain" : 2]),
+  "dart" : (["start" : 35, "gain" : 3]),
+  "louise" : (["start" : 0, "gain" : 3]),
+  "raven" : (["start" : 0, "gain" : 2]),
+  "nino" : (["start" : 0, "gain" : 3])]),
+"dorcas" : ([
+  "bartre" : (["start" : 15, "gain" : 3]),
+  "geitz" : (["start" : 0, "gain" : 3]),
+  "oswin" : (["start" : 0, "gain" : 2]),
+  "vaida" : (["start" : 0, "gain" : 2]),
+  "farina" : (["start" : 0, "gain" : 1])]),
+"bartre" : ([
+  "dorcas" : (["start" : 15, "gain" : 3]),
+  "raven" : (["start" : 0, "gain" : 1]),
+  "canas" : (["start" : 0, "gain" : 2]),
+  "karla" : (["start" : 5, "gain" : 4]),
+  "renault" : (["start" : 0, "gain" : 1])]),
+"hector" : ([
+  "eliwood" : (["start" : 72, "gain" : 3]),
+  "lyn" : (["start" : 0, "gain" : 3]),
+  "oswin" : (["start" : 20, "gain" : 2]),
+  "matthew" : (["start" : 20, "gain" : 3]),
+  "florina" : (["start" : 5, "gain" : 2]),
+  "serra" : (["start" : 15, "gain" : 1]),
+  "farina" : (["start" : 0, "gain" : 1])]),
+"oswin" : ([
+  "hector" : (["start" : 20, "gain" : 2]),
+  "matthew" : (["start" : 5, "gain" : 2]),
+  "serra" : (["start" : 10, "gain" : 1]),
+  "priscilla" : (["start" : 0, "gain" : 2]),
+  "dorcas" : (["start" : 0, "gain" : 2])]),
+"serra" : ([
+  "hector" : (["start" : 15, "gain" : 1]),
+  "matthew" : (["start" : 5, "gain" : 1]),
+  "florina" : (["start" : 0, "gain" : 1]),
+  "sain" : (["start" : 0, "gain" : 2]),
+  "oswin" : (["start" : 10, "gain" : 1]),
+  "lucius" : (["start" : 0, "gain" : 2])
+  "erk" : (["start" : 2, "gain" : 1])]),
+"matthew" : ([
+  "hector" : (["start" : 20, "gain" : 3]),
+  "jaffar" : (["start" : 0, "gain" : 1]),
+  "guy" : (["start" : 10, "gain" : 3]),
+  "serra" : (["start" : 5, "gain" : 1]),
+  "oswin" : (["start" : 5, "gain" : 2]),
+  "legault" : (["start" : 0, "gain" : 2])]),
+"guy" : ([
+  "matthew" : (["start" : 10, "gain" : 3]),
+  "rath" : (["start" : 0, "gain" : 4]),
+  "karel" : (["start" : 5, "gain" : 3]),
+  "priscilla" : (["start" : 0, "gain" : 2]),
+  "louise" : (["start" : 0, "gain" : 1])]),
+"merlinus" : ([
+  "marcus" : (["start" : 0, "gain" : 2]),
+  "nino" : (["start" : 0, "gain" : 2]),
+  "vaida" : (["start" : 0, "gain" : 1])]),
+"erk" : ([
+  "louise" : (["start" : 20, "gain" : 2]),
+  "nino" : (["start" : 0, "gain" : 3]),
+  "pent" : (["start" : 25, "gain" : 3]),
+  "priscilla" : (["start" : 15, "gain" : 3]),
+  "serra" : (["start" : 2, "gain" : 1])]),
+"priscilla" : ([
+  "raven" : (["start" : 20, "gain" : 3]),
+  "lucius" : (["start" : 5, "gain" : 2]),
+  "erk" : (["start" : 15, "gain" : 3]),
+  "oswin" : (["start" : 0, "gain" : 2]),
+  "sain" : (["start" : 0, "gain" : 2]),
+  "heath" : (["start" : 0, "gain" : 2]),
+  "guy" : (["start" : 0, "gain" : 2])]),
+"lyn" : ([
+  "eliwood" : (["start" : 10, "gain" : 2]),
+  "hector" : (["start" : 0, "gain" : 3]),
+  "florina" : (["start" : 76, "gain" : 4]),
+  "rath" : (["start" : 15, "gain" : 4]),
+  "kent" : (["start" : 20, "gain" : 3]),
+  "wil" : (["start" : 17, "gain" : 3]),
+  "wallace" : (["start" : 15, "gain" : 2])]),
+"wil" : ([
+  "lyn" : (["start" : 17, "gain" : 3]),
+  "rebecca" : (["start" : 30, "gain" : 3]),
+  "rath" : (["start" : 0, "gain" : 2]),
+  "dart" : (["start" : 20, "gain" : 3]),
+  "wallace" : (["start" : 0, "gain" : 2]),
+  "raven" : (["start" : 0, "gain" : 1])]),
+"kent" : ([
+  "lyn" : (["start" : 20, "gain" : 3]),
+  "sain" : (["start" : 30, "gain" : 3]),
+  "fiora" : (["start" : 0, "gain" : 3]),
+  "farina" : (["start" : 0, "gain" : 1]),
+  "wallace" : (["start" : 15, "gain" : 2]),
+  "heath" : (["start" : 0, "gain" : 2])]),
+"sain" : ([
+  "kent" : (["start" : 30, "gain" : 3]),
+  "fiora" : (["start" : 0, "gain" : 2]),
+  "serra" : (["start" : 0, "gain" : 2]),
+  "rebecca" : (["start" : 0, "gain" : 2]),
+  "priscilla" : (["start" : 0, "gain" : 2]),
+  "louise" : (["start" : 0, "gain" : 1]),
+  "isadora" : (["start" : 0, "gain" : 1])]),
+"florina" : ([
+  "hector" : (["start" : 5, "gain" : 2]),
+  "lyn" : (["start" : 76, "gain" : 4]),
+  "farina" : (["start" : 35, "gain" : 3]),
+  "fiora" : (["start" : 35, "gain" : 4]),
+  "ninian" : (["start" : 0, "gain" : 4]),
+  "nino" : (["start" : 0, "gain" : 2]),
+  "serra" : (["start" : 0, "gain" : 1])]),
+"raven" : ([
+  "lucius" : (["start" : 30, "gain" : 3]),
+  "priscilla" : (["start" : 20, "gain" : 3]),
+  "rebecca" : (["start" : 0, "gain" : 2]),
+  "wil" : (["start" : 0, "gain" : 1]),
+  "bartre" : (["start" : 0, "gain" : 1])]),
+"lucius" : ([
+  "raven" : (["start" : 30, "gain" : 3]),
+  "priscilla" : (["start" : 5, "gain" : 2]),
+  "serra" : (["start" : 0, "gain" : 2]),
+  "renault" : (["start" : 0, "gain" : 2]),
+  "karel" : (["start" : 0, "gain" : 1])]),
+"canas" : ([
+  "pent" : (["start" : 0, "gain" : 3]),
+  "nino" : (["start" : 0, "gain" : 3]),
+  "renault" : (["start" : 0, "gain" : 2]),
+  "bartre" : (["start" : 0, "gain" : 2]),
+  "vaida" : (["start" : 0, "gain" : 2])]),
+"dart" : ([
+  "farina" : (["start" : 0, "gain" : 2]),
+  "wil" : (["start" : 20, "gain" : 3]),
+  "geitz" : (["start" : 0, "gain" : 2]),
+  "rebecca" : (["start" : 35, "gain" : 3]),
+  "karel" : (["start" : 0, "gain" : 2])]),
+"fiora" : ([
+  "farina" : (["start" : 30, "gain" : 3]),
+  "florina" : (["start" : 35, "gain" : 4]),
+  "eliwood" : (["start" : 0, "gain" : 2]),
+  "kent" : (["start" : 0, "gain" : 3]),
+  "sain" : (["start" : 0, "gain" : 2]),
+  "pent" : (["start" : 10, "gain" : 2]),
+  "geitz" : (["start" : 0, "gain" : 1])]),
+"legault" : ([
+  "matthew" : (["start" : 0 "gain" : 2]),
+  "nino" : (["start" : 0, "gain" : 2]),
+  "isadora" : (["start" : 0, "gain" : 1]),
+  "jaffar" : (["start" : 5, "gain" : 1]),
+  "heath" : (["start" : 0, "gain" : 2])]),
+"ninian" : ([
+  "eliwood" : (["start" : 0, "gain" : 5]),
+  "florina" : (["start" : 0, "gain" : 4]),
+  "hawkeye" : (["start" : 0, "gain" : 3])]),
+"isadora" : ([
+  "legault" : (["start" : 0, "gain" : 1]),
+  "lowen" : (["start" : 10, "gain" : 3]),
+  "marcus" : (["start" : 15, "gain" : 3]),
+  "harken" : (["start" : 40, "gain" : 4]),
+  "geitz" : (["start" : 0, "gain" : 2]),
+  "renault" : (["start" : 0, "gain" : 1]),
+  "sain" : (["start" : 0, "gain" : 1])]),
+"heath" : ([
+  "vaida" : (["start" : 0, "gain" : 2]),
+  "legault" : (["start" : 0, "gain" : 2]),
+  "louise" : (["start" : 0, "gain" : 1]),
+  "priscilla" : (["start" : 0, "gain" : 2]),
+  "kent" : (["start" : 0, "gain" : 2])]),
+"rath" : ([
+  "lyn" : (["start" : 15, "gain" : 4]),
+  "wil" : (["start" : 0, "gain" : 2]),
+  "guy" : (["start" : 0, "gain" : 4])]),
+"hawkeye" : ([
+  "ninian" : (["start" : 0, "gain" : 3]),
+  "pent" : (["start" : 20, "gain" : 3]),
+  "louise" : (["start" : 20, "gain" : 3])]),
+"geitz" : ([
+  "dorcas" : (["start" : 0, "gain" : 3]),
+  "karel" : (["start" : 0, "gain" : 2]),
+  "isadora" : (["start" : 0, "gain" : 2]),
+  "fiora" : (["start" : 0, "gain" : 1]),
+  "dart" : (["start" : 0, "gain" : 2])]),
+"wallace" : ([
+  "lyn" : (["start" : 15, "gain" : 2]),
+  "renault" : (["start" : 0, "gain" : 2]),
+  "wil" : (["start" : 0, "gain" : 2]),
+  "vaida" : (["start" : 0, "gain" : 2]),
+  "kent" : (["start" : 15, "gain" : 2])]),
+"farina" : ([
+  "hector" : (["start" : 0, "gain" : 1]),
+  "florina" : (["start" : 35, "gain" : 3]),
+  "fiora" : (["start" : 30, "gain" : 3]),
+  "kent" : (["start" : 0, "gain" : 1]),
+  "dart" : (["start" : 0, "gain" : 2]),
+  "karla" : (["start" : 0, "gain" : 2]),
+  "dorcas" : (["start" : 0, "gain" : 1])]),
+"pent" : ([
+  "louise" : (["start" : 241, "gain" : 0]),
+  "erk" : (["start" : 25, "gain" : 3]),
+  "canas" : (["start" : 0, "gain" : 3]),
+  "hawkeye" : (["start" : 20, "gain" : 3]),
+  "fiora" : (["start" : 10, "gain" : 2])]),
+"louise" : ([
+  "pent" : (["start" : 241, "gain" : 0]),
+  "erk" : (["start" : 20, "gain" : 2]),
+  "hawkeye" : (["start" : 20, "gain" : 3]),
+  "rebecca" : (["start" : 0, "gain" : 3]),
+  "guy" : (["start" : 0, "gain" : 1]),
+  "heath" : (["start" : 0, "gain" : 1]),
+  "sain" : (["start" : 0, "gain" : 1])]),
+"karel" : ([
+  "guy" : (["start" : 5, "gain" : 3]),
+  "geitz" : (["start" : 0, "gain" : 2]),
+  "karla" : (["start" : 25, "gain" : 2]),
+  "dart" : (["start" : 0, "gain" : 2]),
+  "lucius" : (["start" : 0, "gain" : 1])]),
+"harken" : ([
+  "eliwood" : (["start" : 25, "gain" : 3]),
+  "isadora" : (["start" : 40, "gain" : 4]),
+  "lowen" : (["start" : 15, "gain" : 3]),
+  "marcus" : (["start" : 20, "gain" : 2]),
+  "vaida" : (["start" : 0, "gain" : 1])]),
+"nino" : ([
+  "jaffar" : (["start" : 25, "gain" : 3]),
+  "erk" : (["start" : 0, "gain" : 3]),
+  "florina" : (["start" : 0, "gain" : 2]),
+  "merlinus" : (["start" : 0, "gain" : 2]),
+  "legault" : (["start" : 0, "gain" : 2]),
+  "canas" : (["start" : 0, "gain" : 3]),
+  "rebecca" : (["start" : 0, "gain" : 3])]),
+"jaffar" : ([
+  "nino" : (["start" : 25, "gain" : 3]),
+  "matthew" : (["start" : 0, "gain" : 1]),
+  "legault" : (["start" : 5, "gain" : 1])]),
+"vaida" : ([
+  "heath" : (["start" : 0, "gain" : 2]),
+  "harken" : (["start" : 0, "gain" : 1]),
+  "karla" : (["start" : 0, "gain" : 2]),
+  "wallace" : (["start" : 0, "gain" : 2]),
+  "canas" : (["start" : 0, "gain" : 2]),
+  "dorcas" : (["start" : 0, "gain" : 2]),
+  "merlinus" : (["start" : 0, "gain" : 1])]),
+"karla" : ([
+  "karel" : (["start" : 25, "gain" : 2]),
+  "bartre" : (["start" : 5, "gain" : 4]),
+  "farina" : (["start" : 0, "gain" : 2]),
+  "vaida" : (["start" : 0, "gain" : 2])]),
+"renault" : ([
+  "bartre" : (["start" : 0, "gain" : 1]),
+  "isadora" : (["start" : 0, "gain" : 1]),
+  "lucius" : (["start" : 0, "gain" : 2]),
+  "wallace" : (["start" : 0, "gain" : 2]),
+  "canas" : (["start" : 0, "gain" : 2])]),
+"paul" : ([
+  "jasmine" : (["start" : 241, "gain" : 0])]),
+"jasmine" : ([
+  "paul" : (["start" : 241, "gain" : 0])]),
+"lloyd" : ([
+  "linus" : (["start" : 241, "gain" : 0])]),
+"linus" : ([
+  "lloyd" : (["start" : 241, "gain" : 0])]),
+]);
+
+mapping query_supporters(string who)
+{
+  return supports[who];	
+}

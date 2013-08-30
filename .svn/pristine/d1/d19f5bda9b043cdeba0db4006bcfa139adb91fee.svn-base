@@ -1,0 +1,15 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("the marathon runner of Aegic");
+  set_long(wrap("This monster runs, it runs fast.\n"));
+  set_name("runner");
+  set_id(({"runner", "marathon runner", "marathon runner of aegic", "human"}));
+  set_level(13);
+  set_race("human");
+  set_stat("size",140);
+  set_speed(1);
+}

@@ -1,0 +1,30 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int nulltest(string str)
+{
+  object obj;
+  obj = new("/obj/torch.c");
+  mapping map;
+  map[0] = obj;
+  map[1] = NULL;
+  if(!str)
+  {
+    message("info",""+identify(map)+"\n",this_player());
+    return 1;
+  }
+  return notify_fail("No args.\n");
+}
+
+void extra_init()
+{
+  add_action("nulltest", "null");
+}
+
+void extra_create()
+{
+  set_short("foo ob");
+  set_long("foo\n");
+  set_id("foo");
+}

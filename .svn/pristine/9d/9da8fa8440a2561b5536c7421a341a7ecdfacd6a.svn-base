@@ -1,0 +1,26 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+int chains = 0;
+
+int query_chains()
+{
+  return chains;
+}
+
+void increment_chains()
+{
+  chains++;
+}
+
+void extra_create()
+{
+  set_short("Asdf");
+  set_long(wrap("foo.\n"));
+  set_name("asdf");
+  set_id(({"asdf"}));
+  set_living_name("asdf");
+  set_level(1);
+  set_stat("size",random(1001));
+}

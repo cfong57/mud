@@ -1,0 +1,561 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit OBJECT;
+//THIS IS NOT DESIGNED TO BE A STANDALONE OBJECT. DO NOT CLONE IT.
+int phase = 1; 
+int fruits = 0;
+int water = 100;
+int nutrients = 100;
+int newfruits = 0;
+int started = 0;
+int stopped = 1;
+string planter; //who planted the Golden Seed / Golden Fruit for this tree
+
+int query_phase() { return phase; }
+int query_water() {return water; }
+int query_nutrients() {return nutrients; }
+int query_fruits() { return fruits; }
+string query_planter() { return ""+planter+"";}
+string phasemsg = "It is a Golden Seedling right now, with time and care it "+
+"should grow into a Golden Sapling.\n";
+string watermsg = "The Golden Tree has a small amount of water left.\n";
+string soilmsg = "The Golden Tree has a small amount of nutrients left.\n";
+
+int pick_command(string cmd)
+{
+	if ( cmd == "fruit" )
+	{
+	if(this_player()->query_cap_name() == this_object()->query_planter())
+	{
+	if(fruits == 0)
+	{
+		message("info","There aren't any more fruits on the Golden Tree. "+
+		"You'll have to wait for some more to grow.\n",this_player());
+		return 1;
+    }
+    else
+    {
+      object p = this_player();
+      object fruit;
+      message("info","You reach up and pick a Golden Fruit.\n",p); 
+      message("info",""+p->query_cap_name()+" reaches up and picks a "+
+      "Golden Fruit.\n",environment(p),p);
+      fruit = new("/u/a/allanon/garden/gfruit.c");
+      fruit->move(p,1); 
+      fruits--; 
+      call_out("refresh_messages",0);
+      return 1;
+    }
+    }
+    else
+    {
+	return notify_fail("You are not the owner of this tree and it would be "+
+	"stealing to pick any fruit from it.\n");   
+    }
+    }
+    return notify_fail("Try 'pick fruit'.\n");
+}  
+
+int water_command(string cmd)
+{
+  string wsource;
+  object sourceob;
+  int morewater;
+  
+  if(!cmd)
+  return notify_fail("Try 'water tree with <thing>'.\n");
+  
+  sscanf(cmd, "tree with %s",wsource);
+  
+  if(!wsource)
+  return notify_fail("Water tree with what?\n"); 
+     
+  sourceob = present(wsource,this_player());
+  
+  if(!sourceob)
+  return notify_fail("You don't have the "+wsource+" with you.\n"); 
+   
+  if(!sourceob->query_drinkable())
+  return notify_fail("The "+wsource+" is not drinkable, you can't water the "+
+  "Golden Tree with it.\n");
+  
+  if(sourceob->query_gulpleft() == 0)
+  return notify_fail("There's no more liquid left in the "+wsource+".\n");
+  
+  message("water","You water the Golden Tree with the "+wsource+". The plant "+
+  "seems to be delighted.\n",this_player());
+  message("water",""+this_player()->query_cap_name()+" waters the Golden "+
+  "Tree with the "+wsource+". The plant seems to be delighted.\n",
+  environment(this_player()),this_player());
+  morewater = sourceob->query_gulp_mass();
+  water = query_water() + morewater;
+  sourceob->set_gulpleft(sourceob->query_gulpleft() - 1);
+  call_out("refresh_messages",0);
+  return 1;
+}
+
+int enrich_command(string cmd)
+{
+  string fsource;
+  object fsourceob;
+  int morefood;
+  
+  if(!cmd)
+  return notify_fail("Try 'enrich tree with <thing>'.\n");
+  
+  sscanf(cmd, "tree with %s",fsource);
+  
+  if(!fsource)
+  return notify_fail("Enrich tree with what?\n"); 
+     
+  fsourceob = present(fsource,this_player());
+  
+  if(!fsourceob)
+  return notify_fail("You don't have the "+fsource+" with you.\n"); 
+   
+  if(!fsourceob->query_edible())
+  return notify_fail("The "+fsource+" is not edible, you can't enrich the "+
+  "Golden Tree with it.\n");
+  
+  if(fsourceob->query_food_value() == 0)
+  return notify_fail("That is not fit for your consumption, what makes you "+
+  "think it will be good for the Golden Tree?\n");
+  
+  message("enrich","You feed the Golden Tree with the "+fsource+". The plant "+
+  "seems to be delighted.\n",this_player());
+  message("enrich",""+this_player()->query_cap_name()+" feeds the Golden "+
+  "Tree with the "+fsource+". The plant seems to be delighted.\n",
+  environment(this_player()),this_player());
+  morefood = fsourceob->query_food_value();
+  nutrients = query_nutrients() + morefood;
+  fsourceob->remove();//Yes, even infinite foodsources get deleted *kjeh kjeh*
+  call_out("refresh_messages",0);
+  return 1;
+}
+
+int start_growing(string cmd)
+{
+  if(!cmd)
+  {
+  if(started == 0)
+  {
+  message("start","You touch the Golden Tree gently and bid it to start its "+
+  "growth process.\n",this_player());
+  message("start",""+this_player()->query_cap_name()+" touches the Golden "+
+  "Tree gently and bids it to start its growth process.\n",
+  environment(this_player()),this_player());
+  started = 1;  
+  stopped = 0;
+  call_out("try_grow",300 + random(100));
+  call_out("mini_grow",30 + random(10));
+  return 1;
+  }
+  else
+  {
+  return notify_fail("The tree is already growing.\n");
+  }	  
+  }
+  return notify_fail("No args, just 'start_tree'.\n");	
+}
+
+int stop_growing(string cmd)
+{
+  if(!cmd)
+  {
+  if(stopped == 0)
+  {
+  message("stop","You touch the Golden Tree gently and bid it to stop its "+
+  "growth process.\n",this_player());
+  message("stop",""+this_player()->query_cap_name()+" touches the Golden "+
+  "Tree gently and bids it to stop its growth process.\n",
+  environment(this_player()),this_player());
+  stopped = 1;  
+  started = 0;
+  remove_call_out("try_grow");
+  remove_call_out("mini_grow");
+  return 1;
+  }
+  else
+  {
+  return notify_fail("The tree's growth is already stopped.\n");
+  }	  
+  }
+  return notify_fail("No args, just 'stop_tree'.\n");	
+}
+
+void extra_init() 
+{ 
+    add_action("pick_command","pick"); 
+    add_action("water_command","water");
+    add_action("enrich_command","enrich"); 
+    add_action("start_growing","start_tree");
+    add_action("stop_growing","stop_tree");
+} 
+
+void extra_create()
+{
+  set_short("%^RESET%^%^ORANGE%^A Golden Seedling%^RESET%^");
+  set_long(wrap("This is the mystical Golden Tree. It is said that the "+
+  "fruits of this tree will make you stronger, but no one has yet to lay "+
+  "their eyes upon a Golden Fruit. Growing and raising this tree takes time "+
+  "and effort, but the results are more than worthwhile. To help mortals "+
+  "raise the tree, The Gods have endowed it with the gift of "+
+  "self-pollination and rendered it immune to diseases. In addition, the "+
+  "tree has the amazing ability to convert any liquid to water, in order "+
+  "that mortals encumbered with beers might not have to trek a long ways in "+
+  "search of suitable liquid with which to water it. The tree can also "+
+  "magically make use of any kind of food, making its feeding easier.\n"+
+  "You can water the tree with 'water tree with foo', and you can give it "+
+  "nutrients with 'enrich tree with foo'. If there are any fruits you can "+
+  "'pick fruit' to get them, but only if you're the owner. Fruits will start "+
+  "to grow randomly once the tree is old enough.\n"+
+  "To start the tree's growth, 'start_tree'.\n"+
+  "To stop the tree's growth, 'stop_tree'.\n"+
+  ""+phasemsg+"\n"+
+  ""+watermsg+"\n"+
+  ""+soilmsg+"\n"+
+  "There are "+int_string(fruits)+" fruits on the tree.\n"+
+  "This Golden Tree was planted by "+planter+".\n"));
+  set_id(({"golden tree", "tree", "seedling", "golden seedling"}));
+  set_name("Golden Tree");
+  set_prevent_get(1);
+  set_prevent_drop(1);
+  set_mass(15);
+  set_bulk(15);
+  set_value(327645);
+}
+
+void try_grow()
+{
+  switch(query_phase())
+  {
+  case 1: //seedling -> sapling
+  if(nutrients > 100)
+  {
+  if(water > 100)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-100;
+  nutrients = query_nutrients()-100;
+  set_mass(35);
+  set_bulk(35);
+  set_short("%^RESET%^%^ORANGE%^A Golden Sapling%^RESET%^");
+  phasemsg = "It is a Golden Sapling right now, with time and care it "+
+  "should grow into a small Golden Tree.\n";
+  set_id(({"golden tree", "tree", "sapling", "golden sapling"}));
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break;
+  case 2: //sapling -> small tree
+  if(nutrients > 250)
+  {
+  if(water > 250)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-250;
+  nutrients = query_nutrients()-250;
+  set_mass(50);
+  set_bulk(50);
+  set_short("%^RESET%^%^ORANGE%^A small Golden Tree%^RESET%^");
+  phasemsg = "It is a small Golden Tree right now, with time and care it "+
+  "should grow into a medium-sized Golden Tree.\n";
+  set_id(({"golden tree", "tree", "small golden tree", "small tree"}));
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break;
+  case 3: //small tree -> medium-sized tree
+  if(nutrients > 625)
+  {
+  if(water > 625)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-625;
+  nutrients = query_nutrients()-625;
+  set_mass(100);
+  set_bulk(100);
+  set_short("%^RESET%^%^ORANGE%^A medium-sized Golden Tree%^RESET%^");
+  phasemsg = "It is a medium-sized Golden Tree right now, with time and care "+
+  "it should grow into a large Golden Tree.\n";
+  set_id(({"golden tree", "tree", "medium-sized tree", 
+  "medium-sized golden tree"}));
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break;
+  case 4: //medium-sized tree -> large tree
+  if(nutrients > 750)
+  {
+  if(water > 750)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-750;
+  nutrients = query_nutrients()-750;
+  set_mass(200);
+  set_bulk(200);
+  set_short("%^RESET%^%^ORANGE%^A large Golden Tree%^RESET%^");
+  phasemsg = "It is a large Golden Tree right now, with time and care "+
+  "it should grow into a fully grown Golden Tree.\n";
+  set_id(({"golden tree", "tree", "large tree", "large golden tree"}));
+  fruits = 1;
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break;
+  case 5: //large tree -> fully grown tree
+  if(nutrients > 1000)
+  {
+  if(water > 1000)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-1000;
+  nutrients = query_nutrients()-1000;
+  set_mass(350);
+  set_bulk(350);
+  set_short("%^RESET%^%^ORANGE%^A fully grown Golden Tree%^RESET%^");
+  phasemsg = "It is a fully grown Golden Tree right now, with time and care "+
+  "it should grow into an impressively large Golden Tree.\n";
+  set_id(({"golden tree", "tree", "fully grown tree", 
+  "fully grown golden tree"}));
+  fruits = query_fruits() + 2;
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break; 
+  case 6: //fully-grown tree -> impressively large tree
+  if(nutrients > 1500)
+  {
+  if(water > 1500)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-1500;
+  nutrients = query_nutrients()-1500;
+  set_mass(500);
+  set_bulk(500);
+  set_short("%^RESET%^%^ORANGE%^An impressively large Golden Tree%^RESET%^");
+  phasemsg = "It is an impressively large Golden Tree right now, with time "+
+  "and care it should grow into a grand, majestic Golden Tree.\n";
+  set_id(({"golden tree", "tree", "impressively large tree", 
+  "impressively large golden tree", "impressive tree", 
+  "impressive golden tree"}));
+  fruits = query_fruits() + 4;
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break; 
+  case 7: //impressively large tree -> grand, majestic tree
+  if(nutrients > 5000)
+  {
+  if(water > 5000)
+  {
+  call_out("advance_phase",1);
+  water = query_water()-5000;
+  nutrients = query_nutrients()-5000;
+  set_mass(1500);
+  set_bulk(1500);
+  set_short("%^RESET%^%^ORANGE%^A grand, majestic Golden Tree%^RESET%^");
+  phasemsg = "It is a grand, majestic Golden Tree. It couldn't possibly "+
+  "grow any larger!\n";
+  set_id(({"golden tree", "tree", "grand, majestic tree",
+   "grand, majestic golden tree", "grand tree", "majestic tree", 
+   "grand golden tree", "majestic golden tree"}));
+  fruits = query_fruits() + 7;
+  call_out("stop_phase_advancement",5);
+  break;
+  }
+  break;
+  }
+  call_out("growfail_message",1);  
+  break; 
+  default:
+  call_out("error_message",1);
+  break;
+  } 
+  call_out("try_grow",300 + random(100));	
+}
+
+void stop_phase_advancement()
+{//this stops it from going out of bounds (past 7)
+  remove_call_out("try_grow");	
+}
+
+void tree_dies()
+{
+  message("info","%^RESET%^%^BOLD%^%^RED%^The Golden Tree withers and fades "+
+  "away, dead from a lack of care.%^RESET%^\n",environment(this_object()));
+  remove_call_out("mini_grow");
+  remove_call_out("try_grow");
+  this_object()->remove();	
+}
+
+void advance_phase()
+{
+   message("grow","%^RESET%^%^GREEN%^The Golden Tree grows a little bit "+
+   "taller.%^RESET%^\n",environment(this_object()));
+   phase = query_phase()+1;
+   call_out("refresh_messages",0);	
+}
+
+void newfruit_message()
+{
+  message("new_fruit",
+  "%^RESET%^%^GREEN%^"+capitalize(int_string(newfruits))+" Golden Fruits "+
+  "suddenly grow on the Golden Tree.%^RESET%^\n",environment(this_object()));	
+}
+
+void growfail_message()
+{
+  message("grow_fail","%^RESET%^%^BOLD%^%^BLUE%^The Golden Tree looks like it "+
+  "is trying to grow, but it's missing something...%^RESET%^\n",
+  environment(this_object()));	
+}
+
+void error_message()
+{
+  message("ERROR","%^RESET%^%^BOLD%^%^RED%^Bug, something went wrong - phase "+
+  "out of bounds. Contact Allanon or call 411.%^RESET%^\n",
+  environment(this_object()));
+  message("ERROR","%^RESET%^%^BOLD%^%^RED%^Bug, phase out of bounds. "+
+  "RTFM.%^RESET%^\n",find_living("allanon"));	
+}
+
+void mini_grow()
+{
+  if(water < -1 || nutrients < -1)
+  call_out("tree_dies",0);  
+  switch(query_phase())
+  {
+  case 4:
+  {
+  if(nutrients > 500 && water > 500)
+  {
+  if(!random(100))
+  {
+  newfruits = random(2);
+  fruits = query_fruits() + newfruits;
+  water = query_water() - newfruits * 200;
+  nutrients = query_nutrients() - newfruits * 200;
+  call_out("newfruit_message",1);
+  }
+  }
+  }
+  break;
+  case 5:
+  {
+  if(nutrients > 600 && water > 600)
+  {
+  if(!random(65))
+  {
+  newfruits = random(3);
+  fruits = query_fruits() + newfruits;
+  water = query_water() - newfruits * 175;
+  nutrients = query_nutrients() - newfruits * 175;
+  call_out("newfruit_message",1);
+  }
+  }
+  }
+  break;
+  case 6:
+  {
+  if(nutrients > 850 && water > 850)
+  {
+  if(!random(35))
+  {
+  newfruits = random(5);
+  fruits = query_fruits() + newfruits;
+  water = query_water() - newfruits * 125;
+  nutrients = query_nutrients() - newfruits * 125;
+  call_out("newfruit_message",1);
+  }
+  }
+  }
+  break;
+  case 7:
+  {
+  if(nutrients > 1250 && water > 1250)
+  {
+  if(!random(10))
+  {
+  newfruits = 1 + random(7);
+  fruits = query_fruits() + newfruits;
+  water = query_water() - newfruits * 100;
+  nutrients = query_nutrients() - newfruits * 100;
+  call_out("newfruit_message",1);
+  }
+  }
+  }
+  break;
+  default://not old enough to produce fruit yet
+  {
+  ;
+  }
+  break;
+  }
+  water = query_water() - (1+random(10));
+  nutrients = query_nutrients() - (1+random(10));	  
+  call_out("mini_grow",15+random(15));
+  call_out("refresh_messages",0);
+}
+
+void refresh_messages()
+{
+  watermsg = "The Golden Tree has "+verbalize_amount(water, 6000)+" water "+
+  "left.\n";
+  soilmsg = "The Golden Tree has "+verbalize_amount(nutrients, 6000)+" "+
+  "nutrients left.\n";
+  set_long(wrap("This is the mystical Golden Tree. It is said that the "+
+  "fruits of this tree will make you stronger, but no one has yet to lay "+
+  "their eyes upon a Golden Fruit. Growing and raising this tree takes time "+
+  "and effort, but the results are more than worthwhile. To help mortals "+
+  "raise the tree, The Gods have endowed it with the gift of "+
+  "self-pollination and rendered it immune to diseases. In addition, the "+
+  "tree has the amazing ability to convert any liquid to water, in order "+
+  "that mortals encumbered with beers might not have to trek a long ways in "+
+  "search of suitable liquid with which to water it. The tree can also "+
+  "magically make use of any kind of food, making its feeding easier.\n"+
+  "You can water the tree with 'water tree with foo', and you can give it "+
+  "nutrients with 'enrich tree with foo'. If there are any fruits you can "+
+  "'pick fruit' to get them, but only if you're the owner. Fruits will start "+
+  "to grow randomly once the tree is old enough.\n"+
+  "To start the tree's growth 'start_tree'.\n"+
+  "To stop the tree's growth 'stop_tree'.\n"+
+  ""+phasemsg+"\n"+
+  ""+watermsg+"\n"+
+  ""+soilmsg+"\n"+
+  "There are "+int_string(fruits)+" fruits on the tree.\n"+
+  "This Golden Tree was planted by "+planter+".\n"));
+}
+
+void set_planter(string p)
+{
+    planter = p;
+}
+
+void set_water(int w)
+{//for testing purposes only
+    water = w;
+}
+
+void set_nutrients(int n)
+{//for testing purposes only
+    nutrients = n;
+}
+
+void set_phase(int ph)
+{//for testing purposes only
+  phase = ph;	
+}

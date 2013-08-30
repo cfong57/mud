@@ -1,0 +1,97 @@
+// Need to change id(string str) in ob_logic, from query_id() to this_object()->query_id() for this item to work
+#include <mudlib.h>
+
+#define NEXT 3600
+
+inherit ARMOUR;
+
+int time;
+
+void extra_create() 
+{
+  set_identified(1);
+  set_id( ({ "cloak", "cloak of camouflage", "Cloak of Camouflage"  }) ) ;
+  set_long("foo/n") ;
+  set_short("Cloak of Camouflage");
+  set_name("cloak of camouflage");
+  set_slots( ({"cloak"}) );
+  set_material("silk");
+  set_type("standard");
+  set_type_desc("cloak");
+  set_size(140);
+  set_quality(40);
+  set_cost_modifier(6);
+  add_magic_property("pspregen", 1 );
+  add_magic_property("epregen", 1 );
+  add_magic_property("hpregen", 1 );
+  add_magic_property("spregen", 1 );  
+  set_wear_func("shadow_me");
+  set_remove_func("shadow_off"); 
+  armour_setup();
+}
+
+int shadow_me() 
+{ 
+  object shadow;
+  shadow = new("/u/a/allanon/shadows/camo_shadow.c",this_player()); 
+  return 1;
+}
+
+int shadow_off()
+{
+  this_player()->remove_camo_shadow();
+  return 1;
+}
+
+void extra_init()
+{
+  add_action("merge_action","merge");
+}
+
+string query_time()
+{
+  return format_time(time() - (time + NEXT),0);
+}
+
+int merge_action(string str)
+{
+  string mon;
+  object monob, shadow;
+  if(!str)
+    return notify_fail("What do you want to merge with?\n");
+  
+  sscanf(str, "with %s",mon);
+  if(!mon)
+    return notify_fail("Merge with what?\n");
+    
+  if(time + NEXT > time())
+    return notify_fail("The cloak appears to be spent for the time being.\n");
+    
+  if(!query_user())
+    return notify_fail("You need to wear the cloak before you can camouflage yourself.\n");
+    
+  shadow = this_player()->query_camo_shadow();
+  if(!shadow)
+    return notify_fail("Problem with shadow.\n");
+    
+  monob = present(mon,environment(this_player()));
+  if(!monob)
+    return notify_fail("You do not see "+mon+" here.\n");
+  
+  if(!monob->query_npc())
+    return notify_fail("You can only merge with monsters.\n");
+  
+  if(!monob->query_long() || !monob->query_short() || !monob->query_id() ||
+     !monob->query_race() || !monob->query_stat("size") || !monob->query_name() ||
+     !monob->query_gender() || !monob->query_species())
+     return notify_fail("For some reason the cloak is unable to merge with that monster.\n");
+  shadow->merge_user(monob->query_long(), monob->query_short(), monob->query_id(), 
+          monob->query_race(), monob->query_stat("size"), monob->query_name(), 
+          monob->query_gender(), monob->query_species());
+  time = time();
+  message("info","You feel a strange sensation and everything thing goes blurry then "+
+   "snaps back into place.\n",this_player());
+  message("info","You watch in amazement as "+this_player()->query_cap_name()+
+   " changes shape right before your eyes!\n",environment(this_player()),this_player());
+  return 1;
+}

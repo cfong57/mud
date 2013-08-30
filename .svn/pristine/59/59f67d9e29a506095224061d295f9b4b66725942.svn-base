@@ -1,0 +1,58 @@
+#include <mudlib.h>
+#include <damage.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("Ankheg of the Ancients"); 
+  set_long(wrap("Unlike most ordinary Ankheg, which simply resemble large worms "+
+  "with teeth set in a circular maw, this titanic Ankheg must be at least twenty "+
+  "meters long. The maw alone is at least ten meters in diameter, easily enough to "+
+  "swallow you whole. Ten-foot long teeth, dripping poison, line its interior. "+
+  "The entire surface of the beast is covered in metallic plating, "+
+  "almost giving it the appearance of a machine. \n"));
+  set_name("ankheg of the Ancients");
+  set_id(({"ankheg of the ancients", "ankheg"}));
+  set_level(75); 
+  set_race("ankheg");
+  set_aggressive(1); 
+  set_body_parts(({
+	               "maw", 3, 10, "maw", 
+	               "teeth", 2, 10, "teeth", 
+	               "main segment", 15, 1, "main segment", 	               
+	               "second segment", 15, 1, "second segment",
+	               "third segment", 15, 1, "third segment",
+	               "fourth segment", 15, 1, "fourth segment",
+	               "fifth segment", 15, 1, "fifth segment",
+	               "tail", 20, 1, "tail"}));         
+  set_stat("size",2000);
+  add_natural_weapon("maw", "slashing", 1, ({PHYSICAL, 75, LIGHTNING, 25}));
+  add_natural_weapon("teeth", "piercing", 0, ({PHYSICAL, 25, POISON, 50, LIGHTNING, 25}));
+  add_natural_weapon("tail", "bludgeoning", 0, ({PHYSICAL, 50, LIGHTNING, 50})); 
+  natural_weapon_damage( 3500, "maw");
+  natural_weapon_damage( 5000, "teeth");
+  natural_weapon_damage( 3000, "tail");
+  set_gender("neuter");
+  set_skin_data("type", "none");
+  set_speed(0);
+  add_object("/u/a/allanon/areas/saith/obj/plates");
+  set_wealth( ([ "mithril" : 500 ]) ); 
+  set_resistance("lightning",500); 
+  set_following(0);
+  set_natural_ac(1000);
+}
+
+int special_hit(object target)
+{
+   if(!random(5))
+   {
+    message("damage","Ankheg of the Ancients raises its tail high before SMASHING "+
+    "it back down with terrifying force, CRUSHING "+target->query_cap_name()+" "+
+    "into the ground!\n",
+    environment(target),target);
+    message("damage","Ankheg of the Ancients raises its tail high before SMASHING "+
+    "it back down with terrifying force, CRUSHING you into the ground!\n",target);
+    target->receive_damage(5000+random(1000));
+   }
+}

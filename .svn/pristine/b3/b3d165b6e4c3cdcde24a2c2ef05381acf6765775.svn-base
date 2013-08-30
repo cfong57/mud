@@ -1,0 +1,54 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+void extra_create()
+{
+  set_short( "Northwestern tower of the Bastion, second floor" );
+  set_long(wrap("You have entered what looks to be a sort of guard tower. "+
+  "An iron gate prevents anyone from going up or down the stairs. There are "+
+  "some stone benches around the perimeter, where the guards probably sat "+
+  "while bored. A wooden table is near some of the benches, and on it you see "+
+  "some cards. A dagger has been struck through one of the cards, pinning it "+
+  "to the table. There is a hole in one of the walls, through which an iron "+
+  "tube protrudes.\n"));
+  add_object("/u/a/allanon/area/ity/obj/seaforium.c");
+  set_item_desc(([
+  ({"stone benches", "benches"}) : "These are just simple slabs of stone that "+
+  "have been laid on the floor. Not very comfortable, but it was probably "+
+  "in the best interests of the castle for the guards not to get too easy "+
+  "on the job.\n",
+  ({"wooden table", "table"}) : "The table is made of plain oak wood, and is "+
+  "supported by four legs. There is a great mess of playing cards scattered "+
+  "all over it. One of the cards has been pinned to the table with a "+
+  "dagger.\n",
+  "cards" : "It looks like a standard deck of 52 playing cards, the kind that "+
+  "is used for playing Ice Hold'Em.\n",
+  ({"card", "dagger"}) : "An iron dagger is transfixed through one of the "+
+  "cards on the table. You note that it is the "+thecard+".\n",
+  ({"hole", "iron tube", "tube"}) : "The tube is several centimeters in "+
+  "diameter, and widens out like a trumpet at the end. Perhaps it is a "+
+  "speaking tube, used to communicate with the throne room. You are tempted "+
+  "to try speaking into it, although you would never know if it works unless "+
+  "there was someone on the other side.\n"]));
+  set_sounds(145 + random(20), ({ 
+  "You wonder why there would be a random deck of cards left on the "+
+  "table.\n"}) );
+  set_exits(([
+  "down": "/u/a/allanon/area/ity/rooms/towernw1.c",
+  "up": "/u/a/allanon/area/ity/rooms/towernw3.c"]));
+  create_door("down", "up",
+  (["short" : "iron gate barring the stairs",
+  "long" : "A heavy iron gate bars the stairway down. Since the iron is at "+
+  "least ten centimeters thick, you don't think it would be possible to break "+
+  "it down.\n",
+  "ids" : ({ "iron gate", "gate" }),
+  "status" : "locked",
+  "autoclose" : 15,
+  "autolock" : 1,
+  "quality" : 1001,
+  "material" : "iron",
+  "close_msg" : "The iron gate swings shut.\n",
+  "open_msg" : "You open the iron gate.\n"]) );
+}

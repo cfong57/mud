@@ -1,0 +1,31 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("furious spirit of a ranger");
+  set_long(
+      wrap("A clearly spiteful spirit bars your path. You aren't quite sure why "+
+      "it has come back from the grave, but it seems to be extremely displeased "+
+      "with something. You recall that disturbing graves is a good way to incite spirits. "+
+      "You can discern from first glance that the spirit is that of a human, and "+
+      "with its two blades it was definitely also a ranger when alive. A bright "+
+      "silvery wound in its chest marks how it died...you think you can still see "+
+      "a fragment of a shattered dagger embedded within it.\n"));
+  set_name("spirit");
+  set_id( ({ "furious spirit", "spirit", "ranger"}) );
+  set_level(20);
+  add_object("/u/a/allanon/area/caverns_of_slime/obj/dshard.c");
+  add_random_weapon("random_sabre", 3);
+  add_random_weapon("random_rssword", 3);
+  set_species("undead");
+  set_race("human");
+  set_aggressive(1);
+  set_gender("neuter");
+  set_skin_data("type", "none");
+  set_heartless(1);
+  set_chat_chance(5);
+  set_att_chat_output( ({ "Spirit chants eerily: Yyyou shalll atooone...in blooood!\n" }));
+  set_blocking_dirs( (["northwest" : "The spirit blocks your passage!\n"   ]) );
+}

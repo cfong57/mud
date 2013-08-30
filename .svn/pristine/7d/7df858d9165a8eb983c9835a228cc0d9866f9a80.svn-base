@@ -1,0 +1,324 @@
+/*Pretty cool. Similar to a bow, but actually works. Coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+#include <damage.h>
+
+inherit "/obj/gems/jewel";
+
+object mon;
+int charges = 5;
+int shooting = 0;
+int fkrit;
+int cha;
+int mlore;
+int obint;
+int obwis;
+int offcheck;
+int ready = 0;
+string monstr;
+
+int info_command(string cmd)
+{
+   if(cmd == "shadowshot")
+   {
+message("info",wrap("This pitch-black gemstone radiates a malefic miasma of evil "+
+"that makes even looking at it a challenge. Dark energy emanates from its "+
+"depths, seeking hungrily for life to destroy.\n"+
+"TO SHOOT: shoot <monster>\n"+
+"Note that you cannot fire the Shadowshot while you are asleep, stunned, "+
+"using a skill, casting a spell, unconscious, or in battle. (You can use "+
+"it while frozen, acid-stunned, and numb from high voltage, becuase I "+
+"don't know how to check for mage-mastery status effects yet.)\n"),
+this_player());	
+return 1;
+   }
+}
+
+int shoot_command(string cmd)
+{ 
+	  {
+  object p = this_player();	 
+  object *inventory; 
+  inventory=filter_array(all_inventory(environment(environment(this_object()))), 
+  (:living($1):));  
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+  {
+	  if(!p->query_asleep() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot while you're asleep!\n",p);
+	  return 1;
+	  }
+	  if(p->query_stunned())
+	  {
+	  message("fail","You can't use the Shadowshot while you're stunned!\n",p);
+	  return 1;
+	  }
+	  if(!p->query_uncon() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot while you're "+
+	  "unconscious!\n",p);	
+	  return 1;  
+	  }
+	  if(!p->query_skilling() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot and concentrate on your "+
+	  "skill at the same time!\n",p);  
+	  return 1;
+	  }
+	  if(!p->query_casting() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot and cast your spell at the "+
+	  "same time!\n",p);  
+	  return 1;
+	  }	
+	  if(p->query_battleob())
+	  {
+	  message("fail","You can't concentrate on shooting the Shadowshot in the "+
+	  "middle of combat!\n",p);   
+	  return 1;
+	  }  
+	  if(!shooting == 0)
+	  {
+	  remove_call_out("present_check");
+	  message("change","You stop aiming at your old target to properly aim at "+
+	  ""+ob->query_cap_name()+" instead.\n",p);
+	  message("change",""+p->query_cap_name()+" stops aiming at "+
+	  ""+possessive(p)+" old target to properly aim at "+
+	  ""+ob->query_cap_name()+" instead.\n",environment(p),p);
+	  shooting = 1;
+	  mon = ob;
+	  monstr = ob->query_name();
+	  fkrit = p->query_skill("fake offensive rituals");
+      cha = p->query_stat("charisma");
+      mlore = ob->query_skill("magic lore");
+      obint = ob->query_stat("intelligence");
+      obwis = ob->query_stat("wisdom");
+      offcheck = ( (mlore+obint+obwis) - (fkrit+cha*2) );    
+      if(ob->query_attacker() == !p)
+      {
+      if(!offcheck > 0)
+      {
+	  message("aggro",""+ob->query_cap_name()+" notices your offensive "+
+	  "actions and attacks!\n",p);
+	  message("aggro",""+ob->query_cap_name()+" notices "+
+	  ""+p->query_cap_name()+"'s offensive actions and attacks!\n",
+	  environment(p),p);
+	  ob->kill_ob(p);
+      }
+      }
+      call_out("present_check",7+random(13));
+	  return 1;   
+      }     
+      else      
+      {
+	  message("shoot","You raise the Shadowshot and start aiming at "+
+	  ""+ob->query_cap_name()+".\n",p); 
+	  message("shoot",""+p->query_cap_name()+" raises "+possessive(p)+" "+
+	  "Shadowshot and starts aiming at "+ob->query_cap_name()+".\n",
+	  environment(p),p);
+	  shooting = 1;
+	  mon = ob;
+	  monstr = ob->query_name();
+      fkrit = p->query_skill("fake offensive rituals");
+      cha = p->query_stat("charisma");
+      mlore = ob->query_skill("magic lore");
+      obint = ob->query_stat("intelligence");
+      obwis = ob->query_stat("wisdom");
+      offcheck = ( (mlore+obint+obwis) - (fkrit+cha*2) );
+      if(ob->query_attacker() == !p)
+      {
+      if(!offcheck > 0)
+      {
+	  message("aggro",""+ob->query_cap_name()+" notices your offensive "+
+	  "actions and attacks!\n",p);
+	  message("aggro",""+ob->query_cap_name()+" notices "+
+	  ""+p->query_cap_name()+"'s offensive actions and attacks!\n",
+	  environment(p),p);
+	  ob->kill_ob(p);
+      }      
+      }  
+      call_out("present_check",7+random(13));
+	  return 1;   
+      }   
+  }  
+  return notify_fail("Shoot what?\n");
+}
+}
+
+void extra_init() 
+{ 
+    add_action("shoot_command","shoot"); 
+    add_action("info_command","info");
+} 
+
+void extra_create() 
+{
+  set_short("%^BOLD%^%^RED%^Shadowshot%^RESET%^");
+  set_id(({"Shadowshot", "shadowshot"}));
+  set_long(wrap("Long-range dark magic bolt.\n"+
+  "'info shadowshot' for more information.\n"));
+  set_gem_name("%^BOLD%^%^RED%^Shadowshot%^RESET%^");
+  set_value((this_object()->query_value())+100000+random(50000));
+  set_mass(1250);
+  set_bulk(1500);
+  set_rarity(100);
+  set_quality(70);
+  set_cut(10);
+  set_identified(1);
+  call_out("ready_check",1);
+}
+
+void present_check()
+{
+    object p = this_player();	 
+    object *array;
+    array=filter_array(all_inventory(environment(environment(this_object()))),(:living($1):));   
+    foreach(object ob in array)
+    if(present(monstr,environment(ob)))
+    {
+    shooting = 0;
+    ready = 1;
+    }
+    else
+    {
+	message("fail","The target is no longer present!\n",p);
+    }
+    if(!p->query_asleep() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot while you're asleep!\n",p);
+	  ready = 0;
+	  }
+	  if(p->query_stunned())
+	  {
+	  message("fail","You can't use the Shadowshot while you're stunned!\n",p);
+	  ready = 0;
+	  }
+	  if(!p->query_uncon() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot while you're "+
+	  "unconscious!\n",p);	
+	  ready = 0;
+	  }
+	  if(!p->query_skilling() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot and concentrate on your "+
+	  "skill at the same time!\n",p); 
+	  ready = 0; 
+	  }
+	  if(!p->query_casting() == 0)
+	  {
+	  message("fail","You can't use the Shadowshot and cast your spell at the "+
+	  "same time!\n",p);  
+	  ready = 0;
+	  }	 
+	  if(p->query_battleob())
+	  {
+	  message("fail","You can't concentrate on shooting the Shadowshot in the "+
+	  "middle of combat!\n",p);   
+	  ready = 0;
+	  }
+}
+
+void ready_check()
+{
+	if(ready == 1)
+	{
+    call_out("shoot_func",0);
+	}
+	call_out("ready_check",1);
+}
+
+void shoot_func()
+{
+	object p = this_player();
+	ready = 0;
+    message("damage","%^BOLD%^%^BLACK%^You conjure up malignant energy and "+
+	"channel it through the Shadowshot, sending a stream of pure HATRED at "+
+	""+mon->query_cap_name()+"!%^RESET%^\n",p);
+	message("damage",""+p->query_cap_name()+" fires "+possessive(p)+" "+
+	"Shadowshot at "+mon->query_cap_name()+"!\n",environment(p),p);
+	message("damage","You scream in pain as "+p->query_cap_name()+" fires "+
+	""+possessive(p)+" Shadowshot at you, BURNING a disgusting hole through "+
+	"your body with the force of "+possessive(p)+" hatred!\n",mon);
+	if(mon->query_stunned()) 
+    {  
+    mon->add_stun_duration(50); 
+    } 
+    else 
+    { 
+    object ss = new("/obj/battle/stun_shadow",mon); 
+    if(mon->query_stunned()) 
+    mon->add_stun_duration(350-ss->query_stun_duration()); 
+    } 
+    call_out("p_damage",0);
+    call_out("check_charges",0);
+    mon->kill_ob(p);
+	mon->receive_damage(5000+random(5000)+random(5000), PSIONIC);
+}   
+    
+void p_damage()
+{
+	object p = this_player();
+	message("drain","You feel a sharp mental backlash after unleashing such "+
+    "potent magic!\n",p);
+    message("drain",""+p->query_cap_name()+" receives a sharp mental backlash "+
+    "after unleashing such potent magic!\n",environment(p),p);
+    if( (p->query_max_sp()) > 1200 )
+    {
+    p->set_sp((p->query_sp())-(p->query_max_sp())/2);
+    }
+    else
+    {
+    p->set_sp((p->query_sp())-450-random(150));
+    }   
+    if( (p->query_max_psp()) > 1200 )
+    {
+    p->set_psp((p->query_psp())-(p->query_max_psp())/2);
+    }
+    else
+    {
+    p->set_psp((p->query_psp())-450-random(150));
+    } 
+    message("damage","%^RED%^That%^RESET%^ %^BOLD%^%^RED%^REALLY%^RESET%^ "+
+    "%^RED%^hurt!%^RESET%^\n",p);
+    if(p->query_stunned()) 
+    {  
+    p->add_stun_duration(1); 
+    } 
+    else 
+    { 
+    object ss = new("/obj/battle/stun_shadow",p); 
+    if(p->query_stunned()) 
+    p->add_stun_duration(125-ss->query_stun_duration()); 
+    p->receive_damage(1750+random(1500),PSIONIC);   
+    message("drain","You feel that your god looks unfavorably upon you for "+
+    "using such evil magic!\n",p);
+    message("drain","You lose some Divine Favors!\n",p);
+    p->set_free_dfavor((p->query_free_dfavor())-2500-random(500)); 
+    if(p->query_free_dfavor() < 0)
+    {
+    p->set_free_dfavor(0);
+    }
+}
+}
+
+void check_charges()
+{
+	if(charges < 1)
+	{
+	message("info","The Shadowshot glows violently, before EXPLODING into "+
+	"thousands of tiny fragments which disappear without a trace.\n",
+	this_player()); 
+	message("info",""+this_player()->query_cap_name()+"'s Shadowshot glows "+
+	"violently, before EXPLODING into thousands of tiny fragments which "+
+	"disappear without a trace.\n",environment(this_player()),this_player());
+	remove_action("shoot_command","shoot");
+	remove_call_out("ready_check");
+	this_object()->remove();
+    }
+    else
+    {
+    charges--;
+    }
+} 

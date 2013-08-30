@@ -1,0 +1,148 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_species("animal");
+  set_chat_chance(3);
+  switch (random(7)) {
+    case 0:
+    set_long(wrap("A black bear lays on the ground here, seemingly content "+
+    "and full from a recent meal. In no particular haste, it traces patterns "+
+    "in the air with its nose, undoubtedly seeking out further treats for "+
+    "conquest once it gets hungry again. Despite appearances, the creatute "+
+    "would surely not hesitate to defend itself tooth and nail if attached, "+
+    "so you feel it would be best to let it be.\n"));
+    set_short("Lazy black bear, laying about");
+    set_name("black bear");
+    set_id(({"bear", "black bear"}));  
+    set_race("bear");
+    set_level(20);
+    set_agrochance(20);
+    set_following(0);
+    set_stat("size", 250);
+    set_chat_output(({"The black bear shifts its weight to another loin. "+
+    "You could swear it yawned.\n"}));
+    break;
+    case 1:
+    set_long(wrap("This rabbit is rather fat - it seems to have no problems "+
+    "getting food in this lush part of the forest. It hops along slowly, "+
+    "occasionally stopping to nibble at a plant or root. Once in a while it "+
+    "stiffens up, nose and ears twitching, perhaps sensing a predator nearby. "+
+    "It looks so cute that you almost want to pet it, but the rabbit hops "+
+    "away from you nervously every time you get close.\n"));
+    set_short("A plump rabbit");
+    set_id(({"rabbit", "plump rabbit"}));
+    set_name("Plump rabbit");
+    set_race("rabbit");
+    set_level(5);
+    set_speed(120 + random(10)); 
+    set_stat("size", 30);
+    set_chat_output(({"The rabbit absentmindedly chews a root.\n"}));
+    break;
+    case 2:
+    set_long(wrap("A deer stands here, eying you warily as it picks at the "+
+    "grass. It seems to be fairly picky, as you notice that it only eats the "+
+    "most succulent tips of the vegetation. Although deer are not known to be "+
+    "aggressive, you feel it would be best to leave the animal alone - they "+
+    "can give a nasty kick, and this particular deer is a huge specimen. Your "+
+    "judgment is reinforced when you spot a wolf glancing at the deer from "+
+    "behind some bushes, but quickly slinking away in favor of easier "+
+    "prey.\n"));
+    set_short("Cautious deer, foraging for food");
+    set_name("deer");
+    set_id(({"cautious deer", "deer"}));
+    set_race("deer");
+    set_level(13);
+    set_speed(60 + random(15));
+    set_stat("size", 180);
+    set_chat_output(({"The deer chews at some grass while keeping an eye "+
+    "on you at the same time.\n"})); 
+    break;
+    case 3:
+    set_long(wrap("A boar with a bristle-covered hide is digging the soft "+
+    "dirt here, apparently searching for edible fungi. It is rather large and "+
+    "intimidating, with its sharp tusks and muscular body, but fortunately it "+
+    "merely seems to be hungry and is completely ignoring you. Every now and "+
+    "then it raises its snout to the air and takes a long whiff, before "+
+    "heading off in some new direction. It grunts happily every time it "+
+    "finds a mushroom before greedily devouring it.\n"));
+    set_short("Wild boar, rooting around for mushrooms");
+    set_name("wild boar");
+    set_id(({"boar", "wild boar"}));
+    set_race("boar");
+    set_level(15);
+    set_agrochance(10);
+    set_following(10);
+    set_speed(55 + random(15)); 
+    set_stat("size", 80);
+    add_object("/u/n/neurotico/obj/shroom");
+    set_chat_output(({"The boar snorts and shuffles around a bit, looking "+
+    "for more delicious fungi.\n"}));
+    break;
+    case 4:
+    set_long(wrap("This bony wolf prowls restlessly, its gaunt frame "+
+    "revealing emaciated ribs wracked with hunger. It turns its baleful gaze "+
+    "on you as you approach, and immediately begins to drool. Baring its "+
+    "sharp fangs, the starving beast lunges at you without hesitation. You "+
+    "barely have any time to wonder how such a predator could go hungry when "+
+    "the game is so abundant, before it is snapping and growling right in "+
+    "your face.\n"));
+    set_short("Salviating wolf, eying you hungrily");
+    set_name("wolf");
+    set_id(({"wolf", "salviating wolf", "dire wolf"}));
+    set_level(12);
+    set_race("dire wolf");
+    set_aggressive(1);
+    set_agrochance(50);
+    set_following(65);
+    set_speed(75 + random(15)); 
+    set_stat("size", 65);
+    set_att_chat_output( ({ "The wolf lets out a blood-curdling howl, "+
+    "chilling you to the bone!\n" })); 
+    break;
+    case 5:
+    set_long(wrap("A spotted owl sits on a branch high in a tree, scanning "+
+    "the area for danger, or perhaps for possible meals in the form of a "+
+    "forest rodent. Its large, round eyes are yellow in color and somewhat "+
+    "unsettling. The owl occasionally does this funny motion where it seems "+
+    "to shudder all over, apparently ruffling its fine feathers to a more "+
+    "comfortable position. It has a huge wingspan, and you feel sorry for the "+
+    "rodents this silent hunter of the night must terrorize. The owl pays you "+
+    "no heed: apparently you are neither a threat nor edible.\n"));
+    set_short("Spotted owl, gazing around curiously");
+    set_name("spotted owl");
+    set_id(({"spotted owl", "owl"}));
+    set_level(10);
+    set_race("spotted owl");
+    set_agrochance(75);
+    set_speed(100 + random(15)); 
+    set_stat("size", 45);
+    set_chat_output(({"The owl gazes at you and lets out a long 'Hooo!'\n"}));
+    break;
+    case 6:
+    set_long(wrap("A small black rat is running around the forest floor. It "+
+    "seems to be in a hurry. You notice that it is carrying some shiny "+
+    "objects in its mouth...are those coins?! You wonder what an animal could "+
+    "possibly want with such things. There have been stories of rats amassing "+
+    "great treasures in their nests for no other reason but they could, but "+
+    "never before have you encountered such a phenomenon. The rat stops for a "+
+    "moment to cast a wary eye in your direction before darting off again, "+
+    "presumably towards its hidden burrow.\n"));
+    set_short("Small black rat darts to and fro");
+    set_name("black rat");
+    set_id(({"small black rat", "black rat", "rat"}));
+    set_level(3);
+    set_race("rat");
+    set_speed(15 + random(15)); 
+    set_stat("size", 10);
+    add_object("/u/a/allanon/area/lumber_camp/obj/coins.c");
+    set_chat_output(({"The rat scurries around in haste.\n"}));
+    break;
+  }
+  set_forbidden_rooms(({
+  "/u/a/allanon/area/lumber_camp/rooms/bc",
+  "/u/a/allanon/area/lumber_camp/rooms/fsecret",
+  "/u/a/allanon/area/lumber_camp/rooms/in_tree"}));
+}

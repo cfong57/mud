@@ -1,0 +1,18 @@
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("A mithril shovel");
+  set_id(({"shovel"}));
+  set_long("Special lightweight shovel made of mythril.\n");
+  set_name("shovel");
+  set_wtype("shovel");
+  set_material("mithril");
+  set_quality(100);
+  set_mass(1);
+  set_bulk(1);
+  weapon_setup();
+}

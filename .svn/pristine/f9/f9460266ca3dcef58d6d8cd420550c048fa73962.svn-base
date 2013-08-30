@@ -1,0 +1,81 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int insert_command(string cmd)
+{
+  object plr = this_player();
+  mixed *leaves = ({ });
+  mixed *flowers = ({ });
+
+  if (cmd == "leaf" || cmd == "golden leaf"|| cmd == "leaves" || 
+  cmd == "golden leaves") {
+    foreach(object ob in all_inventory(plr)) {
+      if (base_name(ob) != "/u/a/allanon/area/lumber_camp/obj/leaf") {
+        continue;
+      }
+      leaves += ({ ob });
+      if (sizeof(leaves) > 1) {
+        object n = clone_object("/u/a/allanon/area/lumber_camp/obj/amberleaf");
+        n->move(plr, 1);
+        message("info", "You stick your golden leaves into the slot. There is "+
+        "a brilliant FLASH, and when the light returns to normal, a single "+
+        "leaf is spit back out - but now it is coated in amber!\n", plr);
+        message("info", ""+plr->query_cap_name()+" sticks some golden leaves "+
+        "into a slot in the stone. There is a brilliant FLASH, and when the "+
+        "light returns to normal, a single leaf is spit back out - but now "+
+        "it is coated in amber!\n", environment(plr), plr);
+        leaves->remove();
+        return 1;
+      }
+    }
+    message("info", "You don't seem to have enough leaves.\n", plr);
+    return 1;
+  } else if (cmd == "flower" || cmd == "beautiful flower"|| cmd == "flowers" || 
+   cmd == "beautiful flowers") {
+    foreach(object ob in all_inventory(plr)) {
+      if (base_name(ob) != "/u/a/allanon/area/lumber_camp/obj/flower") {
+        continue;
+      }
+      flowers += ({ ob });
+      if (sizeof(flowers) > 24) {
+        object n = clone_object("/u/a/allanon/area/lumber_camp/obj/necklace");
+        n->move(plr, 1); 
+        message("info", "You stick some of your beautiful flowers into the "+
+        "slot. There is a brilliant FLASH, and when the light returns to "+
+        "normal, a necklace of flowers is spit out, connected by a thin "+
+        "filament of amber!\n", plr);
+        message("info", ""+plr->query_cap_name()+" sticks some beautiful "+
+        "flowers into a slot in the stone. There is a brilliant FLASH, and "+
+        "when the light returns to normal, a necklace of flowers is spit out, "+
+        "connected by a thin filament of amber!\n", environment(plr), plr);
+        flowers->remove();
+        return 1;
+      }
+    }
+    message("info", "You don't seem to have enough flowers.\n", plr);
+    return 1;
+  }
+  return notify_fail("Insert what?\n");
+}
+
+void extra_init()
+{
+  add_action("insert_command", "insert");
+}
+
+void extra_create() 
+{
+  set_id( ({"large stone", "amber", "stone"}) );
+  set_name("amber stone");
+  set_short("A large stone of amber, carved to resemble a massive tree");
+  set_long(wrap("This strange stone, which you identify as amber, fairly "+
+  "sizzles with magical power, but it is clearly non-malignant. Quite the "+
+  "opposite...you can feel a strong sense of goodness just by looking at it. "+
+  "The amber has been carved to look like the tree you are standing in, which "+
+  "you think is a fine example of superb craftmanship.\n"));
+  set_prevent_get(1);
+  set_value(1);
+  set_mass(750);
+  set_bulk(800);
+}

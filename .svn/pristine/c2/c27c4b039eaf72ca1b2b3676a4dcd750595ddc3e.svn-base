@@ -1,0 +1,1015 @@
+#include <mudlib.h>
+#include <damage.h>
+#include <move.h>
+
+inherit OBJECT;
+
+object *foo;
+object target;
+
+int nether_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("nether","You summon the powers of death to "+room+"!\n",p); 
+  message("nether",""+p->query_cap_name()+" summons the powers of death to "+
+  ""+room+"!\n",environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("nether",""+capitalize(ob->query_short())+" is sent to the Nether "+
+  "Plane!\n",environment(p),ob); 
+  message("nether",""+p->query_cap_name()+" sends you to the Nether Plane "+
+  "for being bad!\n",ob);
+  ob->set_hp(-1);
+  }
+  } 
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("nether","You send "+capitalize(ob->query_short())+" to the "+
+  "Nether Plane!\n",p); 
+  message("nether",""+p->query_cap_name()+" sends "+
+  ""+capitalize(ob->query_short())+" to the Nether Plane!\n",
+  environment(p),({p,ob}));
+  message("nether",""+p->query_cap_name()+" sends you to the Nether Plane "+
+  "for being bad!\n",ob);
+  ob->set_hp(-1);    
+  return 1;
+  }
+  }
+  return notify_fail("Send what to the Nether Plane?\n");  
+} 
+
+int block_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  object ss;
+  string room = ""+environment(p)->query_short()+"";
+  message("block","You block "+room+"!\n",p); 
+  message("block",""+p->query_cap_name()+" blocks "+room+"!\n",
+  environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("block",""+capitalize(ob->query_short())+" is frozen to the spot, "+
+  "preventing "+possessive(ob)+" escape!\n",environment(p),ob); 
+  message("block",""+p->query_cap_name()+" blocks you for being bad!\n"+
+ "You are frozen to the spot, preventing your escape!\n",ob);
+  ss = new("/u/a/allanon/shadows/immobile.c");  
+  ss->move(ob,1);
+  ss->shadow_object(ob);
+  ss->check_status();
+  }
+  } 
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  object ss;
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("block","You block "+capitalize(ob->query_short())+", freezing "+
+  ""+objective(ob)+" to the spot and preventing "+
+  ""+possessive(ob)+" escape!\n",p); 
+  message("block",""+p->query_cap_name()+" blocks "+
+  ""+capitalize(ob->query_short())+", freezing "+objective(ob)+" to the spot "+
+  "and preventing "+possessive(ob)+" escape!\n",environment(p),({p,ob}));
+  message("block",""+p->query_cap_name()+" blocks you for being bad!\n"+
+  "You are frozen to the spot, preventing your escape!\n",ob);
+  ss = new("/u/a/allanon/shadows/immobile.c"); 
+  ss->move(ob,1);
+  ss->shadow_object(ob);
+  ss->check_status();
+  return 1;
+  }
+  }
+  return notify_fail("Block what?\n"); 
+}   
+
+int stun_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("stun","You stun "+room+"!\n",p); 
+  message("stun",""+p->query_cap_name()+" stuns "+room+"!\n",
+  environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("stun",""+capitalize(ob->query_short())+" is encircled with chains "+
+  "of binding energy!\n",environment(p),ob); 
+  message("stun",""+p->query_cap_name()+" stuns you for being bad!\n"+
+ "You are encircled with chains of binding energy!\n",ob);
+  if(ob->query_stunned()) 
+  {  
+  ob->add_stun_duration(99999); 
+  } 
+  else 
+  { 
+  ob->stun(99999); 
+  }
+  } 
+  } 
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("stun","You stun "+capitalize(ob->query_short())+", encircling "+
+  ""+objective(ob)+" with chains of binding energy!\n",p); 
+  message("stun",""+p->query_cap_name()+" stuns "+
+  ""+capitalize(ob->query_short())+", encircling "+objective(ob)+" with "+
+  "chains of binding energy!\n",environment(p),({p,ob}));
+  message("stun",""+p->query_cap_name()+" stuns you for being bad!\n"+
+  "You are encircled with chains of binding energy!\n",ob);
+  if(ob->query_stunned()) 
+  {  
+  ob->add_stun_duration(99999); 
+  } 
+  else 
+  { 
+  ob->stun(99999);
+  } 
+  return 1;
+  }
+  }
+  return notify_fail("Stun what?\n"); 
+}   
+
+int sleep_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  object sleep;
+  string room = ""+environment(p)->query_short()+"";
+  message("sleep","You summon the powers of drowsiness to "+room+"!\n",p); 
+  message("sleep",""+p->query_cap_name()+" summons the powers of drowsiness "+
+  "to "+room+"!\n",environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("sleep","Pixie dust flies out of the tip of "+
+  ""+p->query_cap_name()+"'s wand, hitting "+capitalize(ob->query_short())+" "+
+  "smack in the face! "+capitalize(subjective(ob))+" falls asleep "+
+  "instantly.\n",environment(p),({p,ob})); 
+  message("sleep","Pixie dust flies out of the tip of your wand, hitting "+
+  ""+capitalize(ob->query_short())+" smack in the face! "+
+  ""+capitalize(subjective(ob))+" falls asleep instantly.\n",p); 
+  message("sleep",""+p->query_cap_name()+" puts you to sleep for being "+
+  "bad!\n"+
+  "Pixie dust flies out of the tip of "+p->query_cap_name()+"'s wand, "+
+  "hitting you smack in the face! You fall asleep instantly.\n",ob);
+  sleep = new("/obj/sleepobj");
+  sleep->set_camp_rating(999); 
+  sleep->move(ob, 1); 
+  ob->set_asleep(1);
+  }  
+  } 
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  object sleep;
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("sleep","Pixie dust flies out of the tip of your wand, hitting "+
+  ""+capitalize(ob->query_short())+" smack in the face! "+
+  ""+capitalize(subjective(ob))+" falls asleep instantly.\n",p); 
+  message("sleep","Pixie dust flies out of the tip of "+
+  ""+p->query_cap_name()+"'s wand, hitting "+
+  ""+capitalize(ob->query_short())+" smack in the face! "+
+  ""+capitalize(subjective(ob))+" falls asleep instantly.\n",
+  environment(p),({p,ob}));
+  message("sleep",""+p->query_cap_name()+" puts you to sleep for being "+
+  "bad!\n"+
+  "Pixie dust flies out of the tip of "+p->query_cap_name()+"'s wand, "+
+  "hitting you smack in the face! You fall asleep instantly.\n",ob); 
+  sleep = new("/obj/sleepobj");
+  sleep->set_camp_rating(999); 
+  sleep->move(ob, 1); 
+  ob->set_asleep(1);
+  return 1;
+  }
+  }
+  return notify_fail("Put what to sleep?\n"); 
+}   
+
+int silence_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("silence","You summon the powers of silence to "+room+"!\n",p); 
+  message("silence",""+p->query_cap_name()+" summons the powers of silence to "+
+  ""+room+"!\n",environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  object shadow;
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("silence",""+capitalize(ob->query_short())+" is rendered incapable "+
+  "of speech!\n",environment(p),ob);  
+  message("silence",""+p->query_cap_name()+" silences you for being bad!\n"+
+  "You are rendered incapable of speech!\n",ob);
+  shadow = new("/obj/spells/silence_shadow",ob); 
+  shadow->shadow_object(ob);
+  }
+  }   
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  object shadow;
+  message("silence","You silence "+capitalize(ob->query_short())+", "+
+  "rendering "+objective(ob)+" incapable of speech!\n",p); 
+  message("silence",""+p->query_cap_name()+" silences "+
+  ""+capitalize(ob->query_short())+", rendering "+objective(ob)+" "+
+  "incapable of speech!\n",environment(p),({p,ob}));
+  message("silence",""+p->query_cap_name()+" silences you for being bad!\n"+
+  "You are rendered incapable of speech!\n",ob);
+  shadow = new("/obj/spells/silence_shadow",ob); 
+  shadow->shadow_object(ob);
+  return 1;
+  }
+  }
+  return notify_fail("Silence what?\n"); 
+}  
+
+int newbie_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("newbie","You summon the powers of nOObieness to "+room+"!\n",p); 
+  message("newbie",""+p->query_cap_name()+" summons the powers of "+
+  "nOObieness "+room+"!\n",environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("newbie",""+capitalize(ob->query_short())+" is made into a "+
+  "newbie!\n",environment(p),ob); 
+  if(ob->query_name() != this_player()->query_name())  
+  message("newbie",""+p->query_cap_name()+" makes you into a newbie for being "+
+  "bad!\n",ob);
+  ob->set_level(1);
+  ob->set_exprate(0);
+  ob->set_safe_exp(0); 
+  ob->set_total_exp(0);
+  ob->set_advpoints(0);
+  ob->set_total_advpoints(0);
+  ob->clear_skills();
+  ob->clear_spells();
+  ob->set_stat("strength",1);
+  ob->set_stat("dexterity",1);
+  ob->set_stat("constitution",1);
+  ob->set_stat("intelligence",1);
+  ob->set_stat("wisdom",1);
+  ob->set_stat("charisma",1);
+  }
+  } 
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("newbie","You make "+capitalize(ob->query_short())+" into a "+
+  "newbie!\n",p); 
+  message("newbie",""+p->query_cap_name()+" makes "+
+  ""+capitalize(ob->query_short())+" into a newbie!\n",environment(p),
+  ({p,ob}));
+  message("newbie",""+p->query_cap_name()+" makes you into a newbie for "+
+  "being bad!\n",ob);
+  ob->set_level(1);
+  ob->set_exprate(0);
+  ob->set_safe_exp(0);
+  ob->set_total_exp(0);
+  ob->set_advpoints(0);
+  ob->set_total_advpoints(0);
+  ob->clear_skills();
+  ob->clear_spells();
+  ob->set_stat("strength",1);
+  ob->set_stat("dexterity",1);
+  ob->set_stat("constitution",1);
+  ob->set_stat("intelligence",1);
+  ob->set_stat("wisdom",1);
+  ob->set_stat("charisma",1);
+  return 1;
+  }
+  }
+  return notify_fail("Make what into a newbie?\n"); 
+} 
+
+int pierce_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("pierce","You pierce "+room+"!\n",p); 
+  message("pierce",""+p->query_cap_name()+" pierces "+room+"!\n",
+  environment(p),p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  if(ob->query_name() != this_player()->query_name())
+  {
+  message("pierce",""+capitalize(ob->query_short())+"'s resistances and "+
+  "armour class are negated!\n",environment(p),ob); 
+  message("pierce",""+p->query_cap_name()+" pierces you for being bad!\n"+
+  "Your resistances and armour class are negated!\n",ob);
+  ob->set_ac(0);
+  ob->set_natural_ac(0);
+  ob->set_resistances(([ "acid": 0, "psionic" : 0, "poison" : 0, 
+  "asphyxiation" : 0, "fire" : 0, "cold": 0, "physical" : 0, 
+  "lightning" : 0, "sonic" : 0, "magical" : 0 ]));
+  }
+  }
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("pierce","You pierce "+capitalize(ob->query_short())+", "+
+  "negating "+possessive(ob)+" resistances and armour class!\n",p); 
+  message("pierce",""+p->query_cap_name()+" pierces "+
+  ""+capitalize(ob->query_short())+", negating "+ob->query_cap_name()+" "+
+  "resistances and armour class!\n",environment(p),({p,ob}));
+  message("pierce",""+p->query_cap_name()+" pierces you for being bad!\n"+
+  "Your resistances and armour class are negated!\n",ob);
+  ob->set_ac(0);
+  ob->set_natural_ac(0);
+  ob->set_resistances(([ "acid": 0, "psionic" : 0, "poison" : 0, 
+  "asphyxiation" : 0, "fire" : 0, "cold": 0, "physical" : 0, 
+  "lightning" : 0, "sonic" : 0, "magical" : 0 ]));
+  return 1;
+  }
+  }
+  return notify_fail("Pierce what?\n"); 
+} 
+
+int erase_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  object *inventory=all_inventory(environment(p));
+  string room = ""+environment(p)->query_short()+"";
+  message("erase","You summon the Void to "+room+"!\n",p); 
+  message("erase",""+p->query_cap_name()+" summons the Void to "+room+"!\n",
+  environment(p),p);
+  foreach(object ob in inventory)
+  {
+  if(ob->query_player() != 1)
+  {
+  message("erase","The '"+capitalize(ob->query_short())+"' is erased.\n",
+  environment(p),ob);  
+  message("erase",""+p->query_cap_name()+" erases you for being bad!\n",ob);
+  deep_inventory(ob)->remove();
+  ob->remove();
+  }
+  }
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  object *inventory=deep_inventory(environment(p));
+  foreach(object ob in inventory)
+  if(ob->id(cmd))
+  {
+  message("erase","You erase the '"+capitalize(ob->query_short())+"'.\n",p); 
+  message("erase",""+p->query_cap_name()+" erases the "+
+  "'"+capitalize(ob->query_short())+"'.\n",environment(p),({p,ob}));
+  message("erase",""+p->query_cap_name()+" erases you for being "+
+  "bad!\n",ob);
+  deep_inventory(ob)->remove();
+  ob->remove();
+  return 1;
+  }
+  }
+  return notify_fail("Erase what?\n"); 
+} 
+
+int heal_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("heal","You summon the powers of healing to "+room+"!\n",p); 
+  message("heal",""+p->query_cap_name()+" summons the powers of healing to "+
+  ""+room+"!\n",environment(p),p);
+  message("heal","You recover fully.\n",p);
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  message("heal",""+capitalize(ob->query_short())+" recovers fully.\n",
+  environment(p),ob);   
+  message("heal",""+p->query_cap_name()+" heals you for being good!\n",ob);
+  ob->receive_healing(ob->query_max_hp(),"hp");
+  ob->receive_healing(ob->query_max_sp(),"sp");
+  ob->receive_healing(ob->query_max_ep(),"ep");
+  ob->receive_healing(ob->query_max_psp(),"psp");
+  ob->set_blind(0);
+  ob->remove_all_diseases();
+  ob->remove_stun();
+  ob->set_uncon(0);
+  ob->unblock_me();
+  ob->remove_wound();
+  ob->remove_silence_shadow();
+  }
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("heal","You heal "+capitalize(ob->query_short())+".\n",p); 
+  message("heal",""+p->query_cap_name()+" heals "+
+  ""+capitalize(ob->query_short())+".\n",environment(p),({p,ob}));
+  message("heal",""+p->query_cap_name()+" heals you for being good!\n",ob);
+  ob->receive_healing(ob->query_max_hp(),"hp");
+  ob->receive_healing(ob->query_max_sp(),"sp");
+  ob->receive_healing(ob->query_max_ep(),"ep");
+  ob->receive_healing(ob->query_max_psp(),"psp");
+  ob->set_blind(0);
+  ob->remove_all_diseases();
+  ob->remove_stun();
+  ob->set_uncon(0);
+  ob->unblock_me();
+  ob->remove_wound();
+  ob->remove_silence_shadow();
+  return 1;
+  }
+  }
+  return notify_fail("Heal what?\n");  
+} 
+
+int protect_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  string room = ""+environment(p)->query_short()+"";
+  message("protect","You summon the powers of protection to "+room+"!\n",p); 
+  message("protect",""+p->query_cap_name()+" summons the powers of protection "+
+  "to "+room+"!\n",environment(p),p);
+  message("protect","You are encased in a protective shield of light!\n",p);  
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  {
+  message("protect",""+capitalize(ob->query_short())+" is encased in a "+
+  "protective shield of light!\n",environment(p),ob);  
+  message("protect",""+p->query_cap_name()+" protects you for being "+
+  "good!\n"+
+  "A protective shield of light encases you!\n",ob);
+  ob->set_ac(1000000);
+  ob->set_natural_ac(1000000);
+  ob->set_resistances(([ "fire" : 99, "magical" : 99, "sonic" : 99, 
+  "psionic" : 99, "poison" : 99, "cold" : 99, "asphyxiation" : 99, 
+  "physical" : 99, "lightning" : 99, "acid" : 99 ]));
+  }
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  foo = filter_array(all_inventory(environment(p)), (:living($1):));
+  foreach(object ob in foo)
+  if(ob->id(cmd))
+  {
+  message("protect","You point your wand at "+
+  ""+capitalize(ob->query_short())+", and a protective shield of light "+
+  "encases "+objective(ob)+"!\n",p); 
+  message("protect",""+p->query_cap_name()+" points "+possessive(p)+" "+
+  "wand at "+capitalize(ob->query_short())+", and a protective shield of "+
+  "light encases "+objective(ob)+"!\n",environment(p),({p,ob}));
+  message("protect",""+p->query_cap_name()+" protects you for being "+
+  "good!\n"+
+  "A protective shield of light encases you!\n",ob);
+  ob->set_ac(1000000);
+  ob->set_natural_ac(1000000);
+  ob->set_resistances(([ "fire" : 99, "magical" : 99, "sonic" : 99, 
+  "psionic" : 99, "poison" : 99, "cold" : 99, "asphyxiation" : 99, 
+  "physical" : 99, "lightning" : 99, "acid" : 99 ]));
+  return 1;
+  }
+  }
+  return notify_fail("Protect what?\n"); 
+}
+
+int preserve_command(string cmd)
+{ 
+  if(cmd == "all")
+  {
+  object p = this_player();
+  object *inventory=all_inventory(environment(p));
+  string room = ""+environment(p)->query_short()+"";
+  message("preserve","You summon the powers of preservation to "+room+"!\n",p); 
+  message("preserve",""+p->query_cap_name()+" summons the powers of "+
+  "preservation to "+room+"!\n",environment(p),p);
+  foreach(object ob in inventory)
+  {
+  if(ob->query_is_corpse())
+  {
+  message("preserve","Some sort of aura seems to encase "+
+  ""+capitalize(ob->query_short())+". It starts glowing eerie white "+
+  "light.\n",environment(p),ob); 
+  ob->set_nodecay(1);
+  ob->set_name("preserved corpse");
+  ob->set_long(wrap(""+ob->query_long()+"\n"+
+  "The corpse is emitting an eerie white light. It does not appear to be "+
+  "decomposing.\n"+
+  "\n"));
+  }
+  else
+  {
+  message("preserve_fail",""+capitalize(ob->query_short())+" is not a "+
+  "corpse, it cannot be preserved.\n",p);     
+  }
+  }
+  return 1; 
+  }
+  else
+  {
+  object p = this_player();
+  object *inventory=deep_inventory(environment(p));
+  foreach(object ob in inventory)
+  if(ob->id(cmd))
+  {
+  if(ob->query_is_corpse())
+  {
+  message("preserve","You point your wand at "+
+  ""+capitalize(ob->query_short())+", and some sort of aura seems to "+
+  "encase it. It starts glowing eerie white light.\n",p); 
+  message("preserve",""+p->query_cap_name()+" points "+possessive(p)+" "+
+  "wand at "+capitalize(ob->query_short())+", and some sort of aura seems "+
+  "to encase it. It starts glowing eerie white light.\n",
+  environment(p),({p,ob}));
+  ob->set_nodecay(1);
+  ob->set_name("preserved corpse");
+  ob->set_long(wrap(""+ob->query_long()+"\n"+
+  "The corpse is emitting an eerie white light. It does not appear to be "+
+  "decomposing.\n"+
+  "\n"));
+  return 1;
+  }
+  else
+  {
+  message("preserve_fail",""+capitalize(ob->query_short())+" is not a "+
+  "corpse, it cannot be preserved.\n",p);
+  return 1;     
+  }
+  }
+  }
+  return notify_fail("Preserve what?\n"); 
+}
+
+int reanimate_command(string cmd)
+{ 
+  object rcorpse;
+  object *cinv;
+  object *rinv;
+  if(cmd == "all")
+  {
+  object p = this_player();
+  object *inventory=all_inventory(environment(p));
+  string room = ""+environment(p)->query_short()+"";
+  message("reanimate","You summon the dark powers of necromancy to "+
+  ""+room+"!\n",p); 
+  message("reanimate",""+p->query_cap_name()+" summons the dark powers of "+
+  "necromancy to "+room+"!\n",environment(p),p);
+  foreach(object ob in inventory)
+  {
+  if(ob->query_is_corpse() && ob->query_cant_be_zombie())
+  {      
+  message("reanimate",wrap("Powerful magic surrounds the "+
+  ""+ob->query_short()+", blocking it from view. Within a few moments the "+
+  "process of reanimation is complete and the magic disperses, revealing a "+
+  "reanimated corpse!\n"),environment(p),ob); 
+  rcorpse = new("/u/a/allanon/mon/reanimated_corpse.c");
+  rcorpse->move(environment(p),1);
+  rcorpse->set_race(ob->query_race());
+  rcorpse->set_level(ob->query_level());
+  rcorpse->set_bodyparts(ob->query_bodyparts());
+  rcorpse->set_stats(ob->query_stats());
+  rcorpse->set_weapon_slots(ob->query_weapon_slots());
+  rcorpse->set_resistances(ob->query_resistances());
+  rcorpse->set_natural_weapons(ob->query_natural_weapons());
+  rcorpse->set_skin_data("value", ob->query_skin_value());  
+  rcorpse->set_skin_data("bonuses", ob->query_skin_bonuses());
+  rcorpse->set_skin_data("type", ob->query_skin_type());
+  rcorpse->set_short("Reanimated corpse of "+
+  ""+capitalize(ob->query_plrname())+""); 
+  rcorpse->set_long(wrap("This is the reanimated corpse of "+
+  ""+capitalize(ob->query_plrname())+". It looks exactly like its original, "+
+  "living counterpart, except obviously it is an undead now. The process of "+
+  "reanimation steals much from the targets; reanimated beings are not at all "+
+  "the same as when they were alive. They cannot speak, nor can they cast "+
+  "magic...essentially, they become mindless automatrons, only reflecting "+
+  "their former selves in physical appearance. It could be said that being a "+
+  "reanimated corpse is a mixed blessing, since the one thing they do retain "+
+  "is their memories. Even if the reanimated corpse is powerless to act of "+
+  "its own free will, it thinks consciosly, and it remembers. Thus many "+
+  "become insane, or turn hateful towards all living creatures. You wonder if "+
+  "it would not truly be better to let the dead rest in peace.\n"+
+  "\n"+
+  "Reanimated corpse was raised from the "+ob->query_short()+" by "+
+  ""+p->query_cap_name()+".\n"));
+  rcorpse->set_id(({"reanimated corpse", "corpse",
+  "reanimated corpse of "+ob->query_plrname()+""}));
+  rcorpse->set_wealth(([ "mithril" : 0, "platinum" : 0, 
+  "gold" : 0, "silver" : 0 ])); 
+  if(ob->query_killer() == "")
+  {
+  rcorpse->set_chat_output(({ 
+  "Reanimated corpse grumbles: Yoaagrs loogrsks like himm!\n", 
+  "Reanimated corpse wails: I wilgr hunttts himm dogwn!\n"}));
+  }
+  else
+  {
+  rcorpse->set_chat_output(({ 
+  "Reanimated corpse grumbles: Yoaagrs loogrsks like "+
+  ""+capitalize(ob->query_killer())+"!\n", 
+  "Reanimated corpse wails: I wilgr hunttts "+
+  ""+capitalize(ob->query_killer())+" dogwn!\n"}));
+  }   
+  cinv=all_inventory(ob);
+  foreach(object thingg in cinv)
+  {
+  thingg->move(rcorpse,1);
+  rcorpse->force_me("wield all");
+  rcorpse->force_me("wear all");
+  }
+  rinv=all_inventory(rcorpse);
+  foreach(object thingg2 in rinv)
+  {
+  if(base_name(thingg2) != "/ob/blessings/heart")
+  continue;
+  thingg2->remove();  
+  }
+  deep_inventory(ob)->remove();
+  ob->remove();  
+  }
+  else
+  {
+  message("reanimate_fail",wrap(""+capitalize(ob->query_short())+" can't be "+
+  "reanimated - it is not a corpse or it couldn't normally become a zombie "+
+  "anyways (ie. undead corpses).\n"),p);
+  }
+  }
+  return 1;
+  } 
+  else
+  {
+  object p = this_player();
+  object *inventory = all_inventory(environment(p));
+  foreach(object ob in inventory)
+  if(ob->id(cmd))
+  {
+  if(ob->query_is_corpse() && ob->query_cant_be_zombie())
+  {      
+  message("reanimate",wrap("You point your wand at the "+
+  ""+ob->query_short()+", and then flick it upwards. Powerful magic surrounds "+
+  "the corpse, blocking it from view. Within a few moments the process of "+
+  "reanimation is complete and the magic disperses, revealing a reanimated "+
+  "corpse!\n"),p); 
+  message("reanimate",wrap(""+p->query_cap_name()+" points "+possessive(p)+" "+
+  "wand at "+ob->query_short()+", and then flicks it upwards. Powerful "+
+  "magic surrounds the corpse, blocking it from view. Within a few moments "+
+  "the process of reanimation is complete and the magic disperses, revealing "+
+  "a reanimated corpse!\n"),environment(p),({p,ob}));
+  rcorpse = new("/u/a/allanon/mon/reanimated_corpse.c");
+  rcorpse->move(environment(p),1);
+  rcorpse->set_race(ob->query_race());
+  rcorpse->set_level(ob->query_level());
+  rcorpse->set_bodyparts(ob->query_bodyparts());
+  rcorpse->set_stats(ob->query_stats());
+  rcorpse->set_weapon_slots(ob->query_weapon_slots());
+  rcorpse->set_resistances(ob->query_resistances());
+  rcorpse->set_natural_weapons(ob->query_natural_weapons());
+  rcorpse->set_skin_data("value", ob->query_skin_value());  
+  rcorpse->set_skin_data("bonuses", ob->query_skin_bonuses());
+  rcorpse->set_skin_data("type", ob->query_skin_type());
+  rcorpse->set_short("Reanimated corpse of "+
+  ""+capitalize(ob->query_plrname())+""); 
+  rcorpse->set_long(wrap("This is the reanimated corpse of "+
+  ""+capitalize(ob->query_plrname())+". It looks exactly like its original, "+
+  "living counterpart, except obviously it is an undead now. The process of "+
+  "reanimation steals much from the targets; reanimated beings are not at all "+
+  "the same as when they were alive. They cannot speak, nor can they cast "+
+  "magic...essentially, they become mindless automatrons, only reflecting "+
+  "their former selves in physical appearance. It could be said that being a "+
+  "reanimated corpse is a mixed blessing, since the one thing they do retain "+
+  "is their memories. Even if the reanimated corpse is powerless to act of "+
+  "its own free will, it thinks consciosly, and it remembers. Thus many "+
+  "become insane, or turn hateful towards all living creatures. You wonder if "+
+  "it would not truly be better to let the dead rest in peace.\n"+
+  "\n"+
+  "Reanimated corpse was raised from the "+ob->query_short()+" by "+
+  ""+p->query_cap_name()+".\n"));
+  rcorpse->set_id(({"reanimated corpse", "corpse",
+  "reanimated corpse of "+ob->query_plrname()+""}));
+  rcorpse->set_wealth(([ "mithril" : 0, "platinum" : 0, 
+  "gold" : 0, "silver" : 0 ])); 
+  if(ob->query_killer() == "")
+  {
+  rcorpse->set_chat_output(({ 
+  "Reanimated corpse grumbles: Yoaagrs loogrsks like himm!\n", 
+  "Reanimated corpse wails: I wilgr hunttts himm dogwn!\n"}));
+  }
+  else
+  {
+  rcorpse->set_chat_output(({ 
+  "Reanimated corpse grumbles: Yoaagrs loogrsks like "+
+  ""+capitalize(ob->query_killer())+"!\n", 
+  "Reanimated corpse wails: I wilgr hunttts "+
+  ""+capitalize(ob->query_killer())+" dogwn!\n"}));
+  }   
+  cinv=all_inventory(ob);
+  foreach(object thing in cinv)
+  {
+  thing->move(rcorpse,1);
+  rcorpse->force_me("wield all");
+  rcorpse->force_me("wear all");
+  }
+  rinv=all_inventory(rcorpse);
+  foreach(object thing2 in rinv)
+  {
+  if(base_name(thing2) != "/ob/blessings/heart")
+  continue;
+  thing2->remove();  
+  }
+  deep_inventory(ob)->remove();
+  ob->remove();
+  return 1;
+  }
+  else
+  {
+  message("reanimate_fail",wrap(""+capitalize(ob->query_short())+" can't be "+
+  "reanimated - it is not a corpse or it couldn't normally become a zombie "+
+  "anyways (ie. undead corpses).\n"),p);
+  return 1;
+  }
+  }
+  } 
+  return notify_fail("Reanimate what?\n"); 
+}
+
+int spy_cmd(string str)
+{
+  if(str)
+  {
+    if(!find_living(str))
+    {
+	  message("info","Couldn't find "+str+", aborting spy.\n",this_player());
+    }
+    else
+    {
+      target = find_living(str);
+      message("info","You decide to spy on "+target->query_cap_name()+" "+
+      "("+capitalize(target->query_short())+").\n",this_player());
+      message("spy",""+environment(target)->query_look()+"\n"+
+      ""+target->query_look()+"\n",this_player());
+    }
+    return 1;
+  }
+  return notify_fail("Spy on who?\n");
+}
+
+int scan_cmd(string str)
+{
+  if(str)
+  {
+	string tar;
+    string func;
+    sscanf(str,"%s %s",tar,func);
+    if(func)
+    {
+	  if(find_living(tar))
+	  {
+	    target = find_living(tar);
+        message("info","You decide to scan "+target->query_cap_name()+" "+
+        "("+capitalize(target->query_short())+") ("+func+" only).\n",
+        this_player());
+        call_out("scan_func",0,func,target);
+      }
+      else
+      {
+	    message("info","Couldn't find "+tar+", aborting scan.\n",this_player());  
+      }  
+    }
+    else
+    {
+	  if(find_living(str))
+	  {
+	    target = find_living(str);
+        message("info","You decide to scan "+target->query_cap_name()+" "+
+        "("+capitalize(target->query_short())+").\n",this_player());
+        call_out("scan_func",0,"level",target);
+        call_out("scan_func",1,"points",target);
+        call_out("scan_func",2,"df",target);
+        call_out("scan_func",3,"money",target);
+        call_out("scan_func",4,"stats",target);
+        call_out("scan_func",5,"resistances",target);
+        call_out("scan_func",6,"skills",target);
+        call_out("scan_func",7,"spells",target);
+        call_out("scan_func",8,"inventory",target);
+      }
+      else
+      {
+	    message("info","Couldn't find "+str+", aborting scan.\n",this_player());    
+      }
+    }
+    return 1;
+  }
+  return notify_fail("Scan who?\n");
+}
+
+string text_mapping(mapping things)
+{
+  string returnme = "";
+  mixed *indices = keys(things);
+  mixed *values = values(things);
+  for(int i = 0; i < sizeof(indices); i++)
+  {
+    returnme += ""+indices[i]+" : "+values[i]+", ";
+  }
+  return returnme;
+}
+
+varargs void scan_func(string what, object tar)
+{
+  string printme;
+  mapping map = ([]);
+  mixed *things = ({ });
+  if(!tar)
+  {
+    tar = this_player();	  
+  }
+  switch(what)
+  {
+    case "level":
+	message("scan","\nLevel: "+tar->query_level()+"\n",this_player());
+	break;
+	case "points":
+    message("scan","HP: "+tar->query_hp()+" / "+
+	""+tar->query_max_hp()+"\n",this_player());
+	message("scan","SP: "+tar->query_sp()+" / "+
+	""+tar->query_max_sp()+"\n",this_player());
+	message("scan","EP: "+tar->query_ep()+" / "+
+	""+tar->query_max_ep()+"\n",this_player());
+	message("scan","PSP: "+tar->query_psp()+" / "+
+	""+tar->query_max_psp()+"\n",this_player());
+	break;
+	case "df":
+	message("scan","Divine favor: "+tar->query_free_dfavor()+"\n",
+	this_player());
+	break;
+	case "money":
+    message("scan","Bank credit: "+tar->query_total_bank_balance()+"\n",
+    this_player());
+    map = tar->query_wealth();
+    printme = text_mapping(map);
+	message("scan","Money: "+printme+"\n",this_player());
+	break;
+	case "stats":
+	map = tar->query_stats();
+	printme = text_mapping(map);
+	message("scan","Stats: "+printme+"\n",this_player());
+	break;
+	case "resistances":
+	map = tar->query_resistances();
+	printme = text_mapping(map);
+	message("scan","Resistances: "+printme+"\n",this_player());
+	break;
+	case "skills":	
+	map = tar->query_skills();
+	printme = text_mapping(map);
+	message("scan","Skills: "+printme+"\n",this_player());
+	break;
+	case "spells":	
+	map = tar->query_spells();
+	printme = text_mapping(map);
+	message("scan","Spells: "+printme+"\n",this_player());
+	break;
+	case "inventory":
+	things = tar->query_deep_inventory();
+	printme = "";
+	foreach(object ob in things)
+	{
+	  printme += ""+identify(ob)+", ";
+	}
+	message("scan","Inventory: "+printme+"\n",this_player());
+	break;
+	default:
+	message("scan","Unknown scan function, aborting.\n",this_player());
+	break;
+  }	  
+}
+
+void extra_init() 
+{ 
+    add_action("heal_command","heal");         
+    add_action("nether_command","nether");   
+    add_action("newbie_command","newbie");       
+    add_action("pierce_command","pierce");        
+    add_action("protect_command","protect");     
+    add_action("silence_command","silence");    
+    add_action("sleep_command","sleep");        
+    add_action("stun_command","stun");           
+    add_action("block_command","block");         
+    add_action("preserve_command","preserve");   
+    add_action("reanimate_command","reanimate"); 
+    add_action("erase_command","erase");        
+    add_action("spy_cmd","spy");                
+    add_action("scan_cmd","scan");            
+} 
+
+void extra_create()
+{
+  set_short("A long magic wand %^ORANGE%^<law-giving glow>%^RESET%^");
+  set_long(wrap("\n"+
+  "Commands for use on living objects:\n"+
+  "'heal foo'      Fully restores target's hp, sp, ep, and psp.\n"+
+  "'nether foo'    Sends target to the Nether Plane (near-instant death).\n"+
+  "'newbie foo'    Makes the target a newbie (-exp, skills, spells & stats).\n"+
+  "'pierce foo'    Negates the target's resistances, natural ac, and ac.\n"+  
+  "'protect foo'   Makes the target virtually invincible.\n"+
+  "'silence foo'   Sliences the target, making it unable to speak or cast.\n"+
+  "'sleep foo'     Puts the target to sleep.\n"+
+  "'stun foo'      Stuns the target.\n"+
+  "'block foo'     Prevents the target from escaping.\n"+
+  "'spy foo'       Returns the target's short, long, and room desc.\n"+
+  "'scan foo <x>'  Returns lots of info on the target. Optional x:\n"+
+  "level, points, df, money, stats, resistances, skills, spells, inventory\n"+
+  "\n"+
+  "Commands for use on non-living objects:\n"+
+  "'preserve foo'  Used on corpses. Makes it so they won't decompose.\n"+
+  "'reanimate foo' Used on corpses. Makes an undead from the corpse.\n"+
+  "\n"+
+  "Commands for use on any object:\n"+
+  "'erase foo'     Erases the target and all its items from existance.\n"+
+  "\n"
+  "Replace 'foo' with 'all' to target everything in the room, if able.\n"));
+  set_name("magic wand");
+  set_id( ({ "a long magic wand", "long magic wand", "magic wand", "long wand", 
+  "wand" }) );
+  set_mass(1);
+  set_bulk(1);
+  set_light(200);
+  set_value(25000);
+}

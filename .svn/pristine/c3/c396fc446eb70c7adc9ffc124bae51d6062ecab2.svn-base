@@ -1,0 +1,40 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_outside("+"); 
+  set_outdoors("+");
+  set_short( "At a small crossroads" );
+  set_long(wrap("You're standing at a small crossroad. A signpost with four signs "+
+  "stands a little ways off the road to guide travelers. To the north you spot a "+
+  "tavern, there seems to be quite a bit of action going on there. In the east "+
+  "lies a peaceful seaside town. To the west you see numerous ships moored at "+
+  "a small harbor.\n"));
+  set_item_desc(([
+                  "signpost" : "A post made out of wood stuck in the ground. "+
+                  "Four signs pointing to the north, east, south, and west hang "+
+                  "from it.\n", 
+                  "signs" : "The signs read as: NORTH - Chantey's Tavern; EAST - Saith; +"
+                  "SOUTH - Wilderness; WEST - Saith Harbor.\n", 
+                  "tavern" : "The tavern is built from sturdy oak wood, and it "+
+                  "looks like it's been here for quite some time. Apparently it "+
+                  "is a popular place for the locals, they seem to be having "+
+                  "quite a party at the moment.\n", 
+                  ({"seaside town", "town"}) : "A sleepy little seaside community "+
+                  "lies over the hill to the east.\n", 
+                  "harbor" : "It lies to the west. Several ships are moored at "+
+                  "the moment. Most of them look like small fishing boats, but "+
+                  "that huge one with the black skull flag...pirates?!\n"  ]) );
+  set_sounds(120, ({ 
+	                "You can hear the sounds of civilization from the town "+
+	                "in the east.\n", 
+	                "It sounds like there's a party going on in the northern tavern.\n", 
+	                "A crisp sea breeze blows in from the western harbor.\n" }) ); 
+  set_exits(([
+       "west"  : "/u/a/allanon/areas/saith/rooms/path.c",
+       "north" : "/u/a/allanon/areas/saith/rooms/porch.c",
+       "east" : "/u/a/allanon/areas/saith/rooms/hill.c",
+       "out"  : "outworld"]));
+}

@@ -1,0 +1,137 @@
+/* Contains Allanon's toys and gadgets set, located at her workroom. */
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit CONTAINER;
+
+object bomb;
+object can;
+object capture_jar;
+object cbottle;
+object coingun;
+object dartgun;
+object ebottle;
+object food;
+object gun_ammo;
+object paper;
+object reinc_ring;
+object remote;
+object ring_of_teleport;
+object schwartz_ring;
+object scope;
+object shadowshot;
+object testwand;
+object towel;
+object vbottle;
+object wand;
+object water;
+
+int refill_command(string cmd)
+{
+	if ( cmd == "chest" )
+	{
+        object p = this_player();
+        object b = this_object(); 
+        {
+      message("info","You poke the chest, and suddenly a new set of "+
+      "toys and gadgets appears on it.\n",p); 
+      message("info",""+p->query_cap_name()+" pokes the chest and suddenly a "+
+      "new set of toys and gadgets appears on it.\n",environment(p),p);
+      bomb = new("/u/a/allanon/objects/bomb.c");
+      bomb->move(b,1);
+      can = new("/u/a/allanon/objects/can.c");
+      can->move(b,1);
+      capture_jar = new("/u/a/allanon/objects/capture_jar.c");
+      capture_jar->move(b,1);
+      cbottle = new("/u/a/allanon/objects/cbottle.c");
+      cbottle->move(b,1);
+      coingun = new("/u/a/allanon/objects/coingun.c");
+      coingun->move(b,1);
+      dartgun = new("/u/a/allanon/objects/dartgun.c");
+      dartgun->move(b,1);
+      ebottle = new("/u/a/allanon/objects/ebottle.c");
+      ebottle->move(b,1);
+      food = new("/u/a/allanon/objects/food.c");
+      food->move(b,1);
+      gun_ammo = new("/u/a/allanon/objects/gun_ammo.c");
+      gun_ammo->move(b,1);
+      paper = new("/u/a/allanon/objects/paper.c");
+      paper->move(b, 1);
+      reinc_ring = new("/u/a/allanon/objects/reinc_ring.c");
+      reinc_ring->move(b,1);
+      remote = new("/u/a/allanon/objects/remote.c");
+      remote->move(b,1);
+      ring_of_teleport = new("/u/a/allanon/objects/ring_of_teleport.c");
+      ring_of_teleport->move(b,1);
+      schwartz_ring = new("/u/a/allanon/objects/schwartz_ring.c");
+      schwartz_ring->move(b,1);
+      scope =  new("/u/a/allanon/objects/scope.c");
+      scope->move(b,1);
+      shadowshot = new("/u/a/allanon/objects/shadowshot.c");
+      shadowshot->move(b,1);
+      testwand = new("/u/a/allanon/objects/testwand.c");
+      testwand->move(b,1);
+      towel = new("/u/a/allanon/objects/towel.c");
+      towel->move(b,1);
+      vbottle = new("/u/a/allanon/objects/vbottle.c");
+      vbottle->move(b,1);
+      wand = new("/u/a/allanon/objects/wand.c");
+      wand->move(b,1);
+      water = new("/u/a/allanon/objects/water.c");
+      water->move(b,1);
+	  return 1;
+       }
+  return notify_fail("Refill what?\n");  
+    }
+}  
+
+int clear_command(string cmd) 
+{        
+ if ( cmd == "chest" ) 
+ { 
+        object p = this_player();
+        object b = this_object(); 
+        mapping rack = ([ ]);  
+        foreach( object o in all_inventory(b))
+        {
+	    rack[ file_name(o)] = o; 
+        message("info","You clear the chest.\n",p); 
+        message("info",""+p->query_cap_name()+" clears the chest.\n",
+        environment(p),p);
+        foreach(string k, object r in rack) if ( r != this_object())r->remove();
+        deep_inventory(this_object())->remove();
+        return 1; 
+        }           
+ } 
+    return notify_fail("Clear what? -OR- The chest is already empty.\n");        
+} 
+
+void extra_init() 
+{ 
+    add_action("refill_command","refill"); 
+    add_action("clear_command","clear"); 
+} 
+
+/* Ie....Use Clear to clear the chest, and Refill to fill it up again. */
+
+void extra_create()
+{
+  set_short("A large chest");
+  set_long(wrap("It's a large wooden chest, bolted to the floor. There are "+
+  "various toys and gadgets in it.\n"+
+  "TO REFILL: 'refill chest'.\n"+
+  "TO CLEAR: 'clear chest'.\n"+
+  "Note: Technically you could put other stuff in the chest, but 'clear' will "+
+  "still delete them.\n"));
+  set_name("chest");
+  set_id( ({ "large chest", "chest"}) );
+  set_mass(1);
+  set_bulk(1);
+  set_possible_to_close(1);
+  set_capacity(2147483647);
+  set_volume(2147483647);
+  set_dynamic_bulk(100);
+  set_prevent_get(1);
+  set_prevent_drop(1);
+}

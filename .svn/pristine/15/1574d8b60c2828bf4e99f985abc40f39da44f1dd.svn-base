@@ -1,0 +1,103 @@
+#include <mudlib.h>
+#include <damage.h>
+
+inherit WEAPON;
+
+string gen;
+int charges = 35+random(15);
+
+int shock_command(string cmd)
+{ 
+  {
+  object p = this_player();	 
+  object *inventory; 
+  inventory=filter_array(all_inventory(environment(environment(this_object()))), 
+  (:living($1):));  
+  /*all_inventory(environment(p));*/
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+     {
+	  {
+	  if (p->query_gender() == "male")
+	  {
+      gen = "HIM";
+      }
+      else
+      {
+      gen = "HER";
+      }
+      }
+      if (p->query_gender() == "neuter")
+      {
+      gen = "IT";
+      }
+	  message("info","You strike your Staff of Lightning against the ground. "+
+	  "A bolt of lightning suddenly sears the air, striking "+
+	  ""+capitalize(ob->query_short())+"!\n",p); 
+	  message("info",""+p->query_cap_name()+" strikes "+possessive(p)+" Staff "+
+	  "of Lightning against the ground. A bolt of lightning suddenly sears "+
+	  "the air, and strikes "+capitalize(ob->query_short())+"!\n",
+	  environment(p),p);
+	  message("damage",""+p->query_cap_name()+" strikes "+possessive(p)+" "+
+	  "Staff of Lightning against the ground. A bolt of lightning suddenly "+
+	  "sears the air, striking you!\n",ob);
+	  ob->receive_damage(1400+random(150), LIGHTNING);
+	  ob->kill_ob(p); 
+	  if(!random(10))
+	  {
+      message("info","...The lightning bolt turns and strikes YOU!\n",p);
+	  message("info","..."+p->query_cap_name()+" looks shocked as the "+
+	  "lightning bolt suddenly flies back and strikes "+gen+"!\n",
+	  environment(p),p); 
+	  p->receive_damage(1400+random(150), LIGHTNING);
+      }
+	  call_out("check_charges",1);
+	  return 1;
+     }
+  return notify_fail("Shock what?\n"); 
+  }  
+}
+
+void extra_init() 
+{ 
+    add_action("shock_command","shock"); 
+} 
+
+void extra_create() 
+{
+  set_short("Iron staff of Lightning");
+  set_id( ({"iron staff of lightning", "staff of lightning", "iron staff", 
+  "staff"}) );
+  set_name("staff of lightning");
+  set_identified(1);
+  set_long(wrap("The staff is jagged in shape, a bit similar to a lightning "+
+  "bolt. Electricity fairly crackles on its surface; hot blue sparks shoot "+
+  "off at random intervals. There is a brightly fluorescent blue orb of "+
+  "some sort of crystal affixed to the top. Plasma radiates out from its "+
+  "center to strike the sides, making strange arcs and lines in the space "+
+  "between.\n"));
+  set_wtype("staff");
+  set_material("iron");
+  set_quality(25+random(15));
+  add_magic_property("lightning",5);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "It can be used to 'shock' things a limited number of times, but it "+
+"may misfire...";
+} 
+
+void check_charges()
+{
+	if(charges < 1)
+	{
+	message("info","The staff feels drained, somehow.\n",this_player()); 
+	remove_action("shock_command","shock");
+    }
+    else
+    {
+    charges--;
+    }
+} 

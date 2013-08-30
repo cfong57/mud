@@ -1,0 +1,16 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+void extra_create() 
+{
+  set_short("Exquisite golden lamp");
+  set_long(wrap("A lamp made of gold. From the weight of the thing, you'd "+
+  "guess it to contain at least 20 carats. Every now and then, the lamp "+
+  "emits a strange puff of blue smoke, but when you try to open the lid and "+
+  "investigate, some kind of force holds it shut. It is a bit chilly to the "+
+  "touch. All in all, it's a very intriguing item.\n"));
+  set_id(({"golden lamp", "lamp", "gold lamp", "necro lamp"}));
+  set_name("golden lamp");
+  set_value(35000);
+}

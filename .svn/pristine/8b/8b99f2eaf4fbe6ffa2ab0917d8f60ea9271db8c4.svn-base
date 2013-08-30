@@ -1,0 +1,27 @@
+#include <mudlib.h> 
+
+inherit SHADOW; 
+
+void check_status()
+{
+  if(!shadowed_object())
+  {
+	remove_call_out(); 
+    destruct(this_object());
+  } 
+  call_out("check_status", 5);
+}
+
+string query_short(int flag) 
+{ 
+  if(flag)
+  {
+    return shadowed_object()->query_short(flag);	  
+  }
+  else
+  {
+    string temp = "("+verbalize_rating(shadowed_object->query_chance(),
+    100)+" charge)";
+    return "Thin sliver of nothingness called 'Vacuum Blade' " + temp;
+  }
+}

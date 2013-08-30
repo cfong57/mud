@@ -1,0 +1,39 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "down in a hole" );
+  set_long( wrap("Ugh... the air here is musty and damp, and doesn't smell too "+
+  "good either. The slime trails and puddles of ooze are more numerous here. "+
+  "Water drips from the ceiling, making the ground muddy and slippery. "+
+  "Squelching sounds seem to come from farther within the cave. The fog is a "+
+  "bit thicker down here. Five tunnels lead farther into the caves.\n"));
+  set_item_desc(([({ "slime", "trails", "slugs", "ooze" }) :
+                  "It almost seems like they were made by giant slugs.\n",
+                  ({ "water", "ground"}) : "The water is making the ground very muddy and "+
+                  "hard to walk on.\n",
+                  "fog" : "The fog is pale green, and seems to float around at "+
+                  "random. It's difficult to breathe it and you wonder if "+
+                  "it's possibly toxic.\n"  ]) );
+  set_light(50);
+  set_water(5);
+  set_sounds(120, ({
+	                "A nearby puddle bubbles a little bit and lets off more "+
+	                "odors.\n",
+	                "The fog follows you around and makes you cough.\n",
+	                "You thought you just heard a squelching sound, but you "+
+	                "don't see anything.\n" }) );
+
+  add_monster("/u/a/allanon/areas/caverns_of_slime/mon/robber1.c");
+
+  set_exits(
+     ([
+       "up" : "/u/a/allanon/areas/caverns_of_slime/rooms/barren_clearing.c",
+       "east" : "/u/a/allanon/areas/caverns_of_slime/rooms/intersection.c",
+       "north" : "/u/a/allanon/areas/caverns_of_slime/rooms/passage.c",
+       "northwest" : "/u/a/allanon/areas/caverns_of_slime/rooms/crack_room.c",
+       "south" : "/u/a/allanon/areas/caverns_of_slime/rooms/pool1.c",
+       "southwest" : "/u/a/allanon/areas/caverns_of_slime/rooms/skeleton.c"]));
+}

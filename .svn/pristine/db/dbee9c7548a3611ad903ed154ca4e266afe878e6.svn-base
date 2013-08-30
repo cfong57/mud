@@ -1,0 +1,65 @@
+#include <mudlib.h>
+#include <daemons.h> 
+
+inherit ROOM;
+
+string curr_phase; 
+string foliage;
+string longdesc;
+
+void extra_create()
+{
+  set_outside("F"); 
+  set_outdoors("F");
+  set_short( "Deep in a forest" );
+  set_long(wrap("You are now quite deep into the forest. Wildlife has begun "+
+  "to taper off a bit in exchange for more vegetation. Some of the trees here "+
+  "must be over a hundred years old. There's an air of permanence about them. "+
+  "Southwest of here is a giant-looking tree, at least five meters in "+
+  "diameter. The dense foliage prevents you from seeing how tall it is.\n"));
+  longdesc = this_object()->query_long();
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/treants.c");
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/animals.c");
+  set_item_desc(([
+  ({"foliage", "vegatation", "forest"}) : "All manner of forest plants grow "+
+  "thickly around here. It would be easy to get lost among it all.\n"]));  
+  set_sounds(105 + random(26), ({ 
+  "You get a very mysterious feeling from the direction of the giant tree. "+
+  "Perhaps you should go to investigate.\n"}) ); 
+  set_exits(([
+  "north" : "/u/a/allanon/areas/lumber_camp/rooms/f2.c",
+  "south" : "/u/a/allanon/areas/lumber_camp/rooms/f4.c",
+  "southwest" : "/u/a/allanon/areas/lumber_camp/rooms/tree_entrance.c",
+  "northwest" : "/u/a/allanon/areas/lumber_camp/rooms/f1.c"]));
+  call_out("phase_func", 0); 
+  WEATHER_D->add_phase_listener(this_object());
+}
+
+void phase_func()
+{
+  curr_phase = GOD_D->query_current_phase();
+  switch (curr_phase)
+  {
+    case "fire":
+    foliage = "The foliage around you is a brilliant %^RED%^red%^RESET%^.\n";
+    break;
+    case "air":
+    foliage = "The foliage around you is a shimmering %^CYAN%^cyan%^RESET%^.\n";
+    break;
+    case "water":
+    foliage = "The foliage around you is a rippling %^BLUE%^blue%^RESET%^.\n";
+    break;
+    case "earth":
+    foliage = "The foliage around you is a solid %^ORANGE%^brown%^RESET%^.\n";
+    break;
+    case "magic":
+    foliage = "The foliage around you %^BOLD%^wavers%^RESET%^ mysteriously.\n";
+    break;
+  }	
+  set_long(wrap(longdesc + foliage));
+}
+
+void phase_changed(mapping map)
+{ 
+  call_out("phase_func", 0);
+} 

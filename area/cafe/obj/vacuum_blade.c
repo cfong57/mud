@@ -1,0 +1,167 @@
+#include <mudlib.h>
+#include <damage.h>
+#include <void.h>  
+#include <daemons.h>
+#include <move.h>
+
+inherit WEAPON;
+
+int start = time();
+int chance = 100;
+
+//stuff for debug
+void set_chance(int x)
+{
+  chance = x;	
+}
+
+int query_chance()
+{
+  return chance;	
+}
+
+void set_start(int x)
+{
+  start = x;	
+}
+
+int query_start()
+{
+  return start;	
+}
+
+void recharge()
+{
+  if(time() - start > 300 && chance < 100) //5 minutes, charge max at 100
+  {
+    chance += 10;
+    if(chance > 100)
+    {
+	  chance = 100;   
+    }
+    start = time(); //reset start time to now
+    if(query_user())
+    {
+	  message("info","Your Vacuum Blade seems to gain back some power.\n",
+	  query_user());
+    }
+    else if(environment(this_object())->query_player())
+    {
+	  message("info","Your Vacuum Blade seems to gain back some power.\n",
+	  environment(this_object()));
+    }
+  }
+  call_out("recharge", 300);
+}
+
+int tear_command(string cmd)
+{
+  if(cmd == "hole")
+  {
+    if(chance == 100)
+    {
+	  object room = VOID_D->get_free_room();
+	  object rift = new("/obj/misc/rift.c");
+	  message("info","Concentrating intently, you probe the air with the tip "+
+	  "of your Vacuum Blade until you feel a small tug of resistance. You "+
+	  "firmly draw the blade across this area...\n",this_player());
+	  message("info","Concentrating intently, "+
+	  ""+this_player()->query_cap_name()+" probes the air with the tip of "+
+	  ""+possessive(this_player())+" Vacuum Blade until "+
+	  ""+subjective(this_player())+" seems to find something. "+
+	  ""+capitalize(subjective(this_player()))+" firmly draws the blade "+
+	  "across this area...\n",environment(this_player()),this_player());
+	  message("spell","A strange rift materializes in front of you.\n",
+	  environment(this_player()));	  
+	  rift->move(environment(this_player()), 1);
+	  rift->set_destination(room);
+	  rift->set_caster(this_player());
+	  chance = 0;
+	  message("info","Your Vacuum Blade seems to lose all of its power.\n",
+	  this_player());
+    }
+    else
+    {
+	  message("info","Your Vacuum Blade doesn't have enough power.\n",
+	  this_player());   
+    }
+    return 1;
+  }
+  return notify_fail("Usage: 'tear hole'");	
+}
+
+void extra_init()
+{
+  add_action("tear_command","tear");	
+}
+
+void extra_create()
+{
+  object vshadow = new("/u/a/allanon/area/cafe/shadows/vacuum_shadow.c");
+  vshadow->shadow_object(this_object());
+  vshadow->check_status();
+  set_identified(1);
+  set_short("Thin sliver of nothingness called 'Vacuum Blade'");
+  set_id(({"thin sliver of nothingness", "vacuum blade", "blade", "knife",
+  "sliver", "nothingness", "thin sliver", "silver knife"}));
+  set_long(wrap("What a strange weapon. At first glance, it looks like a "+
+  "regular knife made out of silver, with a plain wooden handle and short "+
+  "quillions to protect the hand of the wielder. However, upon closer "+
+  "inspection, you see that the sharp edges are...undefined. They just aren't "+
+  "there. Instead of being metal, they are simply 'nothingness'. No color, no "+
+  "shape, nothing by which to reference them.\n"+
+  "Tiny words have been inscribed to the handle, reading: 'I hope you never "+
+  "have to use this. -Slash'\n"));
+  set_name("vacuum blade");
+  set_wtype("knife");
+  set_material("silver");
+  set_quality(90);
+  recharge();
+  weapon_setup();
+}
+
+string query_special_feature() 
+{
+  return "The blade absorbs the very air, choking opponents and interrupting "+
+  "their spellcasting. Subsequent interruptions will be more difficult unless "+
+  "the blade is given time to recharge.\n"+
+  "The blade can also 'tear' a hole in the material plane, opening a rift to "+
+  "the Void, but doing so requires it to be fully recharged.";
+} 
+
+int special_hit(object target)
+{
+  start = time();
+  if(target->query_casting())
+  {
+	if(random(100) < chance)
+	{
+	  message("info","Your Vacuum Blade sucks the air from around "+
+	  ""+target->query_cap_name()+"! "+capitalize(subjective(target))+" can't "+
+	  "breathe!\n",this_object()->query_user());
+	  message("info",""+this_object()->query_user()->query_cap_name()+"'s "+
+	  "vacuum blade sucks the air from around you! You can't breathe!\n",
+	  target);
+	  message("info",""+this_object()->query_user()->query_cap_name()+"'s "+
+	  "Vacuum Blade sucks the air from around "+target->query_cap_name()+"! "+
+	  ""+capitalize(subjective(target))+" can't breathe!\n",environment(target),
+	  ({target, this_object()->query_user()}));
+      target->interrupt();
+      if(chance < 2)
+      {
+	    chance = 0;   
+      }
+      else
+      {
+        chance = chance / 2;
+      }
+      return 1;
+    }
+  }
+  return 0;  
+} 
+
+mixed * query_dtypes() 
+{
+  return ({ASPHYXIATION, 100});
+} 

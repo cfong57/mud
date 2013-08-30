@@ -1,0 +1,52 @@
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Black shield 'Aegis Shield'");
+  set_id(({"kite shield", "shield", "aegis", "aegis shield", "black shield"}));
+  set_long("A shield for defending yourself. Resists all elements.\n");
+  set_name("aegis shield");
+  set_wtype("kite shield");
+  set_material("adamantium");
+  set_quality(100);
+  add_magic_property("protection",5);
+  add_magic_property("fire",5);
+  add_magic_property("cold",5);
+  add_magic_property("poison",5);
+  add_magic_property("acid",5);
+  add_magic_property("lightning",5);
+  add_magic_property("psionic",5);
+  add_magic_property("asphyxiation",5);
+  add_magic_property("sonic",5);
+  add_magic_property("magical",5);
+  add_magic_property("evil",5);
+  add_magic_property("good",5);
+  add_magic_property("chaos",5);
+  add_magic_property("resist physical",5);
+  add_magic_property("constitution",5);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "This weapon doesn't interfere with the casting process.";
+} 
+
+int query_casterweapon()
+{
+	return 1;
+}
+
+int query_not_offensive()
+{
+	return 1;
+}
+
+int query_damage() { return 300; } 
+int query_size() { return 50; }  
+int query_speed() { return 1; }
+int query_mass() {return 1; }
+int query_bulk() {return 1; }

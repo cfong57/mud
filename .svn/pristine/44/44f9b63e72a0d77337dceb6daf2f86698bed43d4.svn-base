@@ -1,0 +1,91 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+int receive_plates(object plates);
+
+void extra_create()
+{
+  set_short("Melari, the local village smith"); 
+  set_long(wrap("A dwarven smith stands before you. Sweat beads on his balding head, "+
+  "and callouses cover his hands. At the moment he seems to be very busy, some "+
+  "object on his anvil being worked on. Tongs and a spare hammer hang at his "+
+  "waist, necessary tools for any smith. You think that bothering him "+
+  "would probably not be a good idea.\n"));
+  set_name("Melari");
+  add_random_weapon("titanium_hammer", 10);
+  add_random_armour("titanium_random_vest", 10);
+  set_id(({"melari, the local village smith", "Melari", "melari", "the local village smith",
+  "local village smith", "village smith", "local smith", "smith"}));
+  set_level(75); 
+  set_race("dwarf");        
+  set_gender("male");
+  set_following(0);
+  set_agrochance(65);
+  set_chat_chance(4);
+  set_receive_object( (["/u/a/allanon/areas/saith/obj/plates" : "receive_plates" ]) );
+  set_chat_output( ({
+  "Melari hammers mercilessly at something on his anvil.\n",
+  "Melari stops a moment to wipe his forehead with a towel.\n",
+  "Melari takes his tongs and carefully lifts something hot off his anvil, plunging "+
+  "it into a large vat of water and causing a large cloud of steam to rise with a hiss. \n",
+  "Melari takes a file and casually scrapes the accumulated crud off his hammer and anvil.\n"}));
+  set_inquiry(([
+    "$GREET": ({"Greetings, and welcome to my smithy. Are you in need of services?"}),
+    ({ "Sword of Seals", "sword of seals", "sword"}) : "Oh! So, you've heard of the "+
+    "legendary blade too? The Sword of Seals was a fine piece of work, indeed. The "+
+    "Derro warrior Rhedzz was said to be its sole posessor - yes, the same one right "+
+    "out of the old legends. My great-grandfather worked on that sword.",
+    ({"Rhedzz", "rhedzz"}) : "I can't tell you much about him. You might ask "+
+    "Librari, the old hermit who lives in the cave just west of town.",
+    "$DEFAULT" : "I don't know anything about that.",
+    "mithril" : "They say that the well in the center of town was drilled right "+
+    "through an old mithril mine shaft. I wish I could get my hands on some! "+
+    "It's been my lifelong dream to forge something out of mithril.",
+    ({ "ankheg of the ancients", "ankheg", "worm"}) : "The terrible beast? "+
+    "The old legends speak of a titanic worm covered in metal plates, which "+
+    "was locked up safely away long ago. Supposedly that place is right under "+
+    "this very town! I hope it never gets out...a small village like ours "+
+    "would be decimated."]) );
+}
+
+int receive_plates(object plates)
+{
+ object ob;
+ string item;
+  {
+   force_me("say What's this?! It's mithril! Where did you find it? Wait, don't "+
+   "tell me - you got it from the mine, didn't you. Ah well - I don't care where "+
+   "it came from, as long as I have it! I'll start working on it right away!");
+   message("info", "The smith excitedly starts hammering the mithril, and in no "+
+   "time is finished with his forging.\n",environment(this_object()));
+   force_me("say Here you go, thanks so much!");
+   plates->remove();
+   switch(random(4))
+    {
+	 case 0:
+	  ob = new("/u/a/allanon/areas/saith/obj/smithhelm.c");
+	  item = "a helmet";
+	 return 1;
+	 case 1:
+	  ob = new("/u/a/allanon/areas/saith/obj/smithdagger.c");
+	  item = "a dagger";
+	 return 1;
+	 case 2:
+	  ob = new("/u/a/allanon/areas/saith/obj/smithspear.c");
+	  item = "a spear";
+	 return 1;
+	 case 3:
+	  ob = new("/u/a/allanon/areas/saith/obj/smithflail.c");
+	  item = "a flail";
+	 return 1;
+	}
+   ob->move(this_player(),1);
+   message("info", "The smith gives you "+item+".\n",this_player());
+   message("info", "The smith gives "+this_player()->query_cap_name()+" "+item+".\n",
+                   environment(this_player()),this_player());
+   force_me("say Why the look of surprise? I'm a pacifist...no need for weapons or armour. "+
+   "All I wanted was to work with the mithril, that in itself is enough reward!");
+   force_me("smile "+this_player()->query_name());
+  }
+}

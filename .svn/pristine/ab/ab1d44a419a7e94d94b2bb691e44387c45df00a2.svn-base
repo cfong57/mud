@@ -1,0 +1,58 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int worldmap_command(string cmd)
+{
+  string *tmp;
+  string roomtype;
+  int x;
+  int y;
+  mapping themap = ([]);
+  string coordinates;
+  if(!cmd)
+  {
+    tmp = get_dir("/d/world/rooms/");
+    if(sizeof(tmp))
+    {
+      foreach(string file in tmp)
+      {
+        object ob;
+        ob = load_object("/d/world/rooms/" + file);
+        if(!ob)
+        continue; //skip files with wrong extension, etc
+        sscanf(file,"%d,%d",x,y);
+        coordinates = ""+x+","+y+"";
+        roomtype = ob->query_outside();
+        themap[coordinates] = roomtype;
+        if(roomtype == "?")
+        {
+	      write_file("/u/a/allanon/logs/area_log", ""+coordinates+" : \n"); 
+        }    
+      }
+      write_file("/u/a/allanon/logs/temp_log", ""+identify(themap)+"", 1);
+    }
+    else
+    {
+      message("info","Huh, failed to load directory.\n",this_player());	  
+    }
+    return 1;
+  }
+  return notify_fail("No args.\n");
+}
+
+void extra_init()
+{
+  add_action("worldmap_command","worldmap");
+}
+
+void extra_create()
+{
+  set_short("The Mapper(tm)");
+  set_long(wrap("This object is used to generate a mapping of every room in "+
+  "the game and its coordinates. Usage: 'worldmap'.\n"));
+  set_name("the mapper");
+  set_id( ({ "the mapper", "mapper" }) );
+  set_mass(1);
+  set_bulk(1);
+}

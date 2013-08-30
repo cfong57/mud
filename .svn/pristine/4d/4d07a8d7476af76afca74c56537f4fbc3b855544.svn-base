@@ -1,0 +1,43 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+#define OK_USE "/u/a/allanon/area/ity/rooms/towernw2.c"
+
+int blast_command(string cmd) 
+{ 
+  if (environment(this_player())->query_tower() && cmd == "door") 
+  { 
+    message("info", "You set the seaforim charge and run away from the door. "+
+    "Soon afterwards there is a mighty BOOM, and the lock of the door is "+
+    "blown away.\n", this_player()); 
+    message("info", ""+this_player()->query_cap_name()+" sets "+
+    ""+possessive(this_player())+" seaforium charge and runs away from the "+
+    "door. Soon afterwards there is a mighty BOOM, and the lock of the door "+
+    "is blown away.\n", environment(this_player()), this_player());     
+    OK_USE->destroy_door();
+    this_object()->remove();
+    return 1; 
+  } 
+  return notify_fail("Try 'blast door'.\n");
+} 
+
+void extra_init()
+{
+  add_action("blast_command", "blast");
+}
+
+void extra_create() 
+{
+  set_short("Small seaforium charge");
+  set_long(wrap("This is a small seaforium charge. It is highly explosive, so "+
+  "you should take care when handling it. Use 'blast door' to blow open a "+
+  "locked door.\n"+
+  "Currently only works at /u/a/allanon/area/ity/rooms/towernw2.c ."));
+  set_id( ({"small seaforium charge", "small charge", "small seaforium",
+  "seaforium charge", "seaforium", "charge"}) );
+  set_name("seaforium charge");
+  set_value(0);
+  set_mass(50);
+  set_bulk(50);
+}

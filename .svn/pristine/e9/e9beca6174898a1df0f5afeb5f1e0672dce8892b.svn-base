@@ -1,0 +1,473 @@
+README FILE FOR AREA: Caverns of Slime. *REVAMPED*
+CREATED BY: Allanon.
+WITH MAJOR HELP FROM: Echcua and Misrobo.
+COMPLETED ON: 12-13-04.
+
+GENERAL THEME: A smallish area of caves, rich in exp and cash. Mobs inside 
+include some spirits and shades (undeads), flans, slimes, oozes (acid element 
+monsters), Nether Bats/Bluefire Bats, and most importantly the "King Slime" mob.
+"King" mob of the area is a huge Slime - has a gloweq. Flans are easy enough for 
+any noob to kill. Slimes are more difficult, and Oozes are the hardest. 
+Spirit's hardness varies randomly. Shades are tough, and are meant more as the 
+kind of monster that you kill for exp with a party, because soling them is too
+much effort for the reward. "King" mob takes cooperation of a few lv. 25
+and ups (several runs) or to solo takes lv. 35 at the very least (also several 
+runs; estimates are probably very flawed). This area has 2 quests and one secret 
+quest. There is one (1) SECRET ROOM. Hard to find, and it contains an elven 
+ranger monster (HIGHBIE MOB).
+
+BACKGROUND: One day an alchemist who was fascinated with the monsters called 
+Puddings decided to run an experiment on them. Normally this would be harmless,
+except this time the alchemist added one too many blackslice. The whole thing
+blew up, taking out the alchemist, her laboratory, and a 50-foot clearing of 
+forest. The Puddings were somehow transformed by the experiment and now run 
+wild in the caves under the site of the late alchemist's home. Travelers and
+adventurers who have gone to investigate have never returned. Reports from 
+Rangers passing by the area told of "large pools of ooze" and "trees that 
+have been melted away". When a company of Vaerlon's finest soldiers was sent,
+only one, a low-ranking private, returned. While he lay dying in the Temple 
+of Air, he kept babbling "A giant black blob sucked up Sarge!". He passed 
+away a few days later, and everyone was still miffed as to what had happened
+to the doomed company. Reckless adventurers are advised to stay away from 
+the area.
+
+LOCATION: Somewhere in the forests south and west of Vaerlon, about 10 tiles 
+off the main road. A path leads to it off the main road.
+
+LIST OF MOBILES:
+
+1) Restless shade of a soldier
+
+This vaguely humanoid shade is surrounded by smoky fog that makes it hard to 
+perceive. Pale green in color, it seems to be very agitated. Glowering yellow 
+eyes shine malevolently on what you suppose is its head. You think it is 
+probably the spirit from one of the many skeletons lying around. It drifts 
+randomly, occasionally passing through walls and other solid objects. While it 
+does not appear particularly dangerous, its weapons and armor look very 
+corporeal, and it would be prudent to leave the shade alone.
+
+30k or thereabouts exp. Undead so +resistances. No dropped coins.
+
+2) Wandering, vaguely humanoid spirit
+
+A strange spirit seems to be wandering at random around the caverns. It looks 
+like a human at first glance, but its outline is too obscure to be sure. You'd 
+guess that this is probably all that remains of one of the numerous adventurers 
+who were foolish enough to venture here.
+
+Since the level, size, and equipments of this mobile are random, it has a 
+varying exp worth (at least 10k always). Undead so +resistances.
+
+3) Small flan
+
+Before you is a smallish glob of orange ooze. It wiggles and slides around 
+slowly, leaving a trail of sticky slime behind it. You can detect no visible 
+arms on it, and you wonder how it manages to survive. Then you notice that its 
+jellylike body can be transformed into any shape it desires, including tiny arms
+or legs. It has two small, black eyelike slits that you can distinguish from the
+rest of its body.
+
+The smallest mobile in the Slime family. Worth approximately 500. Drops some 
+coins. Resistant to acid damage, has a weak acid special hit.
+
+4) Large orange slime
+
+Before you is a large glob of orange ooze. It wiggles and slides around slowly, 
+leaving a trail of sticky slime behind it. You can detect no visible arms on it,
+and you wonder how it manages to survive. Then you notice that its jellylike 
+body can be transformed into any shape it desires, including tiny arms or legs. 
+It has two large, black eyelike slits that you can distinguish from the rest of 
+its body.
+
+Worth about 3k. These are one step up from Flans. Drops some coins. Resistant to
+acid damage and has an acid special hit (both stronger than the Flan's).
+
+5) Bloated, green ooze
+
+Before you is a large glob of green ooze. It wiggles and slides around slowly, 
+leaving a trail of sticky slime behind it. You can detect no visible arms on it,
+and you wonder how it manages to survive. Then you notice that its jellylike 
+body can be transformed into any shape it desires, including tiny arms or legs.
+It has two large, black eyelike slits that you can distinguish from the rest of 
+its body.
+
+Worth about 5k. These are one step up from Slimes. Drops some coins. 
+Resistant to acid damage and has an acid special hit (both stronger than the 
+Slime's).
+
+5) Nether Bats -OR- Bluefire Bats
+
+Bluefire bat, covered in freezing fire / Nether bat, covered in scorching flames
+
+This monster is a distant cousin of the common cave bat. A genetic mutation has 
+given them the peculiar ability to resist fire, enough so that they are 
+constantly aflame. Flaring red eyes and teeth sharper than stilletos give it a 
+quite fearsome appearance. It constantly drips fire as it flies around, and you 
+are glad that it is confined to this cave - it would cause untold ruin if let 
+loose in the wild.
+
+This monster is a distant cousin of the common cave bat. A genetic mutation has 
+given them the peculiar ability to resist ice, enough so that they are 
+constantly engulfed in freezing blue flames. Cold, icy-blue eyes and teeth 
+sharper than stilletos give it a quite fearsome appearance. A chill wind akin to
+that of death seems to follow in its wake.
+
+Basically elemetally-charged bat monsters. Nether Bats are fire, Bluefire Bats 
+are ice. Note that at sunset, Nether Bats transform to Bluefire Bats, and at 
+sunrise, Bluefire Bats transform to Nether Bats. Worth of about 10k, undead. 
+Nether Bats have resistances so that they get healed from fire and take more 
+damage from ice, vice versa for the Bluefire Bats. Has some special bonuses for
+skins related to elemental charge (yes, skinnable undead).
+
+6) The King Slime
+
+A huge blob of black ooze sits before you. It lets off a disgusting odor, and 
+glue-like mucus pools around it. An enormous eyeball, the size of a dinner 
+plate, stares at you from deep within the semitransparent blob. The slime's size
+has enabled it to form permanent bodyparts: you spot eight tentacle-like arms
+and some odd pipe-like appendages. Something golden glints within the blob.
+
+Worth varies a bit but is about 50k. Immune to acid damage. Has an acid special
+hit much stronger than the Green Slime's. Drops some coins. This monster is 
+special because it is a 'quest monster' - you must slay it to finish either of
+the minor quests in this area, since it drops the quest item. This monster also
+drops a gloweq when slain. Aggressive. +2500 hpmax. Eight "natural weapons".
+
+7) Furious spirit of a ranger
+
+A clearly spiteful spirit bars your path. You aren't quite sure why it has come 
+back from the grave, but it seems to be extremely displeased with something. You
+recall that disturbing graves is a good way to incite spirits. You can discern 
+from first glance that the spirit is that of a human, and with its two blades it
+was definitely also a ranger when alive. A bright silvery wound in its chest 
+marks how it died...you think you can still see a fragment of a shattered dagger
+embedded within it.
+
+Aggressive undead which serves as a blocker to certain room. Worth of about 25k.
++Resistances because undead. Drops some coins. Drops a diamond shard. Wields a 
+random sabre, a random small sword, a random hauberk, random helmet, and random 
+gloves.
+
+LIST OF NPCs:
+
+1) lucid ghost of the alchemist
+Before you floats the pale white ghost of the alchemist. She seems perturbed by 
+something. You seem to recall that the reason spirits are not allowed to leave 
+for the Nether Plane is because they have unfinished business in the world...you
+wonder if perhaps you could help out?
+
+Worth of about 50k. Has a rather strong Acid Blast spell, so quite dangerous to
+kill. Well, it IS a quest monster and all. Undead, +resistances, no coins. Drops
+nothing. If you give the quest item to her she will give you the quest reward 
+and then disappear. A once-per-boot monster (and therefore quest). Has some
+Inquiries.
+
+2) Murin, a tough elven ranger
+
+This ranger, garbed in simple, forest-green clothing, is a young elf female -
+she looks to be maybe 120 or so. Her jade-green eyes and shining, pale blond
+hair lend an air of youthfulness, and she appears quite beautiful. You sense
+that she will grow to be a well-formed elf female in later years. Her
+graceful, powerful movements are characteristic of an experienced ranger.
+She is an elf and medium of size.
+
+Worth of 170k or so. Of course, you're not really supposed to kill her unless 
+highbie. If you give the quest item to you she gives alternate quest reward, but
+does not disappear...simply does not give out reward again (until reset). A
+once-per-boot monster. Murin has Inquiries. Lots of appropriate Ranger skills.
+
+3) Tourne, experienced-looking spelunker
+
+This dark elf seems to be an expert in the area of cave exploration. You can 
+automatically assume, then, that he is also a treasure seeker. His tall frame is
+flexible and muscled from years of spelunking. You think that he might have 
+chosen his career, not because he liked it, but because it would never require 
+exposure to harmful sunlight. You note that spelunkers often make decent 
+livings, and their trade isn't exactly seen as dubious by society - a win-win 
+situation all around. You notice, with some curiosity, that he seems to be a 
+well-educated dark elf...whatever drove him off the path of the scholar, you 
+will never know.
+
+Dark elf NPC with some Inquirys. Offers some (somewhat cryptic) hints about the
+area. Worth of about 13k. Drops a Metalbit. Wields a random sabre, wears a 
+random hauberk.
+
+
+4) Raban, a shifty-looking thief
+
+You immediately check your belongings again after eyeing this shifty-looking 
+human. He looks able to steal just about anything...he's probably here on some 
+shady treasure-seeking venture. No doubt his appearance adds greatly to his 
+occupation - small, mousy, and furtive. His oily black hair has been grown out 
+far enough to serve as a sufficient eyeshade - it covers his right eye, leaving 
+the left one to stare you down silently. It is steel grey, and totally 
+unreadable...
+
+Human NPC with some Inquirys. He's mostly just here to flesh out the area...
+Wields a random rapier and knife, and wears a random robe and cape.
+
+
+5) Dorrah, riled-looking graverobber
+
+An angry little leprechaun female stands defiantly before you. She seems 
+determined to block your passage, for reasons unknown to you. Drool escapes her 
+quivering jaws and her eyes betray madness...you wonder how she even manages to 
+make a decent living with that sort of appearance. While she looks harmless 
+enough in this mental state, you take note that she has an unsheathed blade 
+ready at hand. It probably would be wise to leave her alone to her insanity.
+
+Insane Leprechaun NPC. Mildly amusing. Serves as a blocker to certain room.
+Offers a BIG hint in an indiscreet way about the area. Wields a random dagger 
+and 1 random armour.
+
+
+LIST OF EQUIPMENTS AND ITEMS:
+
+1) The quest rewards from Ghost
+
+Brilliant purple battleaxe <intense red glow>
+Fine steel poorQ battleaxe, deals acid damage "3"
+
+This battleaxe has been painted a brilliant metallic purple. It is 
+double-headed, with acid-covered edges on both ends. The shaft goes past the 
+head and narrows to a sharp point. The axe feels well balanced and is deadly 
+sharp.
+
+Brilliant purple longsword <intense red glow>
+Fine steel poorQ longsword, deals acid damage "3"
+
+This longsword has been painted a brilliant metallic purple. Both of its edges 
+drip with acid. The blade narrows to a broad but sharp point. The grip of the 
+weapon is firm, and it feels well balanced. It looks deadly sharp.
+
+Brilliant purple rapier <intense red glow>
+Fine steel poorQ rapier, deals acid damage "3"
+
+This rapier has been painted a brilliant metallic purple. The entire blade drips
+with acid. It narrows to an extremely sharp point. A hand guard above the hilt
+protects the hand when thrusting. The tip looks deadly sharp.
+
+All 3 sell for about 35k (estimate).
+
+2) The quest reward from Murin
+
+Ancient steel sabre <intense yellow glow>
+Steel averageQ sabre, +1damagedexspeed
+
+It's an old sabre, passed down for generations. A tacky leather strip has been w
+ound around the handle to provide a grip. There is a luminescent blue gem in the
+handle, reminding you of the ocean. The blade has been honed to a fine edge.
+
+Worth about 50k (estimate).
+
+3) Gloweq dropped by King Slime
+
+Slimy black breastplate <intense purple glow>
+PoorQ chitisilk bplate, +1dex +5 acid res
+
+This was once a simple breastplate made of chitinium silk, but after being stuck
+within the slime for so long it has turned sickly black and is permanently 
+covered in a thin coating of slime. However, it still functions fine as an 
+armor, and you think it has picked up some magical properties over time.
+
+Sells for about 20k (estimate).
+
+4) THE quest item
+
+The Heart of Gold
+
+This is a very lifelike replica of a human heart, done in gold. It shimmers 
+mystically in the light, but other than that it seems perfectly ordinary.
+
+Sells for about 10k.
+
+Give to either Ghost or Murin to finish the minor quests.
+
+5) Shade equipment
+
+Shades wield ordinary steel small shield, steel shortsword, iron chain
+mail cuirass, helmet, and gauntlets.
+
+6) Spirits wield totally random armour and weapons.
+
+6) Murin's equipment
+
+Murin wields some rather EXTREME stuff.
+
+Wicked black scimitar <intense pink glow> 
+Fine steel, "1" psionic and sonic damage + 1 psionic resist, "1" poison damage.
+
+This curved sword has a pure black blade. A simple crossguard adorned with an 
+old elven family crest protects the wielder's hands. There is an evil-looking 
+blood ruby embedded in the handle that seems to be giving off some psychic 
+emations. The distinct smell of poison is easily detectable from the 
+blade...best to be cautious with it.
+
+Tainted black scimitar <intense pink glow>
+Fine steel, "1" fire damage + 1 fire resist, "1" speed, "1" accuracy.
+
+This curved sword has a pure black blade. A simple crossguard adorned with an 
+old elven family crest protects the wielder's hands. There is a foul-looking 
+emerald embedded in the handle. Occasionally the blade bursts into flames, 
+leaving an acrid smell of burnt metal in the air. An aura of tainted power 
+surrounds the weapon.
+
+The shirt of Stealth <intense green glow> 
+Chitinium silk, +1strdexcha
+
+This shirt is made of high-quality demonhide, and is colored in a way which 
+makes hiding in the shadows easy. The buttons are made of fine mahogeny wood, 
+the likes of which not even the highest nobles have at their disposal. You think
+they probably came straight from the tree itself.
+
+Forest-green gloves <intense green glow>
+Chitinium silk, +1strdex
+
+These gloves are made of very fine silk, and are as green as the forest itself. 
+Lifelike golden leaf adornments are embroidered on the back of each glove. The 
+front of the gloves are covered in a peculiar substance similar to tree sap 
+which gives them a very good grip.
+
+Forest-green tights <intense green glow>
+Chitinium silk, +2dex
+
+These tights are made of very fine silk, and are as green as the forest itself. 
+Lifelike golden leaf adornments are embroidered along the outside of the legs. 
+This is distinctly a Ranger item, and a wealthy Ranger at that.
+
+Forest-green boots <intense green glow>
+Leather boots, +2str
+
+These boots are made of very fine leather, and are as green as the forest 
+itself. Lifelike golden leaf adornments are embroidered on each boot. The soles 
+are made of well-worn leather which makes no sound. It's quite obvious that a 
+wealthy Ranger once owned these.
+
+7) Items obtained through searching Murin's hidden abode
+
+Short bone knife <intense green glow>
+Bone knife, +2 leatherworking
+
+The blade may be made of bone, but it looks as sharp as any metal knife you have
+seem. It cuts with ease through even tough leather. Aside from its unusual 
+sharpness, you can find nothing out of the ordinary with this weapon. A single 
+rune graces the hilt.
+
+Shining silver dagger <intense magenta glow>
+Silver dagger, "1" poison damage, +1poison resistance, chance to poison enemy
+
+It's a fairly ordinary silver dagger. Poison has been enchanted into the weapon,
+causing slight black tarnishes. Seeing as it is made of fine silver and not some
+other, better material, you can guess with good reason that it is a weapon of 
+the nobles, more for its showy effect than for its usefulness as a real weapon.
+
+8) Fake keys
+
+Throughout the area are scattered 3 keys (Red, Blue, and Green). They are fake 
+and do absolutely nothing except confound the mortals.
+
+9) Warning note
+
+Small scrap of parchment
+
+A note written in blood!...Beware the Ranger's remains!...
+
+Small tidbit item I added so a player might, just might, not be slaughtered 
+unawares by aggro ranger spirit. Besides that it fleshes out the area nicely.
+
+10) Another Quest Item
+
+Diamond shard
+
+This is an extremely thin, small, and sharp shard. It is made of diamond, which 
+is strange since you're almost certain that diamonds never grow to this shape 
+naturally. Perhaps it was once part of a weapon, which has shattered. You 
+suppose if you had enough shards, you just might be able to fix the weapon.
+
+Get one hundred (yes, you heard me, 100) of these, "fix shards", you get:
+
+11) Diamond Dagger
+
+Brilliantly shining diamond dagger <intense red glow>
+Diamond dagger, averageQ, +2damage, +2speed, +1accuracy.
+
+This dagger seems to have been recently reforged from several shards of diamond,
+but the quality is so exquisite that you can detect no telltale signs of damage.
+The light reflects in arcs of luminescence off the diamond blade, giving it an 
+aura of brilliance. The blade has been honed to deadly sharpness, and the tip is
+finer than that of a pin.
+
+Yes this item is INSANELY good and Yes its worth is extraordinary. But! Just
+think about it for a moment...collect ONE HUNDRED shards?! That's at least 10
+reboots we're talking about here. Besides, no hints for the quest...
+
+12) The Real Key Etc.
+
+Searcing in the "pool" rooms will give you an item:
+
+Small metal bit
+
+When you get 4 of these, "combine bits" to make:
+
+Small steel key <eerie glow>
+
+...which can be used to unlock the door leading to the lair of the King Slime.
+Yes, this is the "real" key. :)
+
+LISTING OF ROOMS:
+
+Evergreen forest in Outworld:
+
+eeeEEEeeeeeee|
+eeeeeeeeeEEee|
+eee?....eeeee|
+eeeeeeeE.eeee|
+eeeeeeeee....+
+eEEEeeeEEeeeee\
+
+This is approximate, the location can be changed if necessary.
+
+A barren clearing in the middle of the forest:
+
+  #
+
+That is, when you enter there is just the single room. You can go down to get 
+farther into the area.
+
+Map of caverns:
+
+           B^O       P4  Sd
+           |          \ /
+           L           T
+           | 
+         C P M        I leads DOWN through a door to *
+        ^ \| ^
+      P2   @-I-G-P3
+          /  |
+         K   Su
+
+
+^  = Special exits
+/  = Northeast-Southwest Exits
+- = East-West Exits
+|  = North-South Exits
+
+@  = Down in a hole (First room of caverns, Tourne here)
+K  = A room full of remains (Searchable)
+Su = A room with stairs leading up
+Sd = A room with stairs leading down
+I  = Intersection
+G  = Smooth-walled tunnel (Dorrah here)
+*  = In the lair of the king slime (King slime here)
+M  = Murin's hidden abode (Searchable, Murin here)
+C  = A room with ragged walls (Searchable)
+L  = On a ledge over a basin
+B  = In a large, slime-filled basin
+O  = On a small island, in the middle of a basin (Searchable)
+T  = Grave of a ranger (Aggro ranger spirit here)
+P1 = Deep in the caves, next to a pool of ooze (#1) (Searchable)
+P2 = Deep in the caves, next to a pool of ooze (#2) (Searchable)
+P3 = Deep in the caves, next to a pool of ooze (#3) (Searchable)
+P4 = Deep in the caves, next to a pool of ooze (#4) (Searchable, Raban here)
+
+Special exits are simply unconventional exits.

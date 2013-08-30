@@ -1,0 +1,37 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+int clean_up(int inh) { return 1; }
+void reset() { return; }
+
+int fireplace_lit = 0;
+
+void extra_create()
+{
+  seteuid( getuid() );
+  set_outside("h"); 
+  set_outdoors("h");
+  set_short("Room A");
+  set_long(wrap("You are in a small and dusty room. There is a fireplace set "+
+  "into one of the walls, but it is covered by a thick steel grating and you "+
+  "cannot figure out how to light it.\n"));
+  set_exits((["south" : "/u/a/allanon/areas/necropolis/rooms/roomB.c"]));
+  ::reset();
+}
+
+void light_fire()
+{
+  message("info", "With a whirr of mechanical sounds, the fireplace suddenly "+
+  "ignites itself! Gnomish technology sure is amazing.\n", this_object());
+  set_long(wrap("You are in a small and dusty room. There is a fireplace set "+
+  "into one of the walls. It is covered by a thick steel grating, yet somehow "+
+  "it has been lit. It gives a little bit of warmth to this otherwise barren "+
+  "room.\n"));
+  fireplace_lit = 1;
+}
+
+int query_fireplace_lit()
+{
+  return fireplace_lit;	
+}

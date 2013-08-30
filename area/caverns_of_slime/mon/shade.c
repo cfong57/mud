@@ -1,0 +1,46 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("restless shade of a soldier");
+  set_long(wrap("This vaguely humanoid shade is surrounded by smoky fog that "+
+  "makes it hard to perceive. Pale green in color, it seems to be very agitated. "+
+  "Glowering yellow eyes shine malevolently on what you suppose is its head. "+
+  "You think it is probably the spirit from one of the many skeletons lying "+
+  "around. It drifts randomly, occasionally passing through walls and other "+
+  "solid objects. While it does not appear particularly dangerous, its weapons "+
+  "and armor look very corporeal, and it would be prudent to leave the shade alone.\n"));
+
+  set_name("shade");
+  set_race("shade");
+  set_id(({"restless shade", "shade"}));
+  set_level(23);
+
+  add_armour("/u/a/allanon/area/caverns_of_slime/obj/shadehelmet");
+  add_armour("/u/a/allanon/area/caverns_of_slime/obj/shadegauntlets");
+  add_weapon("/u/a/allanon/area/caverns_of_slime/obj/shadesword",({"right hand"}));
+  add_weapon("/u/a/allanon/area/caverns_of_slime/obj/shadeshield",({"left hand"}));
+
+  set_skill("melee", 50);
+  set_skill("piercing weapons", 40);
+  set_skill("bludgeoning weapons", 40);
+  set_skill("swords", 35);
+  set_skill("shields", 35);
+  set_skill("weapon parry", 30);
+  set_skill("shield parry", 30);
+  set_skill("medium armours", 25);
+  set_species("undead");
+
+  set_stat("size",175);
+  set_gender("neuter");
+  set_random_resistances(0);
+  set_resistance("physical",15);
+  set_agrochance(50);
+  set_skin_data("type", "none");
+  set_speed(75+random(47));
+  set_forbidden_rooms( ({ "/u/a/allanon/area/caverns_of_slime/rooms/barren_clearing",
+                          "/u/a/allanon/area/caverns_of_slime/rooms/basin",
+                          "/u/a/allanon/area/caverns_of_slime/rooms/passage" }));
+}

@@ -1,0 +1,52 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "A room with ragged walls" );
+  set_long( wrap("This room is quite beautiful, except for the ubiquitous slime. "+
+  "Jagged, sharp quartz crystals protrude from the wall, making awesome but deadly "+
+  "patterns. The walls themselves look quite flimsy, what with all the cracks in them. "+
+  "Some of them are large enough to hide something.\n"));
+  set_item_desc((["slime" : "Green...sticky...disgusting. Standard slime.\n",
+                  "walls" : "You wonder at all the cracks.\n",
+                  "cracks" : "Most are just small fissures filled with slime. One "+
+                  "particularly large crack catches your eye.\n",
+                  ({ "quartz crystals", "quartz", "crystals" }) : "They come in a "+
+                  "multitude of colors and shapes. Each one is sharper than a "+
+                  "steel knife...best to be cautious around them.\n",
+                  "wall" : "It's covered in quartz crystals in most places.\n"  ]) );
+
+  add_item( ({ "large crack", "crack" }),
+            "This crack seems to be large enough to fit your hand through...\n");
+
+  add_item_search( ({ "large crack", "crack" }), "search_crack");
+
+  set_light(50);
+  set_water(5);
+  set_monsters( ([ "/u/a/allanon/area/caverns_of_slime/mon/slime.c" : 3 ]) );
+
+  set_sounds(120, ({
+	                "You thought you felt a breeze coming from the direction of "+
+	                "the wall...strange.\n"}) );
+  set_exits(
+  (["southeast" : "/u/a/allanon/area/caverns_of_slime/rooms/hole.c"]));
+    ::reset();
+}
+
+
+int search_crack()
+{
+    {
+      message("info", "You reach your hand through the crack and find that it's "+
+      "really a tunnel you can go through!\n",
+              this_player());
+
+      message("info", this_player()->query_cap_name()+" reaches deep into the "+
+      "crack, and seems to discover something interesting.\n",
+              environment(this_player()),this_player());
+
+      add_exit("crack", "/u/a/allanon/area/caverns_of_slime/rooms/pool2.c");
+    }
+}

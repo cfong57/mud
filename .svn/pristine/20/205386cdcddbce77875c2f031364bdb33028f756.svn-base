@@ -1,0 +1,30 @@
+#include <mudlib.h>
+#include <money.h>
+#include <shop.h>
+inherit "/std/shop.c"; 
+
+void extra_create() 
+{
+  seteuid(getuid());
+  set_light(25);
+  set_shop_id(file_name(this_object()));
+  set_home_town("vaerlon");
+  set_community("The City of Vaerlon");  
+  set_short("Allanon's test shop");
+  set_long(wrap("This is Allanon's test shop, where the buying and selling of "+
+  "many types of goods takes place. It defaults to being a weapon shop.\n"+
+  "call here;set_shop_type;<int>.\n"+
+  "1 = armour, 2 = weapons, 4 = general, 8 = food, 16 = skins, 32 = gem.\n"));
+  set_profit(101);
+  set_max_stuff(2000);
+  set_shop_type(WEAPON_SHOP);
+  //set_flags(NO_BUYING);
+  set_money(1000000000);
+  set_shopkeeper("/u/a/allanon/areas/caywin/obj/mage_card.c");
+  set_exits( ([ "out" : "/u/a/allanon/workroom/allanon_workroom"]) ) ; 
+  set_items(([ 
+              "/obj/food/bread.c" : 10, 
+              "/obj/food/flask.c": 10,
+              "/obj/food/waybread.c" : 10,
+              "/obj/food/crisp_rye-bread.c": 10]));
+}

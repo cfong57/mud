@@ -1,0 +1,163 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit ROOM;
+
+int websearched = 0;
+
+int break_command(string cmd)
+{
+  object container;
+  object shadow;
+  if(cmd == "sealed container")
+  {
+	int limit;
+	int reward;
+	switch(this_player()->query_level())
+	{
+	  case 1..20:
+	  {
+	    limit = 10;
+	    reward = 1;
+      }
+	  break;
+	  case 21..40:
+	  {
+	    limit = 5;
+	    reward = 2;
+      }
+	  break;
+	  case 41..75:
+	  {
+	    limit = 3;
+	    reward = 3;
+      }
+	  break;
+	  case 76..100:
+	  {
+	    limit = 2;
+	    reward = 4;
+      }
+	  break;
+	  default:
+	  {
+	    limit = 10;
+	    reward = 1;
+      }
+	  break;
+	}
+    if(this_player()->query_containers() < limit)
+    {
+      message("info","You take one of the sealed containers and set it down "+
+      "in the middle of the room. Sizing up your opponent, you consider how "+
+      "to best destroy it.\n",this_player());
+      message("info",""+this_player()->query_cap_name()+" takes one of the "+
+      "sealed containers and sets it down in the middle of the room.\n",
+      this_object(),this_player());
+      if(!this_player()->query_timer_shadow())
+      {
+        shadow = new("/u/a/allanon/area/ity/shadows/timer_shadow.c");
+        shadow->move(this_player(),1);
+        shadow->shadow_object(this_player());
+        shadow->start_me();
+      }
+      this_player()->increment_containers();
+      container = new("/u/a/allanon/area/ity/mon/container.c");
+      container->set_level(this_player()->query_level());
+      container->set_ac(0);
+      container->set_exp(0);
+      container->set_natural_ac(0);
+      container->set_resistances(([ "acid": 0, "psionic" : 0, "poison" : 0, 
+      "asphyxiation" : 0, "fire" : 0, "cold": 0, "physical" : 0, 
+      "lightning" : 0, "sonic" : 0, "magical" : 0 ]));
+      container->clear_skills();
+      container->clear_spells();
+      container->set_cps("attack",0);
+      container->set_cps("defence",0);
+      container->set_reward(reward);
+      container->move(this_object(),1);
+    }
+    else
+    {
+      message("info","On second thought, haven't you broken enough containers "+
+      "for now? It's not like they are going anywhere.\n",this_player());
+      message("info",""+this_player()->query_cap_name()+" reaches out for "+
+      "a sealed container, but seems to reconsider.\n",
+      environment(this_player()),this_player());  
+    }
+    return 1;
+  }
+  return notify_fail("Break what?\n");
+}
+
+void extra_init()
+{
+  add_action("break_command","break");
+}
+
+void extra_create()
+{
+  set_short( "Storage room of the Bastion" );
+  set_long(wrap("This room is full of crates, barrels, sacks, and other "+
+  "containers. While some have broken open, others remain sealed shut. By the "+
+  "general air of decay, you guess that this must have been the storage room "+
+  "where ingredients were kept. There are some hooks hanging from the "+
+  "ceiling which probably held meats once, but they have all been eaten by "+
+  "scavenging animals now. Only some bleached bones scattered around the "+
+  "floor attest to anything of interest being here once, although you wonder "+
+  "about the sealed containers. One corner of the room is obscured by a "+
+  "large spiderweb.\n"));
+  set_item_desc(([
+  ({"crates", "barrels", "sacks", "containers"}) : "Most of the "+
+  "containers have broken over time, either because they rotted away or from "+
+  "the attacks of hungry scavengers. You can see some rotten grains and moldy "+
+  "bread crusts, plus other less identifiable former foodstuffs. A few of the "+
+  "containers remain sealed, however...\n",
+  ({"sealed containers"}) : "Some of the containers have been sealed shut "+
+  "with iron bands. Although the bands are rusty now, they are still strong "+
+  "enough to withstand the test of time, and the occasional hungry animal. A "+
+  "determined adventurer might be able to break one open, though.\n",
+  ({"hooks", "bones", "ceiling", "floor"}) : "A number of iron hooks are "+
+  "suspended from the ceiling by chains of the same material. Some bones "+
+  "litter the general vicinity underneath each hook, showing that there were "+
+  "probably various meats hung upon them once.\n"]));
+  add_item( ({ "spiderweb", "large spiderweb", "web", "corner" }), 
+  "A spiderweb stretches over one corner of the room. You can't hear anything "+
+  "coming from the other side, but the web is several meters across and it "+
+  "could be hiding any number of unpleasant things.\n");             
+  add_item_search( ({ "spiderweb", "large spiderweb", "web", "corner" }), 
+  "search_web");
+  set_sounds(175 + random(25), ({ 
+  "Being surrounded by all this former food gets your stomach rumbling...when "+
+  "was the last time you had a real meal?\n"}) );
+  set_exits(([
+  "north" : "/u/a/allanon/area/ity/rooms/kitchen.c"]));
+}
+
+void search_web()
+{
+  object spider;
+  if (!websearched) {
+    websearched = 1;
+    message("info", "You curiously pick at the spiderweb, trying to break "+
+    "through to the other side. Something from within the web emits a "+
+    "high-pitched shriek, and suddenly a huge spider lunges out at you!\n",
+    this_player());
+    message("info", ""+this_player()->query_cap_name()+" curiously picks at "+
+    "the spiderweb, trying to break through to the other side. Something from "+
+    "within the web emits a high-pitched shriek, and suddenly a huge spider "+
+    "lunges out at you!\n", environment(this_player()), this_player());
+    spider = new("/u/a/allanon/area/ity/mon/spider.c");
+    spider->move(environment(this_player())); 
+    spider->kill_ob(this_player());
+  }
+  else
+  {
+    message("info", "You search the spiderweb, but only manage in getting "+
+    "many sticky threads stuck to yourself. There is nothing hidden in the "+
+    "corner.\n", this_player());     
+    message("info", this_player()->query_cap_name()+" searches the spiderweb, "+
+    "but only manages to get covered in sticky threads.\n", 
+    environment(this_player()), this_player());
+  }
+}

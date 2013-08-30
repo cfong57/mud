@@ -1,0 +1,36 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_outside("p"); 
+  set_outdoors("p");
+  set_short( "A sprawling lumberjack camp" );
+  set_long(wrap("You've entered a large, sprawling camp. It appears that "+
+  "lumberjacks have taken up residence here, as there are enormous piles of "+
+  "fresh-cut timber everywhere. The area here has been completely clear-cut, "+
+  "there isn't a tree left standing. The edges of the camp, where the logging "+
+  "has not yet reached, are swarming with the activity of industrious goblins "+
+  "intent on cutting down the trees. Most of the camp is in disarray; it "+
+  "seems there has been a lack of planning. A couple bonfires burn here and "+
+  "there, but they don't seem to be using wood for fuel.\n"));
+  add_monster("/u/a/allanon/area/lumber_camp/mon/goblins.c");
+  add_monster("/u/a/allanon/area/lumber_camp/mon/goblins.c");
+  set_item_desc(([
+  ({"piles", "fresh-cut timber", "timber"}) : "Large stacks of timber can be "+
+  "seen everywhere in the camp. The logs have been cut with remarkable skill "+
+  "and precision, considering who the lumberjacks are. Someone is going to "+
+  "make a fortune from these.\n", 
+  ({ "bonfire", "bonfires", "fuel"}) : "Taking a close look at the bonfires, "+
+  "you determine that dead treants are being burned in them. Probably the "+
+  "goblins' attempt at revenge for the killing of their comrades.\n"]));  
+  set_sounds(100 + random(31), ({ 
+  "The camp swarms with activity. Everyone seems to be going somewhere or "+
+  "doing something in a hurry.\n"}) ); 
+  set_exits(([
+  "north"  : "/u/a/allanon/area/lumber_camp/rooms/g5.c",
+  "east"  : "/u/a/allanon/area/lumber_camp/rooms/g4.c",
+  "west" : "/u/a/allanon/area/lumber_camp/rooms/g3.c",
+  "south" : "/u/a/allanon/area/lumber_camp/rooms/g1.c"]));
+}

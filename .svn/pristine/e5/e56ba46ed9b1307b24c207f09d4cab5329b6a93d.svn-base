@@ -1,0 +1,75 @@
+#include <mudlib.h>
+#include <daemons.h> 
+
+inherit ROOM;
+
+string curr_phase; 
+string foliage;
+string longdesc;
+
+void extra_create()
+{
+  set_outside("F"); 
+  set_outdoors("F");
+  set_short( "A small platform hidden among the branches" );
+  set_long(wrap("Looking upwards, you can just barely see the hole in the "+
+  "branches that you fell through. You've landed, luckily, on a wooden "+
+  "platform hidden among the thick branches. There are some sparse "+
+  "furnishings here and there, and the soft bed that you landed on, but "+
+  "otherwise the platform is bare. The occupant of this highly private home "+
+  "certainly lives frugally. Looking over the edge of the platform, it's a "+
+  "long, long way down...\n"));
+  longdesc = this_object()->query_long();
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/tekalu.c");
+  set_item_desc(([
+  ({"thick branches", "branches", "foliage"}) : "The tree branches serve very "+
+  "well to shield the platform from prying eyes.\n",
+  "hole" : "You resolve to yourself never to go climbing on top of unstable "+
+  "tree branches ever again.\n",
+  ({"sparse furnishings", "furnishings", "bed", "chairs", "table"}) : "Not "+
+  "much to speak of here...there is a hand-worked table and two chairs, as "+
+  "well as a soft bed made out of a large pile of leaves.\n",
+  ({"platform", "planks"}) : "The platform consists of several planks loosely "+
+  "fitted together wherever gaps in the branches would allow. It must have "+
+  "taken quite a bit of patience to so arrange the planks that the whole "+
+  "apparatus doesn't come crashing down when the wind blows.\n",
+  "edge" : "After the unexpected fall you just took, you decide to play it "+
+  "safe and stay well away from the edge of the platform.\n"]));
+  set_sounds(134 + random(12), ({ 
+  "This high up, the wind is a bit chilly. You shiver slightly.\n",
+  "You try not to think about accidentally falling off the platform.\n"}) ); 
+  set_exits((["up" : "/u/a/allanon/areas/lumber_camp/rooms/treetop.c"]));
+  set_exit_msg( ([ "up" : "$N climbs up through the branches and back to the "+
+  "top of the tree." ]) ); 
+  call_out("phase_func", 0); 
+  WEATHER_D->add_phase_listener(this_object());
+}
+
+void phase_func()
+{
+  curr_phase = GOD_D->query_current_phase();
+  switch (curr_phase)
+  {
+    case "fire":
+    foliage = "The foliage around you is a brilliant %^RED%^red%^RESET%^.\n";
+    break;
+    case "air":
+    foliage = "The foliage around you is a shimmering %^CYAN%^cyan%^RESET%^.\n";
+    break;
+    case "water":
+    foliage = "The foliage around you is a rippling %^BLUE%^blue%^RESET%^.\n";
+    break;
+    case "earth":
+    foliage = "The foliage around you is a solid %^ORANGE%^brown%^RESET%^.\n";
+    break;
+    case "magic":
+    foliage = "The foliage around you %^BOLD%^wavers%^RESET%^ mysteriously.\n";
+    break;
+  }	
+  set_long(wrap(longdesc + foliage));
+}
+
+void phase_changed(mapping map)
+{ 
+  call_out("phase_func", 0);
+} 

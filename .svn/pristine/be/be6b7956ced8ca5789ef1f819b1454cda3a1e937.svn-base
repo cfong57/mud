@@ -1,0 +1,50 @@
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  object shadow;
+  set_short("Runic Blade");
+  set_long(wrap("A Vaerlon commander was once faced with an unsolvable "+
+  "problem. He had a very skilled team of soldiers, and an equally skilled "+
+  "team of Valkor mages. The soldiers, being Elven, had a small talent for "+
+  "magic, and the mages, being Dwarves, had a bit more brawn than average. The"+
+  " commander wanted both groups to be able to fight, but also to be able to "+
+  "cast their spells. As it happened, this commander was also an alchemist. "+
+  "One day, while working in his laboratory, he chanced upon the creation of "+
+  "this weapon - a Runic blade. By infusing the powers of the mages into a "+
+  "magically responsive material, he was able to forge swords that would not "+
+  "only serve well in combat, but also would not interfere with spellcasting. "+
+  "Needless to say, the problem never happened again.\n"));
+  set_name("Runic Blade");
+  set_id(({"Runic Blade", "runic blade", "blade", "silver gladius", "gladius"}) );
+  set_equip_func("wield_me");
+  set_identified(1);
+  set_wtype("gladius");
+  set_material("silver");
+  set_quality(50);
+  add_magic_property("resist fire",1);
+  add_magic_property("resist cold",1);
+  add_magic_property("resist lightning",1);
+  add_magic_property("resist acid",1);
+  shadow = new("/u/a/allanon/areas/saith/obj/runicshadow.c");
+  shadow->shadow_object(this_object());
+  weapon_setup();
+}
+
+int query_casterweapon()
+{
+	return 1;
+}
+
+string query_special_feature() 
+{ 
+return "This weapon does not interfere with casting.";
+} 
+
+int wield_me()
+{
+  message("info", "The weapon seems to shimmer in your hand as you wield it.\n", this_player()); 
+  return 1;
+}

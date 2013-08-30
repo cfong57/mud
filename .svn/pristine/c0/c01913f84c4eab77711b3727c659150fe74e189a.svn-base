@@ -1,0 +1,51 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int worldmap_command(string cmd)
+{
+  string *tmp;
+  string name;
+  mapping rooms = ([]);
+  if(!cmd)
+  {
+    //tmp = get_dir("/d/world/rooms/" + "*.world");
+    tmp = get_dir("/u/a/allanon/obj/" + "*.c");
+    if(sizeof(tmp))
+    {
+      foreach(string file in tmp)
+      {
+        object ob;
+        //ob = load_object("/d/world/rooms/" + file);
+        ob = load_object("/u/a/allanon/obj/" + file);
+        if(!ob)
+        continue; //skip files with wrong extension, etc
+        //name = file[0..<3];
+        name = file;
+        message("info",""+identify(name)+"\n",this_player());
+      }
+    }
+    else
+    {
+      message("info","Huh, failed to load directory.\n",this_player());	  
+    }
+    return 1;
+  }
+  return notify_fail("No args.\n");
+}
+
+void extra_init()
+{
+  add_action("worldmap_command","worldmap");
+}
+
+void extra_create()
+{
+  set_short("The Mapper(tm)");
+  set_long(wrap("This object is used to generate a mapping of every room in "+
+  "the game and its coordinates. Usage: 'worldmap'.\n"));
+  set_name("the mapper");
+  set_id( ({ "the mapper", "mapper" }) );
+  set_mass(1);
+  set_bulk(1);
+}

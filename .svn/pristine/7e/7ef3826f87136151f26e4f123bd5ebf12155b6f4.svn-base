@@ -1,0 +1,36 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_outside("-"); 
+  set_outdoors("-");
+  set_short( "On a path leading to a harbor" );
+  set_long(wrap("You're standing on a dirt path leading east and west. To the east "+
+  "is a small crossroads. To the west lies a large harbor, skillfully made of "+
+  "wood and jutting far out to sea. Many ships can be seen...you spot several "+
+  "fishing vessels, probably used by the locals. There is one magnificent "+
+  "ship at the far end of the harbor that you are sure belongs to a wealthy man. It's "+
+  "been decked out in gold and silver, and it positively sparkles in the light. "+
+  "You also notice a large ship moored at the other end of the harbor that has a "+
+  "black flag with a skull on it. That could only mean one thing - pirates.\n"));
+  set_item_desc(([
+                  "crossroads" : "To the east lies a crossroads.\n", 
+                  "harbor" : "The harbor lies just west of here. It juts out to sea "+
+                  "in both the north and west directions.\n", 
+                  "magnificent ship" : "You have never seen a more beautiful ship. "+
+                  "Every surface is gilded with gold and silver, and more than "+
+                  "a handful of gems have been encrusted into the planks. You wonder "+
+                  "how it even manages to stay afloat with all that finery.\n", 
+                  ({"black flag", "flag"}) : "The pirate ship flies the standard "+
+                  "pirate flag - skull and crossbones on a black background.\n", 
+                  "large ship" : "Large and foreboding, a pirate ship lies moored "+
+                  "at the northern end of the harbor.\n"  ]) );
+  set_sounds(120, ({ 
+	                "The strong smell of the sea blows from the west.\n", 
+	                "You stop a moment and watch the busy harbor with interest.\n" }) ); 
+  set_exits(([
+       "east"  : "/u/a/allanon/areas/saith/rooms/crossroads.c",
+       "west" : "/u/a/allanon/areas/saith/rooms/harbor1.c"]));
+}

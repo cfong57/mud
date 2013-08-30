@@ -1,0 +1,58 @@
+#include <mudlib.h> 
+
+inherit SHADOW; 
+
+int time = 7200; //one Icesus day or two real life hours
+int weapons = 0;
+
+void set_time(int x) //for debugging
+{
+  time = x;	
+}
+
+int query_has_weapon_shadow()
+{
+  return 1;	
+}
+
+void take_weapon()
+{
+  weapons++;	
+}
+
+int query_weapons()
+{
+  return weapons;	
+}
+
+void check_status()
+{
+  if (!shadowed_object()) { 
+    destruct(this_object());
+  } 
+  if (shadowed_object()->query_dead()) {
+    destruct(this_object()); 
+  }
+  call_out("check_status", 5);
+}
+
+int query_time()
+{
+  return time;	
+}
+
+void timer_func()
+{
+  if (time <= 0) {
+    destruct(this_object());      
+  } else {
+    time--;
+  }
+  call_out("timer_func", 1);
+}
+
+void start_me()
+{
+  check_status();
+  timer_func();   
+}

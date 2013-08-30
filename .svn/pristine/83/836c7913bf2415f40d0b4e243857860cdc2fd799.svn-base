@@ -1,0 +1,43 @@
+/*Endlessmob that wanders Aegic, cleaning up garbage. It utilizes the
+Trashbag. Coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("the janitor of Aegic");
+  set_long(wrap("This monster cleans up all the litter people dump in the "+
+  "Void and elsewhere.\n"));
+  set_name("janitor");
+  set_id(({"janitor"}));
+  add_object("/u/a/allanon/objects/trashbag");
+  set_level(random(101));
+  set_race("human");
+  set_stat("size",random(1001));
+  set_autopickup(1);
+  set_speed(60);
+}
+
+void second_life()
+{
+  object new_monster;
+  new_monster = new("/u/a/allanon/janitor.c");
+  deep_inventory(this_object())->remove();
+  new_monster->move(environment(this_object()));
+  if(this_object()->query_last_attacker())
+  {
+  new_monster->kill_ob(this_object()->query_last_attacker());
+  }
+  message("info", "The janitor respawns, ready to fight again.\n",
+  environment(this_object()));
+  return;
+}
+
+void autopickup(object ob)
+{
+	force_me("put all to bag");
+	force_me("put all coins to bag");
+	force_me("empty trash");
+}

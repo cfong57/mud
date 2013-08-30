@@ -1,0 +1,115 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("Suzanne Danzer, an assassin");
+  set_long(wrap(
+  "Suzanne is a human female. She is clad in midnight-black gear and moves "+
+  "stealthily in the shadows. Armed with lethal daggers, she is a dangerous "+
+  "opponent indeed.\n"));
+  set_name("Suzanne");
+  set_id( ({ "Suzanne Danzer", "Suzanne", "Danzer", "suzanne", "danzer", 
+  "assassin"}) ); 
+  set_race("human");
+  set_gender("female");
+  set_level(100);
+  set_agrochance(100);
+  set_stat("dexterity", query_stat("dexterity")+100);
+  set_skill("assailing", 999);
+  set_skill("weapon parry", 999);
+  set_skill("block", 999);
+  set_skill("melee", 999);
+  set_skill("piercing weapons", 999);
+  set_skill("swords", 999);
+  set_skill("twin weapons", 999);
+  set_skill("determination", 999);
+  set_skill("avoid hits", 999);
+  set_skill("contact reflexes", 999);
+  set_skill("thrust", 999);
+  set_skill("pierce", 999);
+  set_skill("concentrated attack", 300);
+  set_skill("concentrated defence", 999);
+  set_skill("light armours", 999);
+  set_skill("medium armours", 999);
+  set_skill("impale", 999);
+  set_skill("stab", 999);
+  set_skill("swing", 999);
+  set_skill("dodge", 999);
+  set_skill("enhance criticals", 999);
+  set_skill("blind fighting", 999);
+  set_skill("combat analysis", 999);
+  set_skill("combat sense", 999);
+  set_skill("continuous assault", 300);
+  set_skill("controlled retreat", 999);
+  set_skill("counter-attack", 300);
+  set_skill("defensive battle strategy", 999);
+  set_skill("offensive battle strategy", 999);
+  set_skill("find weakness", 999);
+  set_skill("target focusing", 999);
+  set_skill("camouflage", 999);
+  set_skill("hide in shadows", 999);
+  set_skill("knowledge of weapons", 999);
+  set_skill("magical defences", 999);
+  set_skill("martial arts", 999);
+  set_skill("move silently", 999);
+  set_skill("brawling", 999);
+  set_skill("natural", 999);
+  set_skill("parry", 999);
+  set_skill("rural combat", 999);
+  set_skill("rural concealment", 999);
+  set_skill("tracking", 999);
+  set_skill("unarmed fighting", 999);
+  set_skill("vital points", 999);
+  set_skill("wilderness retreat", 999);
+  set_skill("wipe tracks", 999);
+  force_me("battle -c assailing");
+  add_random_weapon("mithril_dagger", 10);
+  add_random_weapon("mithril_dagger", 10);
+  add_random_armour("ancient dragonscale_standard_vest", 10);
+  add_random_armour("ancient dragonscale_standard_collar", 10);
+  add_random_armour("ancient dragonscale_standard_cap", 10);
+  add_random_armour("ancient dragonscale_standard_gloves", 10);
+  add_random_armour("ancient dragonscale_standard_bracelets", 10);
+  add_random_armour("ancient dragonscale_standard_tights", 10);
+  add_random_armour("ancient dragonscale_standard_boots", 10);
+  set_inquiry(([
+    "$GREET" : "inquire_func",
+    "$DEFAULT" : "inquire_func"]));
+}
+
+void inquire_func()
+{
+  message("greet","Suzanne looks at you blankly.\n",this_player(),
+  this_object());
+  message("greet","Suzanne looks at "+this_player()->query_cap_name()+" "+
+  "blankly.\n",environment(this_player()),({this_object(),this_player()}));
+  return;
+}
+
+void party_invite(object mon) 
+{ 
+if(mon->query_name() == "allanon") 
+{ 
+force_me("party join"); 
+force_me("nod allanon silently");
+} 
+else 
+force_me("say I only party with Allanon."); 
+} 
+
+int special_hit(object target)
+{
+   if(!random(2))
+   {
+    message("last_breath","Suzanne moves blindingly fast, ending up behind "+
+    ""+target->query_cap_name()+". She delivers a fatal stab to "+
+    ""+target->query_cap_name()+", killing "+objective(target)+" without a "+
+    "sound.\n",environment(target),({target,this_object()}));
+    message("last_breath","Suzanne moves blindingly fast and seems to "+
+    "disappear. A second later you receive a fatal, perfectly-aimed stab, "+
+    "which kills you instantly and without a sound.\n",target);
+    target->set_hp(-1);
+   }
+}

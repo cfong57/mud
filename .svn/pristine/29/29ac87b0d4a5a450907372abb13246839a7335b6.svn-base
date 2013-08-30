@@ -1,0 +1,67 @@
+#include <mudlib.h>
+#include <damage.h>
+#include <move.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Sapphire-studded longsword");
+  set_id(({"longsword", "sapphire longsword", "sapphire-studded longsword",
+  "sword"}));
+  set_long(wrap("This longsword is made of flawless, transparent blue iceron. "+
+  "The crossguard, hilt, and pommel are all studded with perfect sapphire "+
+  "gems, each about the size of a nailhead. From time to time, some "+
+  "%^BLUE%^blue%^RESET%^ flames burn along the length of the blade, but they "+
+  "seem to absorb heat instead of giving it off. The entire sword emits a "+
+  "freezing aura, creating a thin veil of frozen water wapor around it at "+
+  "all times. It is almost impossible to touch the blade without freezing "+
+  "yourself to its icy surface.\n"));
+  set_name("sapphire-studded longsword");
+  set_wtype("longsword");
+  set_material("iceron");
+  add_magic_property("cold resistance",5);
+  add_magic_property("fire resistance",5);
+  set_quality(65);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{return "It has a chance of temporarily freezing the enemy.";} 
+
+int special_hit(object target)
+{
+  object fshadow;
+  object sshadow;
+  object p = this_object()->query_user();
+  if(!target->query_frozen())//don't want the effects to stack
+  {
+  if(!random(25))
+  {
+  message("freeze","Your sapphire-studded longsword flashes brilliantly with "+
+  "%^BLUE%^blue%^RESET%^ fire as it strikes "+target->query_cap_name()+"! "+
+  ""+capitalize(objective(target))+" is temporarily frozen solid!\n",p);	  
+  message("freeze",""+p->query_cap_name()+"'s sapphire-studded "+
+  "longsword flashes brilliantly with %^BLUE%^blue%^RESET%^ fire as it "+
+  "strikes "+target->query_cap_name()+"! "+capitalize(objective(target))+" is "+
+  "temporarily frozen solid!\n",environment(p),p);
+  message("freeze",""+p->query_cap_name()+"'s sapphire-studded "+
+  "longsword flashes brilliantly with %^BLUE%^blue%^RESET%^ fire as it "+
+  "strikes you! You are temporarily frozen solid!\n",target);
+  fshadow = new("/u/a/allanon/lorim/weapons/freeze_shadow.c");
+  fshadow->move(target,1);
+  fshadow->shadow_object(target);
+  fshadow->start_me();
+  sshadow = new("/obj/spells/silence_shadow",target); 
+  sshadow->shadow_object(target);
+  return 1;
+  }
+  }
+  return 0;
+} 
+
+mixed * query_dtypes() 
+{ 
+  return ({ COLD, 75, PHYSICAL, 25 }); 
+} 

@@ -1,0 +1,73 @@
+#include <mudlib.h>
+#include <damage.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Shining blade 'Swift Sword'");
+  set_id(({"shining blade", "blade", "swift sword", "sword"}));
+  set_long("This fine sabre has been worked from mithril. It's incredibly "+
+  "light, at least it feels so when you hold it. The blade is made extremely "+
+  "thin that it can cut so fast it rips the very air. Whole blade seems to "+
+  "hum and vibrate a bit as you hold it.\n");
+  set_name("swift sword");
+  set_wtype("sabre");
+  set_material("mithril");
+  set_quality(999);
+  add_magic_property("speed",5);
+  add_magic_property("accuracy",5);
+  add_magic_property("dexterity",5);
+  add_magic_property("sonic",5);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "It has a chance of hitting the enemy with Sonic Smash.";
+} 
+
+int special_hit(object target)
+{
+  int total,hits;
+  object pob;
+
+  if(!random(5))
+    {
+     total = 2+random(9);
+     message("damage",""+capitalize(this_object()->query_user())+"'s Swift "+
+     "Sword flashes for a second before suddenly hastening to GODLY speeds, "+
+     "hitting "+target->query_cap_name()+" multiple times!\n",
+     environment(target),target);
+     if(pob = target->query_partyob())
+     {
+     foreach(object member in pob->query_present_members(environment(target)))
+     {
+     hits = 1+random(5);
+     total -= hits;
+     if(total>0) 
+     {
+     message("damage",""+capitalize(this_object()->query_user())+"'s Swift "+
+     "Sword flashes for a second before suddenly hastening to GODLY speeds, "+
+     "hitting you multiple times!\n",target);
+     message("damage",member->query_cap_name()+" cries out in pain as "+
+     ""+subjective(member)+" is hit by the Swift sword "+hits+" times!\n",
+     environment(member),member);
+     member->receive_damage(hits * 1000,5000 + random(2500), SONIC);
+     continue;
+     }
+     }
+     return 1;
+     }
+     hits = 2+random(9); 
+     message("info","You are hit by the Swift Sword "+hits+" times!\n",target);
+     message("info",target->query_cap_name()+" cries out in pain as "+
+     ""+subjective(target)+" is hit by the Swift Sword "+hits+" times!\n",
+     environment(target),target);
+     target->receive_damage(hits * 1000,5000 + random(2500), SONIC);
+     }
+     return 1;
+}
+
+mixed * query_dtypes()  { return ({ SONIC, 100 }); } 

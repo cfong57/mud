@@ -1,0 +1,9 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "A blank room" );
+  set_long("Long desc.\n");
+}

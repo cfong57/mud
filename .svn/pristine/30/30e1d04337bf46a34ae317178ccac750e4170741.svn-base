@@ -1,0 +1,108 @@
+/* An original item coded by Allanon. Stupid, but some think it's cool. 
+It doesn't seem to work well with gloweq. Enjoy. */
+
+#include <mudlib.h>
+
+inherit OBJECT;
+
+string colour;
+string hilite;
+
+int spray_command(string cmd)
+{ 
+  {
+  object p = this_player();	 
+  object *inventory; 
+  inventory=all_inventory(environment(p));
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+   {
+	  message("info","*PSSH* You spray "+ob->query_short()+" with your "+
+	  "spray can.\n",p); 
+	  message("info",""+p->query_cap_name()+" sprays "+ob->query_short()+" "+
+	  "with "+possessive(p)+" spray can *PSSH*.\n",environment(p),p);
+	  ob->set_short("%^"+hilite+"%^"+ob->query_short()+"%^RESET%^");
+	  return 1;
+   }
+  return notify_fail("Spray what?\n"); 
+  }  
+}
+ 
+void extra_init() 
+{ 
+    add_action("spray_command","spray"); 
+} 
+void extra_create() 
+{
+    switch(random(15))
+   {
+	case 0:
+	 colour = "black";
+	break;
+	case 1:
+	 colour = "red";
+	break;
+	case 2:
+	 colour = "pink";
+	break;
+	case 3:
+	 colour = "dark green";
+	break;
+	case 4:
+	 colour = "bright green";
+	break;
+	case 5:
+	 colour = "orange";
+	break;
+	case 6:
+	 colour = "yellow";
+	break;
+	case 7:
+	 colour = "blue";
+	break;
+	case 8:
+	 colour = "ocean-blue";
+	break;
+	case 9:
+	 colour = "cyan";
+	break;
+	case 10:
+	 colour = "sky-blue";
+	break;
+	case 11:
+	 colour = "dark magenta";
+	break;
+	case 12:
+	 colour = "bright magenta";
+	break;
+	case 13:
+	 colour = "grey";
+	break;
+	case 14:
+	 colour = "white";
+	break;
+   }
+  if(colour == "black") hilite = "BOLD%^BLACK";
+  if(colour == "red") hilite = "RED";
+  if(colour == "pink") hilite = "BOLD%^RED";
+  if(colour == "dark green") hilite = "GREEN";
+  if(colour == "bright green") hilite = "BOLD%^GREEN";
+  if(colour == "orange") hilite = "ORANGE";
+  if(colour == "yellow") hilite = "YELLOW";
+  if(colour == "blue") hilite = "BLUE";
+  if(colour == "ocean-blue") hilite = "BOLD%^BLUE";
+  if(colour == "cyan") hilite = "CYAN";
+  if(colour == "sky-blue") hilite = "BOLD%^CYAN";
+  if(colour == "dark magenta") hilite = "MAGENTA";
+  if(colour == "bright magenta") hilite = "BOLD%^MAGENTA";
+  if(colour == "grey") hilite = "WHITE";
+  if(colour == "white") hilite = "BOLD%^WHITE";
+  set_short("A can of %^"+hilite+"%^"+colour+"%^RESET%^ paint");
+  set_long(wrap("This is a small titanium spray can containing "+
+  "%^"+hilite+"%^"+colour+"%^RESET%^ paint. Try 'spray foo' and see what "+
+  "happens! (Make sure foo isn't in your inventory.)\n"));
+  set_name("spray can");
+  set_id( ({ "can of "+colour+" paint", "can", ""+colour+" paint", "paint"}) );
+  set_mass(1);
+  set_bulk(1);
+}

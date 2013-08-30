@@ -1,0 +1,28 @@
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create() 
+{
+  set_identified(1);
+  set_id( ({"chain chomp", "chomp"}) );
+  set_name("Chain Chomp");
+  set_short("'Chain Chomp'");
+  set_long(wrap(
+  "This is a strange weapon. It looks like the body of the monster "+
+  "'Chain Chomp'. Used kind of like a Ball'n'Chain, you guess...the weapon "+
+  "consists of an enormous head, about one meter in diameter, attached to a "+
+  "short chain. The head has teeth, but they are locked closed in death. "+
+  "It's a very large and bulky weapon, and hard to use, but it looks like "+
+  "it could cause a lot of damage.\n"));
+  set_wtype("ball'n'chain");
+  set_material("adamantium");
+  set_quality(75);
+  add_magic_property("accuracy",-5);
+  add_magic_property("speed",-5);
+  add_magic_property("damage",5);
+  weapon_setup();
+}
+
+int query_damage() { return 2500+random(750); } 
+int query_size() { return 100; } 

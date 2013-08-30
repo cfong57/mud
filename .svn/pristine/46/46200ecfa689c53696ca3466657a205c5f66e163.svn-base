@@ -1,0 +1,359 @@
+README FILE FOR AREA: Goblin Lumberjack camp.
+CREATED BY: Allanon.
+COMPLETED ON: 9-26-2010
+LAST MODIFIED/FIXED ON: 10-29-2010
+
+GENERAL THEME: 
+Area is a forest + lumberjack camp, with goblin lumberjacks, hence the name. 
+There is also a third section connected to the forest which has some secret
+stuff in it, and is hard to reach unless a player is very observant and patient.
+Treants populate the forest and are 'at war' with lumberjacks. They are led by 
+a dryad, and the goblins are led by a derro. The area should be suitable 
+for mid-level players, the smallest mob is worth about 4k and the biggest 
+topping out at around 50k. Area consists of 30 rooms, with about 1/3 to each.
+section of the area - the goblin camp, the forest, and "secret stuff". There are 
+two basic quests, to help either side of the war, treants or goblins. In
+addition, there is a somewhat difficult (well, in terms of thinking required)
+quest to help a hidden monster finish their research. To fit in with the lore of 
+the area, it should ideally be placed somewhere in a forest,
+since where else would one cut down trees?
+
+BACKGROUND:
+The Graemor Logging Company is not a particularly well-known or respected
+establishment; they have been known for some rather destructive environmental
+practices, and were long ago declared unaffiliated with the kingdom of Graemor 
+due to rising complaints from the Rangers, Gaesati Shapeshifters, and even 
+the local Wilders. As a result they have had to venture farther and farther 
+afield to find work and trees. Recently the latest expedition decided that a 
+certain old forest near <city> was an ideal location. Known to locals as the 
+Chromatic Forest because of the beautiful foliage that is said to shift with
+the elemental phase, it is a sacred place where the trees themselves have 
+been seen to move. It also happened to be the rumored hideout of a legendary
+elf mage, but no one has been able to confirm or deny such a thing.
+
+The derro overseer of the Company, along with a pack of goblin workers and 
+some supplies, was sent to scout the area in advance of the main crew and to get 
+permanently established logging underway. Things went smoothly, but soon the 
+goblins encountered trouble when the dryad protector of the forest, enraged from 
+the destruction, commanded a small army of forest creatures in retaliation. The 
+ensuing skirmish was short, sharp, and bloody; casualties ran high on both 
+sides, and the battle ended at a draw. Tensions are now high in both camps, 
+with the derro and goblins sworn to revenge, and the dryad and forest 
+inhabitants out for vengeance for the felling of their trees.
+
+MONSTERS AND NPCS:
+
+M1) Animals
+
+A variety of different forest beasts. Types include black bear, rabbit, deer,
+boar, wolf, owl, and rat. The boars carry Neurotico shrooms. Rats carry a 
+random amount of coins.
+
+M2) Frightened bandit
+
+A flavor mob. His partner was apparently killed by the spirit of the torturer,
+and so he stands guard over his dead body, attacking anyone on sight. The
+torturer will attack him if he happens to follow players into the room.
+
+M3) Birch guard
+
+This guard monster prevents players from reaching Cichele until it is slain.
+
+M4) Brant
+
+The overseer of the lumberjacks. His weapon is a quest item for Cichele, and
+Cichele carries a quest item for him. Prevents players from searching his 
+desk while present in the room. Rewards players for killing treants. There is
+a chance that his quest weapon won't spawn. Has a "fighter 3" kit for Strike
+and etc.
+
+M5) Carrion crawler
+
+A flavor mob, imported from Vaerlon's sewers. 
+
+M6) Cellaria
+
+The legendary elf mage spoken of in the description of the area. Unfortunately
+she has died. However, her spirit lingers on. She wants to complete her 
+research before leaving for the Nether Plane. If players can find her catalyst
+ring which she lost, she will give them a teleport ring in return, and then
+disappear for the rest of the boot. While she is present, she warns players
+when they attempt to search for potions in her room. Cellaria is level 50, but
+since she is in a safe room anyway it doesn't matter.
+
+M7) Cichele
+
+The dryad spirit, protector of the forest. Hates Brant and his goblins with
+a passion. Although she cannot reward players in any tangible way for killing
+goblins, she will reward them for defeating Brant with a pair of water walking
+boots. Occasionally she will spawn with some interesting weapons, too. Usually
+spawns as a mage, though, who has Call Lightning, Mana Blast, and Storm of Ice.
+
+M8) Dragonfly
+
+A nasty little creature with poisonous natural weapons and a special hit that
+infects players with a strong (for its level, anyway) poison. It can be found
+when searching in the first room of the area. In some ways it is a test of a
+player's readiness for the area: if the dragonfly is too much of an opponent, 
+they will not last against much else in the area either. Except maybe the wild
+rabbits or whatever. It is aggressive and follows quickly and far.
+
+M9) Giliwyr
+
+A fallen priest of Magic who is in a hidden room. Players must beat the 
+Syntax Demon(tm) to find the secret exit, and it is likely that he will 
+remain a secret for quite some time. As fitting a priest of Magic, he can cast
+Ball of Magic and Haste. There is not much reward to beating
+him, even though he has good equipment, because when he dies all his inventory
+is destroyed. Instead, he leaves behind a Blade of the Magi (see items). Has a
+stunning special_hit.
+
+M10) Goblin sentinel
+
+Guards Brant's room and won't let anyone pass while she lives. Has a special
+hit that deals double damage.
+
+M11) Goblins
+
+The lumberjacks. There are four levels of them: Puny, Tired, Large, and Burly.
+Difficulty and level increases with type. The puny ones are casters, with 
+Wind of Fire and Dart of Fire.
+
+M12) Skinny goblin
+
+This goblin has gone mad from hunger and is busily devouring all of the
+lumberjacks' food supplies. He is stronger than the rest of them and spawns
+with a random fine steel axe. In his inventory he carries a bunch of breads,
+and he will also occasionally throw bread at opponents in battle.
+
+M13) Sturgeon
+
+In a semi-hidden room, a wild and angry sturgeon can be encountered when 
+players examine the water. It is a dangerous opponent, perhaps the strongest
+of anything in the area, but players are given a good warning to stay away. If
+players leave the room by the time he attempts to spawn, he won't come again
+until the room resets. His skin is iron, with the possibility to give additional
+protection for items made of it. This is to go along with the fact that he also
+has 150 natural AC.
+
+M14) Tekalu
+
+This chitine ranger is moderately well hidden. He fights with four swords and 
+uses Whirling Blades. His swords are Falcon's Falchions (see items), so they
+deal sonic damage in addition to being of material crystal. He has Weapon
+Parry at 75% and defends fairly well in addition to being a good attacker;
+and in addition to that, his room is high above the ground; he will randomly
+push people off, so they fall and take damage.
+
+M15) Icy spirit of the torturer
+
+Cellaria's house used to be inhabited by a master torturer who worked for 
+Graemor (or so they say). He was the final inquisitor for many an innocent
+Vaerlonian. Cellaria killed him when he wouldn't sell her his house, but his
+spirit remains entombed below the house in a small dungeon. He wields two 
+Sapphire-studded Longswords (see items) which can freeze opponents. When killed,
+he leaves a hint about what the key is for the area. His swords cannot be 
+obtained (currently?) as they are too powerful; they disappear when he dies.
+
+M16) Treants
+
+The living trees which inhabited this forest peacefully before Brant and his
+goblins arrived. There are four types, in increasing order of difficulty:
+Fir, Elm, Yew, and Oak. Oak treants won't move, but the rest do. Treants 
+protect each other, and will attack goblins on sight. They are also all 
+-Ranger rep.
+
+M17) Vulture
+
+Generic flavor mob. Likes to hang out with the Carrion crawler and eat corpeses.
+
+ITEMS AND EQUIPMENT:
+
+I1) Amber Leaf
+
+This equipment is obtained by inserting two Golden Leaves into the Amber Stone.
+It goes on the miscellaneous slot, fits anyone without needing to be resized,
+and emits a lot of light.
+
+I2) Basin
+
+A magical spring found in one room of the forest. Its water is twice as "good"
+as that from a public fountain. Its description and the sounds for the room
+speak of how it is magical in nature, hinting to players that that room has
+a hidden exit to 'somewhere'.
+
+I3) Blade of the Magi
+
+A fine steel longsword of crap quality that deals 100% magical damage. 
+Giliwyr "becomes" this when he dies. It is a castable weapon and also gives
++5 to skill Cast Magical.
+
+I4) Bark boots (water-walking)
+
+This is the quest reward that Cichele hands out. It is a pair of +2hpr boots.
+When they are worn it makes the player float above water, much like the Floating
+spell. However, the effect stops working when the item's magical energy is
+about half gone (or "subtle glow") - at this point, when they are worn, nothing
+happens. When the boots are removed, float status is removed also.
+
+I5) Branch from a treant
+
+This trophy is dropped by all treants. Giving them to Brant will make him
+reward the player with some gold coins. Otherwise they have little value.
+
+I6) Brass Rapier of Nature
+
+This is one of Cichele's weapons which she might spawn with, when she is 
+not a mage type. It gives a bonus to max health and deals lightning damage. It
+also has a special hit that stuns the opponent. 
+
+I7) Rotten wood staff
+
+This is Cichele's other weapon which she might spawn with. It has a variety
+of magical properties, including poison damage, but since it's wood it is 
+rather crap anyway. It has a special hit that poisons the opponent and is 
+somewhat powerful.
+
+I8) An ominous bottle <eerie glow> ("death bottles")
+
+This potion is not a real potion, instead it is a food item. It is used by
+eating it...but, woe to the player who does that, because it causes a random
+potentially lethal effect such as poison. These effects last a long time and 
+will probably kill most players, but at least the fire_ob can be removed by use 
+of the 'roll' command. The item can also be thrown to put the effect on an 
+enemy. Bottles are found by searching inside Cellaria's house.
+
+I9) Falcon's Falchion (x4)
+
+This is a crystal falchion. It deals part sonic damage, but this is achieved 
+through changing the damagetype map directly; this avoids giving the item a
+"glow". The purpose is to prevent it from giving a million divine favors and
+being worth a stupid amount at the shop. Tekalu spawns with 4 of these.
+
+I10) Sealed glass bottle, containing flames ("fire bottle")
+
+This item, when broken, produces a campfire to the room. It will work anywhere,
+but if the place would not normally allow campfires (water rooms, etc) then
+the fire will still die out. Like the "death bottles" it's not a real potion;
+one can't drink it and there is no effect of throwing. Bottles are found by
+searching inside of Cellaria's house. 
+
+I11) Beautiful flowers
+
+These can be picked in a certain room of the forest. When sniffed, they randomly
+restore some hp, sp, ep, or psp. Inserting 25 of these into the Amber Stone
+produces a Flower Necklace. This item doesn't keep over boot.
+
+I12) freeze_shadow.c
+
+This is the effect shadow for Sapphire-studded Longsword. It causes frozen
+status, block_attack, immobility, and silence. However, for some reason
+players can still dodge attacks and do some other things while it is in effect,
+so it's not perfect.
+
+I13) Forester's Axe
+
+This is Brant's weapon, and also a quest item for Cichele. It has +2 strength,
+but is made of brass. The special hit randomly deals 3 times damage to monsters
+of the Treant race.
+
+I14) Sapphire-studded Longsword (x2)
+
+The icy spirit of the torturer spawns with two of these. THEY ARE NOT OBTAINABLE
+BY PLAYERS; when he dies they are destructed. A good thing, too, because they
+are made of iceron, have a quality of 65, randomly freeze opponents, give 5 
+resist to cold and fire, and also deal 75% cold damage. This was originally just
+a concept weapon for another area, but I borrowed it and put it in here.
+
+I15) Golden leaf
+
+Cichele always spawns with one of these. Besides being worth some fair amount
+of money, it is a quest item for Brant. Inserting two of these into the Amber
+Stone produces an Amber Leaf. Since Cichele's room does not reset, only one of
+these can be obtained per boot.
+
+I16) Silver Mace of Leech
+
+This is a silver mace with a quality of 40 and 3 acid damage. Brant awards this
+to players when they give him Cichele's Golden leaf. The mace has a special 
+that heals players for the amount of damage they dealt, unless the target is 
+another player. If the target is undead, then it actually damages the wielder 
+and heals the undead.
+
+I17) Flower necklace
+
+This is obtained by inserting 25 Beautiful flowers into the Amber Stone. It is
+a miscellaneous armour which randomly boosts regenerations - hpr, spr, epr, or
+pspr - by +1 or +2. To compensate for this, the item randomly changes its magic
+at least every 30 seconds, so one can never be sure what regen properties it
+has. Although these are easy to get, they are not very valuable, since they
+are made of stone.
+
+I18) Old ring
+
+This is the magical catalyst that Cellaria is searching for. It is buried in a
+hole in the dungeon's storage room, and that room is locked by a door whose key
+is the Fine crystal stiletto. So, some thinking and ingenuity are required to
+get this item. When given to Cellaria, she will make it into a Teleport Ring.
+Other than this it is a worthless item.
+
+I19) Miniscule glass bottle with something whirling inside ("regen bottle")
+
+This is a very cool item that contains a pseudo Sorcerer's regen vortex. The
+vortex is put into the room when players break the bottle. Like the other 
+bottles, this is not a true potion; in fact it is really just a container to
+hold the vortex with. Bottles are found by searching inside Cellaria's house.
+
+I20) A rotten key, covered in mold
+
+This is the key to the storehouse of the goblin lumberbacks, where the Skinny
+goblin is devouring the supplies. It can be found be searching the stream in
+a certain room. Keeps over the boot and the room it can be found in resets 
+anyway, so it's not hard to get.
+
+I21) A weird bottle, made of tree bark ("sleep bottle")
+
+The fourth and final type of bottle. Like the others, it is not a true potion;
+it is a food item, and players eat it to use it. When ingested it puts the 
+player to sleep, no matter how tired they were before. The exception is for 
+Monks, since they don't sleep or something like that. Bottles are found by
+searching Cellaria's room. This item doesn't cause sleep effect when thrown
+(and battle would make monsters wake up anyway).
+
+I22) A large stone of amber, carved to resemble a massive tree
+
+This item does not actually do anything by itself, but players can 'insert' the
+Beautiful flowers and Golden leaves into it, to produce Flower necklaces and 
+Amber Leaves, respectively. It spawns in the same room as Cichele, so players
+would at least have to fight the Birch Guard to get to it. Can't be moved.
+
+I23) Fine crystal stiletto
+
+Other than being a crystal shortsword with quality of 70, this item is actually
+a key for a certain door. This fact is not at all obvious, unless one happens
+to discover that it has "key" among its ids. There are some hints around the
+area that this is the key for that door; but still, it would take some thinking
+to discover the fact. This in addition to the fact that the item is found by
+searching Brant's room, which does not reset, and that can only be done once
+Brant himself is dead.
+
+I24) Golden Ring of Teleportation
+
+This ring is given to players by Cellaria once they return the Old ring to her.
+When it is used, players are teleported to the central square of their 
+hometown. It has a finite number of charges, though. Doesn't work during combat.
+
+I25) A small vortex of energies
+
+This is the regen ob contained inside the "regen bottles". It was 99% coded
+by Zaltaiz. It functions a lot like a Sorcerer's regen vortex: it goes away
+in the presence of a campfire, and only one vortex can be in a room at once.
+Since this is created without casting a spell, the power of the vortex is
+based on the level of the one who breaks the "regen bottle".
+
+I26) Pile of dirty coins
+
+This is a kludge object that is held by the rat version of the animals monster.
+Because animals cannot directly have money, it instead spawns with this item
+in its inventory. When players 'polish' the coins they reveal what type they
+are and receive the appropriate amount of money to their inventory.

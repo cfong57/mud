@@ -1,0 +1,79 @@
+#define A1 CHESSBOARD["A1"]
+#define B1 CHESSBOARD["B1"]
+#define C1 CHESSBOARD["C1"]
+#define D1 CHESSBOARD["D1"]
+#define E1 CHESSBOARD["E1"]
+#define F1 CHESSBOARD["F1"]
+#define G1 CHESSBOARD["G1"]
+#define H1 CHESSBOARD["H1"]
+#define A2 CHESSBOARD["A2"]
+#define B2 CHESSBOARD["B2"]
+#define C2 CHESSBOARD["C2"]
+#define D2 CHESSBOARD["D2"]
+#define E2 CHESSBOARD["E2"]
+#define F2 CHESSBOARD["F2"]
+#define G2 CHESSBOARD["G2"]
+#define H2 CHESSBOARD["H2"]
+#define A3 CHESSBOARD["A3"]
+#define B3 CHESSBOARD["B3"]
+#define C3 CHESSBOARD["C3"]
+#define D3 CHESSBOARD["D3"]
+#define E3 CHESSBOARD["E3"]
+#define F3 CHESSBOARD["F3"]
+#define G3 CHESSBOARD["G3"]
+#define H3 CHESSBOARD["H3"]
+#define A4 CHESSBOARD["A4"]
+#define B4 CHESSBOARD["B4"]
+#define C4 CHESSBOARD["C4"]
+#define D4 CHESSBOARD["D4"]
+#define E4 CHESSBOARD["E4"]
+#define F4 CHESSBOARD["F4"]
+#define G4 CHESSBOARD["G4"]
+#define H4 CHESSBOARD["H4"]
+#define A5 CHESSBOARD["A5"]
+#define B5 CHESSBOARD["B5"]
+#define C5 CHESSBOARD["C5"]
+#define D5 CHESSBOARD["D5"]
+#define E5 CHESSBOARD["E5"]
+#define F5 CHESSBOARD["F5"]
+#define G5 CHESSBOARD["G5"]
+#define H5 CHESSBOARD["H5"]
+#define A6 CHESSBOARD["A6"]
+#define B6 CHESSBOARD["B6"]
+#define C6 CHESSBOARD["C6"]
+#define D6 CHESSBOARD["D6"]
+#define E6 CHESSBOARD["E6"]
+#define F6 CHESSBOARD["F6"]
+#define G6 CHESSBOARD["G6"]
+#define H6 CHESSBOARD["H6"]
+#define A7 CHESSBOARD["A7"]
+#define B7 CHESSBOARD["B7"]
+#define C7 CHESSBOARD["C7"]
+#define D7 CHESSBOARD["D7"]
+#define E7 CHESSBOARD["E7"]
+#define F7 CHESSBOARD["F7"]
+#define G7 CHESSBOARD["G7"]
+#define H7 CHESSBOARD["H7"]
+#define A8 CHESSBOARD["A8"]
+#define B8 CHESSBOARD["B8"]
+#define C8 CHESSBOARD["C8"]
+#define D8 CHESSBOARD["D8"]
+#define E8 CHESSBOARD["E8"]
+#define F8 CHESSBOARD["F8"]
+#define G8 CHESSBOARD["G8"]
+#define H8 CHESSBOARD["H8"]
+
+#define R "%^BOLD%^%^RED%^R%^RESET%^" //enemy rook
+#define N "%^BOLD%^%^RED%^N%^RESET%^" //enemy knight
+#define B "%^BOLD%^%^RED%^B%^RESET%^" //enemy bishop
+#define Q "%^BOLD%^%^RED%^Q%^RESET%^" //enemy queen
+#define K "%^BOLD%^%^RED%^K%^RESET%^" //enemy king
+#define P "%^BOLD%^%^RED%^P%^RESET%^" //enemy pawn
+#define r "%^BOLD%^%^MAGENTA%^r%^RESET%^" //player rook
+#define n "%^BOLD%^%^MAGENTA%^n%^RESET%^" //player knight
+#define b "%^BOLD%^%^MAGENTA%^b%^RESET%^" //player bishop
+#define q "%^BOLD%^%^MAGENTA%^q%^RESET%^" //player queen
+#define k "%^BOLD%^%^MAGENTA%^k%^RESET%^" //player king
+#define p "%^BOLD%^%^MAGENTA%^p%^RESET%^" //player pawn
+
+#define LINE " |-+-+-+-+-+-+-+-|\n"

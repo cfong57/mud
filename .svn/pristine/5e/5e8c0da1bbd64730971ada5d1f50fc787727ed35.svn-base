@@ -1,0 +1,61 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit OBJECT;
+object soulbarb;
+//Wiznote, this is not a real trap per se, seeing as how it cannot be 'set'
+//This is intentional, it will simply be cloned to the room and left there
+void extra_init()
+{
+  if(this_player()->query_floating() == 0)
+  { 
+  if(this_player()->query_species() != "undead")
+  {
+  if(this_player()->query_race() != "beholder")
+  {
+  if(this_player()->query_barbed() == 0)
+  {
+  message("trigger","You set off a hidden %^GREEN%^soul trap%^RESET%^!\n",
+  this_player());
+  message("trigger",""+this_player()->query_cap_name()+" sets off a hidden "+
+  "%^GREEN%^soul trap%^RESET%^!\n",environment(this_player()));
+  message("trap_effects","It feels like an invisible wire has been wound "+
+  "around you, but you can detect nothing physically present.\n",this_player());
+  soulbarb = new("/u/a/allanon/lorim/weapons/soul_barb.c");
+  soulbarb->move(this_player(),1);
+  soulbarb->shadow_object(this_player());
+  soulbarb->check_status();
+  soulbarb->call_out("barb_me",100 - random(70));
+  this_object()->destruct();
+  }
+  }
+  }
+  }
+}
+
+void extra_create()
+{
+  set_short("%^GREEN%^Soul trap%^RESET%^");	
+  set_long(wrap("A specialized trap designed for use against spies and other "+
+  "traditionally stealthy opponents, the soul trap is a one-of-a-kind killing "+
+  "device that is impossible to avoid once activated. Once stepped on, the "+
+  "trap plants a 'soul barb' in the target, a unique parasite which burrows "+
+  "deep into the flesh and remains there for up to 100 seconds, after which "+
+  "it removes the target's soul, causing instant death. The whole process is "+
+  "nearly painless, a drawback that many see as minor compared to the "+
+  "device's guaranteed success. Information on 'soul barbs' is nearly "+
+  "nonexistant, as is the knowledge of how to procure them; or, for that "+
+  "matter, how or where this trap is manufactured.\n"+
+  "This trap cannot be moved or un-set once it has been set.\n"+
+  "After being set, the trap becomes invisible to most creatures, including "+
+  "the person who set it. It also does not discriminate in its targets.\n"+
+  "This trap cannot be found with 'trap locations'.\n")); 
+  set_id(({"soultrap_ob"}));
+  set_name("soul trap");
+  set_prevent_get(1);
+  set_prevent_drop(1);
+  set_value(1000000);
+  set_invisible(1);
+  set_mass(1);
+  set_bulk(1);
+}

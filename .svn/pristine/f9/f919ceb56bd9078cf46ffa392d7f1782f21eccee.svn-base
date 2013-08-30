@@ -1,0 +1,74 @@
+#include <mudlib.h>
+#include <daemons.h> 
+
+inherit ROOM;
+
+string curr_phase; 
+string foliage;
+string longdesc;
+
+void extra_create()
+{
+  set_outside("F"); 
+  set_outdoors("F");
+  set_short( "Entering a deep forest" );
+  set_long(wrap("You are entering a deep, flourishing forest. There is "+
+  "abundant wildlife, dense vegetation, and an overall feeling of peace and "+
+  "calmness. The quiet and solemnity of the forest make you feel very at "+
+  "ease, and you wish there were more forests like this. There is a stream "+
+  "flowing through here, and you wonder if it is the same stream you saw "+
+  "earlier, since it is completely clean and pure. You wonder if the forest "+
+  "contains magical properties.\n"));
+  longdesc = this_object()->query_long();
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/treants.c");
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/animals.c");
+  set_item_desc(([
+  ({"abundant wildlife", "wildlife"}) : "Deer, rabbits, owls, and other "+
+  "animals of the forest can be easily spotted here. You would never even "+
+  "think of killing such happy, carefree creatures.\n", 
+  ({ "dense vegatation", "vegatation", "foliage", "forest"}) : "It's nice to "+
+  "see some plants after the utter desolation of the battleground. They are "+
+  "an eternal symbol of life and vitality.\n",
+  "stream" : "It would seem to be the same stream you saw winding through the "+
+  "bloody battleground, but now it has been completely restored and is clear "+
+  "as crystal. You don't trust it enough to drink from it, though. The stream "+
+  "curves and starts to flow west from here, into impassable vegetation.\n"]));  
+  set_sounds(100 + random(23), ({ 
+  "The sounds of forest animals can be heard easily here.\n",
+  "The leaves of the trees rustle a bit with a small breeze.\n"}) ); 
+  set_exits(([
+  "northeast"  : "/u/a/allanon/areas/lumber_camp/rooms/be.c",
+  "east"  : "/u/a/allanon/areas/lumber_camp/rooms/f2.c",
+  "southeast" : "/u/a/allanon/areas/lumber_camp/rooms/f3.c"]));
+  call_out("phase_func", 0); 
+  WEATHER_D->add_phase_listener(this_object());
+}
+
+void phase_func()
+{
+  curr_phase = GOD_D->query_current_phase();
+  switch (curr_phase)
+  {
+    case "fire":
+    foliage = "The foliage around you is a brilliant %^RED%^red%^RESET%^.\n";
+    break;
+    case "air":
+    foliage = "The foliage around you is a shimmering %^CYAN%^cyan%^RESET%^.\n";
+    break;
+    case "water":
+    foliage = "The foliage around you is a rippling %^BLUE%^blue%^RESET%^.\n";
+    break;
+    case "earth":
+    foliage = "The foliage around you is a solid %^ORANGE%^brown%^RESET%^.\n";
+    break;
+    case "magic":
+    foliage = "The foliage around you %^BOLD%^wavers%^RESET%^ mysteriously.\n";
+    break;
+  }	
+  set_long(wrap(longdesc + foliage));
+}
+
+void phase_changed(mapping map)
+{ 
+  call_out("phase_func", 0);
+} 

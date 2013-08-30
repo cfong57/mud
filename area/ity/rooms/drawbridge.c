@@ -1,0 +1,11 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "Grand drawbridge of the Bastion" );
+  set_long(wrap("Temporary room to make entrydoors work properly.\n"));
+  set_exits(([
+  "north" : "/u/a/allanon/area/ity/rooms/entrydoors.c"]));
+}

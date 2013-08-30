@@ -1,0 +1,24 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("Monster holding magic chains");
+  set_long(wrap("foo.\n"));
+  set_name("monster");
+  set_id(({"monster"}));
+  set_level(random(101));
+  set_race("human");
+  set_stat("size",random(1001));
+}
+
+void second_life()
+{
+  object demon = find_object("/u/a/allanon/temp/demon.c");
+  force_me("say "+demon->query_chains()+"");
+  demon->increment_chains();
+  force_me("say "+identify(demon)+"");
+  force_me("say "+demon->query_short()+"");
+  force_me("say "+demon->query_chains()+"");
+}

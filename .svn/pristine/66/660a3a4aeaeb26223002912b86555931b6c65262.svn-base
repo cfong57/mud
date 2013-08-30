@@ -1,0 +1,107 @@
+/*Abusable item coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit ARMOR;
+
+string htst;
+string destination;
+
+int teleport_command(string cmd)
+{
+  if(!cmd)
+  {
+  object p = this_player();
+  switch(this_player()->query_home_town()) 
+  {
+  case "vaerlon":
+      htst = "Vaerlon";
+      destination = "/d/valkor/vaerlon/rooms/streets/h4.c";
+      break;
+
+  case "graemor":
+      htst = "Graemor";
+      destination = "/d/graemor/virtual/9,18.graemor-part1.c";
+      break;
+
+  case "teladan":
+      htst = "Teladan";
+      destination = "/u/t/tarak/areas/town/rooms/f8.c";
+      break;
+            
+  /*case "cenedoiss":
+      htst = "Cenedoiss";
+      destination = "/u/t/tarak/areas/town/rooms/f8.c";
+      break;*/
+
+  case "atherton":
+      htst = "Atherton";
+      destination = "/u/b/belannaer/virtual/14,13.atherton.c";
+      break;
+
+  default:
+      htst = "Vaerlon";
+      destination = "/d/valkor/vaerlon/rooms/streets/h4.c";
+      break;
+  }
+  message("teleport","You rub the Ring of Teleport while thinking of your "+
+  "hometown. The air around you shimmers and suddenly you find yourself "+
+  "standing in the central square of "+htst+".\n",p);
+  message("wear",""+p->query_cap_name()+" rubs "+possessive(p)+" Ring of "+
+  "Teleport. The air around "+objective(p)+" starts to distort, and suddenly "+
+  "in the blink of an eye "+subjective(p)+" disappears.\n",environment(p),p);
+  p->move(destination);
+  call_out("destruct_me",5);
+  return 1;
+  }
+}
+
+void extra_init() 
+{ 
+    add_action("teleport_command","teleport"); 
+} 
+
+void extra_create() 
+{
+  set_identified(1);
+  set_short("Ring of Teleport");
+  set_long(wrap("This ring teleports you to your hometown's central square. "+
+  "The syntax is 'teleport'. Note that it doesn't need to be worn for the "+
+  "command to work - you just have to have it in your inventory (or even in "+
+  "your environment, actually).\n"));
+  set_id(({"ring of teleport", "ring"}));
+  set_name("Ring of Teleport");
+  set_slots(({"finger"}));
+  set_material("silver");
+  set_type("full plate");
+  set_type_desc("ring");
+  set_quality(999);
+  set_size(175);
+  armour_setup();
+}
+
+string query_special_feature() 
+{ 
+return "This ring can teleport you back to your hometown's central square.";
+} 
+
+void destruct_me()
+{
+  object p = this_player();
+  message("destruct","Your Ring of Teleport gives off a bright pulse of "+
+  "light and slowly fades away to nothingness.\n",p);
+  message("destruct",""+p->query_cap_name()+"'s Ring of Teleport gives off a "+
+  "bright pulse of light and slowly fades away to nothingness.\n",
+  environment(p),p);
+  this_object()->remove();
+}
+
+int query_size()
+{
+    object p = environment(this_object());
+    if(p && userp(p)) 
+    return p->query_stat("size"); 
+    else 
+    return ::query_size(); 
+}    

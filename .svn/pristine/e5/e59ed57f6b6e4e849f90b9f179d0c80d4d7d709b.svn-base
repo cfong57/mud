@@ -1,0 +1,27 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+int chains = 0;
+
+int query_chains()
+{
+  return chains;
+}
+
+void increment_chains()
+{
+  chains++;
+}
+
+void extra_create()
+{
+  set_short("Dat demon");
+  set_long(wrap("foo.\n"));
+  set_name("demon");
+  set_id(({"demon"}));
+  set_level(random(101));
+  set_race("demon");
+  set_stat("size",random(1001));
+  set_stat("strength",query_chains());
+}

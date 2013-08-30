@@ -1,0 +1,50 @@
+#include <mudlib.h>
+
+inherit MONSTER;
+
+void extra_create()
+{
+  set_short("A ghostly waiter, at your beck and call");
+  set_long(wrap("This ghost is an odd sight. It is clad in the attire of a "+
+  "professional waiter, with a black coat, white dress shirt, beige slacks, "+
+  "and black leather shoes. It looks at you with an unreadable yet somehow "+
+  "polite expression, waiting for your orders patiently.\n"));
+  set_name("Ghostly waiter");
+  set_id(({ "ghostly waiter", "waiter", "ghost", "human", "undead", 
+  "waiter_id"}));
+  set_level(50);
+  set_race("human");
+  set_species("undead");
+  set_gender("neuter");
+  set_inquiry(([
+  "$GREET" : "My most sincere greetings to you, Master $TPQCN. Are you ready "+
+  "for your food? Or perhaps you would care for a drink first?\n",
+  ({"assist", "order"}) : "You have only to ask, and I shall bring you food "+
+  "or drink immediately.\n",
+  "food" : "food_inquiry",
+  "drink" : "drink_inquiry",
+  "$DEFAULT" : "I'm afraid I don't know anything about that, Master "+
+  "$TPQCN.\n"]));
+}
+
+void food_inquiry()
+{
+  object food;
+  string master = this_player()->query_cap_name();
+  force_me("say Certainly, Master "+master+"");
+  message("info","The waiter vanishes, and before you can even blink it is "+
+  "back, carrying a steaming plate of food.\n",environment(this_object()));
+  food = new("/u/a/allanon/area/ity/obj/food.c");
+  food->move(environment(this_object()),1);
+}
+
+void drink_inquiry()
+{
+  object drink;
+  string master = this_player()->query_cap_name();
+  force_me("say Certainly, Master "+master+"");
+  message("info","The waiter vanishes, and before you can even blink it is "+
+  "back, carrying a refreshingly cold beverage.\n",environment(this_object()));
+  drink = new("/u/a/allanon/area/ity/obj/drink.c");
+  drink->move(environment(this_object()),1);
+}

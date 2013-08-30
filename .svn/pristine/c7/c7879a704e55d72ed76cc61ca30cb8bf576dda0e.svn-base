@@ -1,0 +1,44 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+int clean_up(int inh) { return 1; }
+void reset() { return; }
+
+void extra_create()
+{
+  seteuid( getuid() );
+  set_outside("h"); 
+  set_outdoors("h");
+  set_short("Entrance to The Necropolis");
+  set_long(wrap("You're standing on a hill overlooking the surrounding area. "+
+  "The long grass sways rhythmically in the wind and you can hear the melodic "+
+  "chirping of birds. Some small animals make the grass rustle occasionally. "+
+  "The rocky soil is firm underfoot, and everything would seem perfectly "+
+  "ordinary if not for an enormous stairway leading down into the hill.\n"));
+  add_monster("/u/a/allanon/areas/necropolis/mon/scout.c"); 
+  set_item_desc(([
+                  "grass" : "The grass is quite generic. It has a thin layer "+
+                  "of 'fuzz' on it which tickles you as you wade through.\n", 
+                  "soil" : "The ground here is indistinguishable from the "+
+                  "surrounding terrain's soil.\n", 
+                  ({"enormous stairway", "stairway", "entrance"}) : "There is "+
+                  "a large hole, seemingly dug straight down into the hill, "+
+                  "with a stairway set into it. The stairs are made of "+
+                  "roughly hewn granite that sparkles a bit in the light. "+
+                  "From below you can feel a draft of chilly air. Wherever it "+
+                  "leads, it must be deep underground.\n"]));
+  set_sounds(120,({"The stairway piques your curiosity. What adventures await "+
+  "underground?\n"})); 
+  set_exits(([
+       "stairway" : "/u/a/allanon/areas/necropolis/rooms/tomb.c",
+       "north" : "outworld",
+       "northeast" : "outworld",
+       "east" : "outworld",
+       "southeast" : "outworld",     //fill these in later
+       "south" : "outworld",
+       "southwest" : "outworld",
+       "west" : "outworld",
+       "northwest" : "outworld"]));
+  ::reset();
+}

@@ -1,0 +1,275 @@
+#pragma save_types
+
+#include <mudlib.h>
+#include "chess.h"
+
+inherit ROOM;
+
+string BOARD = ""+
+  "  A B C D E F G H\n"+
+  " ,---------------.\n"+
+  "8|"+R+"|"+N+"|"+B+"|"+Q+"|"+K+"|"+B+"|"+N+"|"+R+"|\n"+
+  ""+LINE+""+
+  "7|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|"+P+"|\n"+
+  ""+LINE+""+
+  "6| | | | | | | | |\n"+
+  ""+LINE+""+
+  "5| | | | | | | | |\n"+
+  ""+LINE+""+
+  "4| | | | | | | | |\n"+
+  ""+LINE+""+
+  "3| | | | | | | | |\n"+
+  ""+LINE+""+
+  "2|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|"+p+"|\n"+
+  ""+LINE+""+
+  "1|"+r+"|"+n+"|"+b+"|"+q+"|"+k+"|"+b+"|"+n+"|"+r+"|\n"+
+  "`---------------'\n";
+
+mapping CHESSBOARD = ([
+"A8" : 0, "B8" : 0, "C8" : 0, "D8" : 0, "E8" : 0, "F8" : 0, "G8" : 0, "H8" : 0,
+"A7" : 0, "B7" : 0, "C7" : 0, "D7" : 0, "E7" : 0, "F7" : 0, "G7" : 0, "H7" : 0,
+"A6" : 0, "B6" : 0, "C6" : 0, "D6" : 0, "E6" : 0, "F6" : 0, "G6" : 0, "H6" : 0,
+"A5" : 0, "B5" : 0, "C5" : 0, "D5" : 0, "E5" : 0, "F5" : 0, "G5" : 0, "H5" : 0,
+"A4" : 0, "B4" : 0, "C4" : 0, "D4" : 0, "E4" : 0, "F4" : 0, "G4" : 0, "H4" : 0,
+"A3" : 0, "B3" : 0, "C3" : 0, "D3" : 0, "E3" : 0, "F3" : 0, "G3" : 0, "H3" : 0,
+"A2" : 0, "B2" : 0, "C2" : 0, "D2" : 0, "E2" : 0, "F2" : 0, "G2" : 0, "H2" : 0,
+"A1" : 0, "B1" : 0, "C1" : 0, "D1" : 0, "E1" : 0, "F1" : 0, "G1" : 0, "H1" : 0
+]);
+
+//0 for empty square
+//1 for space under attack by player 1 (magenta)
+//2 for space under attack by player 2 (red)
+
+object *players = ({}); //alternative to making a chess shadow
+
+int game_in_progress = 0;
+
+int query_game_in_progress()
+{
+  return game_in_progress;	
+}
+
+int reset_command(string str)
+{
+  if(str == "board")
+  {
+    foreach(string str in keys(CHESSBOARD))
+    {
+	  if(objectp(CHESSBOARD[str]))
+	  {
+	    CHESSBOARD[str]->remove();	  
+	  }
+	  CHESSBOARD[str] = 0;
+    }
+    CHESSBOARD["A1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["A1"]->initialize("magenta rook");
+    CHESSBOARD["B1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["B1"]->initialize("magenta knight");	
+    CHESSBOARD["C1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["C1"]->initialize("magenta bishop");	
+    CHESSBOARD["D1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["D1"]->initialize("magenta queen");	
+    CHESSBOARD["E1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["E1"]->initialize("magenta king");	
+    CHESSBOARD["F1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["F1"]->initialize("magenta bishop");	
+    CHESSBOARD["G1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["G1"]->initialize("magenta knight");	
+    CHESSBOARD["H1"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["H1"]->initialize("magenta rook"); 
+    CHESSBOARD["A2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["A2"]->initialize("magenta pawn");
+    CHESSBOARD["B2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["B2"]->initialize("magenta pawn");	
+    CHESSBOARD["C2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["C2"]->initialize("magenta pawn");	
+    CHESSBOARD["D2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["D2"]->initialize("magenta pawn");	
+    CHESSBOARD["E2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["E2"]->initialize("magenta pawn");	
+    CHESSBOARD["F2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["F2"]->initialize("magenta pawn");	
+    CHESSBOARD["G2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["G2"]->initialize("magenta pawn");	
+    CHESSBOARD["H2"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["H2"]->initialize("magenta pawn");
+    CHESSBOARD["A7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["A7"]->initialize("red pawn");
+    CHESSBOARD["B7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["B7"]->initialize("red pawn");	
+    CHESSBOARD["C7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["C7"]->initialize("red pawn");	
+    CHESSBOARD["D7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["D7"]->initialize("red pawn");	
+    CHESSBOARD["E7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["E7"]->initialize("red pawn");	
+    CHESSBOARD["F7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["F7"]->initialize("red pawn");	
+    CHESSBOARD["G7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["G7"]->initialize("red pawn");	
+    CHESSBOARD["H7"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["H7"]->initialize("red pawn");    
+    CHESSBOARD["A8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["A8"]->initialize("red rook");
+    CHESSBOARD["B8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["B8"]->initialize("red knight");	
+    CHESSBOARD["C8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["C8"]->initialize("red bishop");	
+    CHESSBOARD["D8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["D8"]->initialize("red queen");	
+    CHESSBOARD["E8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["E8"]->initialize("red king");	
+    CHESSBOARD["F8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["F8"]->initialize("red bishop");	
+    CHESSBOARD["G8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["G8"]->initialize("red knight");	
+    CHESSBOARD["H8"] = new("/u/a/allanon/chess/chesspiece.c");
+    CHESSBOARD["H8"]->initialize("red rook"); 	
+    message("chess","The chessboard has been reset.\n",this_object());  
+    return 1;
+  }
+}
+
+int play_command(string str)
+{
+  if(str == "1")
+  {
+    return 1;
+  }
+  else if(str == "2")
+  {
+    return 1;	  
+  }
+  else if(str == "npc")
+  {
+    return 1;	  
+  }
+  else
+  {
+    return notify_fail("Usage: 'play <1|2|npc>'\n");	  
+  }
+}
+
+int move_command(string str)
+{
+  if(str)
+  {
+    return 1;
+  }
+  return notify_fail("Usage: move <piece> <dir> <num>\n");
+}
+
+int view_command(string str)
+{
+  if(!str)
+  {
+    message("chess","\n"+BOARD+"",this_player());
+    return 1;
+  }
+  return notify_fail("Usage: 'view'\n");
+}
+
+int giveup_command(string str)
+{
+  if(!str)
+  {	  
+    return 1;
+  }
+  return notify_fail("Usage: 'giveup'\n");
+}
+
+int nocontest_command(string str)
+{
+  if(!str)
+  {	  
+    return 1;
+  }
+  return notify_fail("Usage: 'nocontest'\n");
+}
+  
+string signfunc()
+{
+  return
+  "CHESS\n"+
+  "=====\n"+
+  "\n"+
+  "Rules of Chess:\n"+
+  "  The goal of chess is to force the opponent's king ("+k+" or "+K+") \n"+
+  "  into a 'check' position, whereby he cannot move without being put into \n"+
+  "  capture range of one of your pieces. Players take turns moving one \n"+
+  "  piece per turn. For a description of the various pieces, look at the \n"+
+  "  plaque.\n"+
+  "\n"+
+  "Commands available in this room:\n"+
+  "  play <1|2|npc>\t\t\tPlay by yourself, with another player, or against an NPC\n"+
+  "  move <piece> <dir> <num>\t\t\tMove your <piece> <dir> <num> times\n"+
+  "  view\t\t\tView the board (brief mode)\n"+
+  "  look,l\t\t\tView the board (verbose mode)\n"+
+  "  giveup\t\t\tGive up, lose the game\n"+
+  "  nocontest\t\t\tMatch ends in a draw if all players agree
+  "\n"+
+  "  reset board\t\t\tReset the board\n";
+}
+
+string plaquefunc()
+{
+  return
+  "CHESS PIECES\n"+
+  "============\n"+
+  "\n"+
+  "Pawns:\n"+
+  "  Pawns can move forward one square (two from their starting position)\n"+
+  "  and they capture pieces diagonally in front of them by one square.\n"+
+  "  	
+}
+
+string query_look()
+{
+  string look;
+  look =
+  "   == CHESS ==   \n"+
+  "\n"+
+  ""+BOARD+""+
+  "There is a wooden sign hanging on the wall.\n"+
+  "There's also a small golden plaque on the opposite wall.\n"+
+  "\n\n"+
+  "        The only obvious exit is %^BOLD%^%^GREEN%^out%^RESET%^.\n"+
+  ""+this_object()->query_look_contents()+"";
+  return look;
+}
+
+void extra_init()
+{
+  add_action("play_command","play");
+  add_action("move_command","move");
+  add_action("view_command","view");
+  add_action("giveup_command","giveup");
+  add_action("reset_command","reset");
+  add_action("nocontest_command","nocontest");
+}
+
+void extra_create()
+{
+  set_short( "Chessboard" );
+  set_long(wrap("This long desc should not be seeable.\n"));
+  set_item_desc(([
+  ({"wooden sign", "sign"}) : (: signfunc :),
+  ({"small golden plaque", "small plaque", "golden plaque", "plaque"}) :
+  (: plaquefunc :)]));
+  set_safe_room(1);
+  set_no_teleport(1);
+  set_pre_exit_function("out", "playing_check");
+  set_exits(([
+  "out" : "/u/a/allanon/workroom/connector.c"]));
+}
+
+int playing_check()
+{
+  if(this_player()->member_array(players))
+  {
+    message("info","You are in the middle of a chess game, you can't "+
+    "just up and leave.\n",this_player());
+    return 1;
+  }
+  return 0;
+}

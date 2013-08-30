@@ -1,0 +1,39 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{ 
+  set_no_teleport(1); 
+  set_short( "Entrance to Cellaria's dungeon" );
+  set_long(wrap("You stand in a cold, damp catacombs that seems to have been "+
+  "hacked out of the natural bedrock with uncanny skill. A ladder leads back "+
+  "the way you came, and the narrow hole it goes through is the only "+
+  "light source in this dim place. Despite being a damp and dark place, you "+
+  "see no traces of fungus on the walls: it is as if the place was "+
+  "intentionally scoured clean. Faint traces of blood can be seen on the "+
+  "floor, heading towards the north. The path itself branches towards the "+
+  "north, east, and south here. There is an especially rotten stench coming "+
+  "from the south, and to the east you feel the air gets distinctly "+
+  "cooler, to the point that your breath fogs.\n"));
+  set_light(-25);
+  set_item_desc(([
+  ({"natural bedrock", "bedrock", "walls"}) : "The walls of this place are "+
+  "unnaturally smooth, but they are certainly not natural, as the tunnel "+
+  "is squarish.\n", 
+  ({ "ladder, hole"}) : "The ladder is made of wood and looks quite sturdy. "+
+  "It leads back to the surface, and after only five minutes down here, you "+
+  "have a very strong desire to go back already.\n",
+  ({"blood", "traces"}) : "A trail of blood droplets, rust-red in color, "+
+  "leads off to the north. They look recent.\n"]));            
+  set_exits((["ladder" : "/u/a/allanon/areas/lumber_camp/rooms/cottage_out.c",
+  "north" : "/u/a/allanon/areas/lumber_camp/rooms/dungeon_north.c",
+  "east" : "/u/a/allanon/areas/lumber_camp/rooms/dungeon_east.c",
+  "south" : "/u/a/allanon/areas/lumber_camp/rooms/dungeon_south.c"]));
+  set_exit_msg( ([ "ladder" : "$N approaches the ladder and climbs up." ]));
+}
+
+int query_temperature() 
+{ 
+  return 10; 
+}

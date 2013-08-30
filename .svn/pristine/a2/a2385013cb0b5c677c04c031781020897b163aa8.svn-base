@@ -1,0 +1,142 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit OBJECT;
+
+void send_commands(string v);
+void imput_commands(string v);
+object reporter;
+int inuse = 0;
+string mesg;
+
+int multi_func(string cmd)
+{
+	object p = this_player();
+	if(!cmd)
+	{    	
+    if(inuse == 0)
+    {
+	message("info","Creating reporter...\n",p);
+	reporter = new("/u/a/allanon/objects/reporter.c");
+	reporter->move(p,1);
+	inuse = 1;
+	return 1;
+    }
+    else
+    {
+	message("info","You've already got a Reporter running. It is located at "+
+	""+capitalize(environment(reporter)->query_short())+".\n",p);
+	return 1;
+	}
+    }
+    if(cmd == "now")
+    {
+	if(inuse == 0)
+	return notify_fail("But you don't have a Reporter active.\n");
+	reporter->do_report(); 
+	return 1;   
+    }
+    if(cmd == "return")
+    {
+	if(inuse == 0)
+	return notify_fail("But you don't have a Reporter active.\n");
+	reporter->return_me();
+	return 1;
+    }
+    if(cmd == "remove")
+    {
+	if(inuse == 0)
+	return notify_fail("But you don't have a Reporter active.\n");
+    reporter->self_destruct();
+    message("destruct","Reporter destructed.\n",p);
+    inuse = 0;
+    return 1;
+    }
+    if(cmd == "listen")
+    {
+	if(inuse == 0)
+	return notify_fail("But you don't have a Reporter active.\n");
+	reporter->set_chatter(1);
+	message("info","Reporter now listening for messsages.\n",p);
+	return 1;    
+    }
+    if(cmd == "stop_listen")
+    {
+	if(inuse == 0)
+	return notify_fail("But you don't have a Reporter active.\n");
+	reporter->set_chatter(0);
+	message("info","Reporter will stop catching messages.\n",p);
+	return 1;   
+    }
+    if(cmd == "do_this")
+    {
+	if(inuse == 0)
+	return notify_fail("But you don't have a Reporter active.\n");
+	call_out("imput_commands",0);
+    return 1;    
+    }
+    if(cmd == "help")
+    {
+	message("help","The following options are available:\n"+
+	"'rcd'             Creates a new Reporter or locates the current one.\n"+
+	"'rcd now'         Makes the Reporter report.\n"+
+	"'rcd return'      Recalls the Reporter to your inventory.\n"+
+	"'rcd remove'      Destructs the Reporter.\n"+
+	"'rcd listen'      Reports any messages heard.\n"+
+	"'rcd stop_listen' Stops reporting messages.\n"+
+	"'rcd do_this'     Commands the Reporter to do something.\n"+
+	"'rcd help'        Shows this helpfile.\n"+
+	"\n"+
+	"Commands for the Reporter itself are as follows:\n"+
+	"'deploy <foo>' Deploys the Reporter to the room foo is in, if \n"+
+	"               find_living() can locate foo. Mainly for player-objects.\n"+
+	"'moveto <foo>' More complicated, moves the Reporter to the filename \n"+
+	"               'foo'. Has to be exactly right or it won't work.\n",p);
+	return 1;
+    }
+    return notify_fail("Try 'rcd help' for the correct syntax.\n");
+}
+
+void extra_init()
+{
+  add_action("multi_func","rcd"); //'report command'
+}
+
+void extra_create()
+{
+  set_short("A remote-control");
+  set_long(wrap("Used to control the Reporter. Try 'rcd help' if you're "+
+  "confused.\n"));
+  set_name("remote control");
+  set_id( ({"remote control", "control", "remote-control", "remote"}) );
+  set_mass(1);
+  set_bulk(1);
+}
+
+void send_commands(string v)
+{
+  object p = this_player(); 
+  if(!(v == "yes" || v == "y" || v == "Yes"))
+  {
+    imput_commands("");
+    return;
+  }  
+      message("info","Command sent to the Reporter.\n",p);
+      message("allanon_command",""+mesg+"",reporter);
+      return;
+}
+
+void imput_commands(string v)
+{
+  object p = this_player();
+  if(!sizeof(v))
+  {
+    message("info","Imput the command you want the Reporter to do: \n",p);
+    input_to("imput_commands");
+    return;
+  }
+  mesg = v;
+  message("check",""+mesg+"\n",p);
+  message("info", "Is that correct? [y,n]\n",p);
+  input_to("send_commands");
+}

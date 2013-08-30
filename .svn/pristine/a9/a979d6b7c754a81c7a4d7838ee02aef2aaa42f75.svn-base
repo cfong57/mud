@@ -1,0 +1,33 @@
+/*Slightly modified underwater breathing shadow, for Allanon's amulet.*/
+
+#include <mudlib.h>
+#include <modules.h>
+inherit M_ABILITIES;
+inherit SHADOW;
+
+object shadowed;
+
+int check_status()
+{
+  if(!shadowed_object()) 
+  destruct(this_object()); 
+  call_out("check_status",5);
+}
+
+void create(object plr)
+{
+  if(shadow_object(plr))
+  shadowed = plr;
+  else
+  return;
+  message("info","You can now breathe underwater.\n",shadowed);
+}
+int query_breath_underwater()
+{
+  return 1;
+}
+
+int remove_shadow_3()
+{
+	destruct(this_object()); 
+}

@@ -1,0 +1,50 @@
+/* Item that could possibly be added to game somewhere. Coded by Allaon, 
+enjoy. */
+
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int break_command(string cmd) 
+{ 
+    if ( cmd == "bottle" ) 
+    { 
+	    object p = this_player();
+	    object cfire;
+        message("info","You smash the bottle on the ground, unleashing the "+
+        "flames within!\n",p); 
+        message("info","The intense heat creates a small blaze on the ground, "+
+        "which starts incinerating fuel, eventually becoming a small "+
+        "campfire.\n",p); 
+        message("info",""+p->query_cap_name()+" smashes "+possessive(p)+" "+
+        "Bottle of flames on the ground, unleashing the flames "+
+        "within!\n",environment(p),p);
+        message("info","The intense heat creates a small blaze on the "+
+        "ground, which starts incinerating fuel, eventually becoming "+
+        "a small campfire.\n",environment(p),p);            
+        cfire = new("/obj/campfire.c");
+        cfire->move(environment(p),1);
+        this_object()->remove();        
+        return 1; 
+    } 
+    return notify_fail("Break what?\n"); 
+} 
+  
+void extra_init() 
+{ 
+    add_action("break_command","break"); 
+} 
+
+void extra_create()
+{
+  set_short("Glass bottle containing flames");
+  set_long("This is a sealed bottle made out of glass. It seems to contain "+
+  "flames inside of it. You could 'break' the bottle to let loose the flames "+
+  "but you aren't sure what would happen. There is a label on the bottle "+
+  "that reads: 'Campfire'.\n");
+  set_id( ({ "flames-in-a-bottle", "glass bottle contianing flames", "bottle",
+  "glass bottle", "bottle containing flames"}) );
+  set_mass(1);
+  set_bulk(1); 
+  set_value(5000+random(5000));
+}

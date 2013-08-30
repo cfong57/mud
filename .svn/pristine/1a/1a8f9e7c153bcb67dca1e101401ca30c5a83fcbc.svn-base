@@ -1,0 +1,52 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_outside("F"); 
+  set_outdoors("F");
+  set_short( "Eastern edge of a battleground" );
+  set_long(wrap("You're standing in a dense forest. A few trees have deep "+
+  "cuts in them, as if someone was trying to cut them down but was "+
+  "interrupted. The ground vegetation is quite scuffed here - it seems like "+
+  "many people have moved through the area recently. There are a few "+
+  "bloodstains dotting the ground here and there, and they make you feel "+
+  "ill-at-ease. At least there's less blood here than the center of the "+
+  "battleground. This seems to be a dead end: trees block your path in every "+
+  "way except the one you entered from...\n"));
+  set_item_desc(([
+  ({"trees", "deep cuts", "cuts", "dense forest", "forest"}) : "Seems like "+
+  "lumberjacks tried to cut these trees down but had to stop before "+
+  "finishing. Upon closer examination of the trees, you spot a very faint "+
+  "trail leading away to the southwest.\n", 
+  ({ "ground vegetation", "vegetation", "ground", "small bushes", "bushes", 
+  "grass", "flowers", "plants"}) : "Small bushes, grass, flowers and the "+
+  "like. Many footprints can be found and a lot of the plants have been "+
+  "trampled.\n",
+  "footprints" : "The heavy tread of lumberjack boots can be spotted easily "+
+  "in the soft soil.\n",
+  ({"soft soil", "soil"}) : "The earth here is very soft and lush, suitable "+
+  "for any kind of vegetation to thrive.\n",
+  ({"bloodstains", "blood"}) : "There is some blood on the ground, but it is "+
+  "brown and dry so it must have been spilled some time ago.\n",
+  ({"trail", "path"}) : "The path looks like it was made naturally by "+
+  "animals. You spot a few miscellaneous tracks here and there.\n",
+  ({"miscellaneous tracks", "tracks"}): "The tracks represent a number of "+
+  "animals. You think you can identify wolf, boar, rat, deer, rabbit, and "+
+  "even bear tracks.\n",
+  "animals" : "Although you have not spotted one yet, you can hear faint "+
+  "rustling sounds every now and then that let you know you are not "+
+  "alone.\n"]));  
+  set_sounds(130 + random(13), ({ 
+  "The trees are very dense here, almost to the point of blocking out the "+
+  "sunlight.\n", 
+  "Some sounds of civilization can be heard coming from the north.\n", 
+  "You see a deer sprint through the dense forest a few feet away from you. "+
+  "Seems there are still some animals after all.\n" }) );
+  set_exit_msg( ([ "southwest" : "$N seems to melt into the trees."]) );
+  set_hidden_exits( ({ "southwest"}) ); 
+  set_exits(([
+  "west" : "/u/a/allanon/areas/lumber_camp/rooms/bc.c",
+  "southwest" : "/u/a/allanon/areas/lumber_camp/rooms/f1.c"]));
+}

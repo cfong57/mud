@@ -1,0 +1,17 @@
+/*These are for Allanon's spring-loaded dart gun.*/
+
+#include <mudlib.h>
+
+inherit OBJECT;
+
+void extra_create()
+{
+  set_short("A small dart");
+  set_long(wrap("A small dart used to reload "+
+  "/u/a/allanon/objects/dartgun.c.\n"));
+  set_name("dart");
+  set_id( ({ "dart", "small dart" }) );
+  set_mass(1);
+  set_bulk(1);
+  set_value(3000+random(50));
+}

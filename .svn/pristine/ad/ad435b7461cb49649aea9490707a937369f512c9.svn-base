@@ -1,0 +1,114 @@
+#include <mudlib.h>
+#include <modules.h>
+
+inherit M_CITYGUARD;
+inherit M_REPUTATION;
+
+string guardstr = "guardswoman";//set so that unloaded shortdesc doesn't bug
+string genstr = "woman";
+
+void extra_create()
+{
+  set_guard_community("The Kingdom of Lorim");
+  set_reputation("The Kingdom of Lorim",450);
+  set_home_town("lorim");
+  set_reputation_effects(({"disarm","end_fight"}));
+  set_short("An elite "+guardstr+" of Lorim");
+  set_long(wrap("One of Lorim's elite "+guardstr+", this belittling soldier "+
+  "is clearly a cut above the lesser protectors of the city. You can see "+
+  "various medals on "+possessive(this_object())+" coat of mail, honoring "+
+  "military prowess and brave deeds. You have heard that, like the frozen "+
+  "lands in which they reside, the Lorim are as cold and unforgiving as the "+
+  "tundra and wield both the ice and blizzard with ease; however, if and when "+
+  "befriended, a Lorim can be counted on like no other, and if you have yet "+
+  "to aggravate them, they are said to treat all with polite courteousness. "+
+  "This "+guardstr+" seems to be a perfect example as "+
+  ""+objective(this_object())+" sizes you up in a cautious manner.\n"));
+  set_name("elite "+guardstr+"");
+  set_id(({"elite "+guardstr+"", "guard", ""+genstr+"", ""+guardstr+"", 
+  ""+guardstr+" of lorim", "elite "+guardstr+" of lorim", "human"}));
+  set_level(75);
+  set_race("human"); 
+  set_stat("size",180);
+  set_speed(0);
+  set_agrochance(100);
+  set_following(100);
+  set_stat("wisdom",(this_object()->query_stat("wisdom"))+15);
+  set_stat("intelligence",(this_object()->query_stat("intelligence"))+20);
+  add_weapon("/u/a/allanon/lorim/weapons/egsword.c");
+  add_random_weapon("fine steel_knight shield",10);
+  add_random_armour("fine steel_plate mail_helmet",10);
+  add_random_armour("fine steel_plate mail_neck guard",10);
+  add_random_armour("fine steel_plate mail_breastplate",10);
+  add_random_armour("fine steel_plate mail_bracers",10);
+  add_random_armour("fine steel_plate mail_gauntlets",10);
+  add_random_armour("fine steel_plate mail_greaves",10);
+  add_random_armour("fine steel_plate mail_boots",10);  
+  set_spell("cold blast", 100);
+  set_skill("magic lore", 100);
+  set_skill("strike", 100);
+  set_skill("forceful", 100);
+  set_skill("swords", 100);
+  set_skill("slashing weapons", 100);
+  set_skill("cleave", 100);
+  set_skill("chop", 100);
+  set_skill("swing", 100);
+  set_skill("offensive battle strategy", 100);
+  set_skill("slash", 100);
+  set_skill("shields", 100);
+  set_skill("bludgeoning weapons", 100);
+  set_skill("pound", 100);
+  set_skill("crush", 100);
+  set_skill("bash", 100);
+  set_skill("weapon parry", 100);
+  set_skill("block", 100);
+  set_skill("shield parry", 100);
+  set_skill("melee", 100);
+  set_skill("combat sense", 100);
+  set_skill("defensive battle strategy", 100);
+  set_skill("contact reflexes", 100);
+  set_skill("enhance criticals", 100);
+  set_skill("strike mighty blow", 100);
+  add_spell("cold blast", "random", 0);
+  add_skill("strike", "random",0); 
+  set_chance(100,0);
+  force_me("battle -c forceful");
+  set_inquiry(([
+  "$GREET" : "Welcome to the Kingdom of Lorim. Please enjoy your stay.\n",
+  "$DEFAULT" : "I beg your pardon, but I cannot spare time for your idle "+
+  "questions, as I am on duty at the moment. If you insist on chatting with "+
+  "the City Guards, direct your steps towards the Coat of Arms Tavern. It "+
+  "is located straight ahead, you can't miss it.\n"]));
+  call_out("define_strings",0);
+}
+
+void define_strings()
+{
+  switch(this_object()->query_gender())
+  {
+  case "female":
+  {
+  guardstr = "guardswoman";
+  genstr = "woman";	  
+  break;
+  }
+  case "male":
+  {
+  guardstr = "guardsman";
+  genstr = "man";
+  break;
+  }
+  case "neuter":
+  {
+  guardstr = "guard";
+  genstr = "neuter";	  
+  break;
+  }
+  default://incase someone tries to set_gender() something else...
+  {
+  guardstr = "guardswoman";
+  genstr = "woman";
+  break;	  
+  }
+  }
+}

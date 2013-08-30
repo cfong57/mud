@@ -1,0 +1,211 @@
+#include <mudlib.h> 
+#include <damage.h>
+
+inherit ROOM;
+object target;
+
+int judge_cmd(string str)
+{
+object p = this_player();
+message("info","You call a lightning bolt to the room...\n",p);
+message("info",""+p->query_cap_name()+" calls a lightning bolt to the "+
+"room...\n",environment(p),p);
+if(!str)
+{
+return notify_fail("You can't decide who to zap, the lightning bolt fades "+
+"away.\n");
+message("info","The lightning bolt fades away.\n",environment(p),p);
+}
+if(!find_living(str))
+{
+return notify_fail("The target could not be found. Zap aborted.\n");
+message("info","The lightning bolt fades away.\n",environment(p),p);
+}
+target = find_living(str);
+message("info","You send the lightning bolt to zap "+
+""+find_living(str)->query_cap_name()+" "+
+"("+capitalize(find_living(str)->query_short())+").\n",p);
+message("info",""+p->query_cap_name()+" sends the lightning bolt to zap "+
+""+find_living(str)->query_cap_name()+" "+
+"("+capitalize(find_living(str)->query_short())+")!\n",environment(p),p);
+message("info","A lightning bolt appears from thin air, striking you!\n",
+find_living(str));
+message("info","A lightning bolt forms from nowhere and descends on "+
+""+find_living(str)->query_cap_name()+"!\n",environment(find_living(str)),
+find_living(str));
+if(target->query_stunned()) 
+{  
+target->add_stun_duration(99999); 
+} 
+else 
+{ 
+object ss = new("/obj/battle/stun_shadow",target); 
+if(target->query_stunned()) 
+target->add_stun_duration(99999-ss->query_stun_duration()); 
+} 
+target->receive_damage(100000,LIGHTNING);
+return 1;
+}
+
+int spy_cmd(string str)
+{
+object p = this_player();
+if(!str)
+{
+return notify_fail("Spy on whom?\n");
+}
+if(!find_living(str))
+{
+return notify_fail("The target could not be found. Spy aborted.\n");
+}
+target = find_living(str);
+message("info","You decide to spy on "+find_living(str)->query_cap_name()+" "+
+"("+capitalize(find_living(str)->query_short())+").\n",p);
+message("spy",""+environment(target)->query_look()+"\n"+
+""+target->query_look()+"\n",p);
+return 1;
+}
+
+int scan_cmd(string str)
+{
+object p = this_player();
+if(!str)
+{
+return notify_fail("Scan whom?\n");
+}
+if(!find_living(str))
+{
+return notify_fail("The target could not be found. Scan aborted.\n");
+}
+target = find_living(str);
+message("info","You decide to scan "+find_living(str)->query_cap_name()+" "+
+"("+capitalize(find_living(str)->query_short())+").\n",p);
+call_out("level_msg",0);
+call_out("points_msg",1);
+call_out("df_msg",2);
+call_out("bc_msg",3);
+call_out("wealth_msg",4);
+call_out("stats_msg",5);
+call_out("resistances_msg",6);
+call_out("skills_msg",7);
+call_out("spells_msg",8);/*
+message("scan","Level "+target->query_level()+"\n",p);
+message("scan",""+target->query_hp()+" / "+target->query_max_hp()+" HP\n",p);
+message("scan",""+target->query_total_bank_balance()+" bank credit\n",p);
+message("scan",""+implode(({target->query_wealth()}),",")+"\n",p);
+message("scan",""+target->query_free_dfavor()+" divine favor\n",p);
+message("scan",""+implode(target->query_stats(),",")+"\n",p);
+message("scan",""+implode(target->query_resistances(),",")+"\n",p);
+message("scan",""+implode(target->query_skills(),",")+"\n",p);
+message("scan",""+implode(target->query_spells(),",")+"\n",p);*/
+return 1;
+}
+//implode() messages create runtime errors but it seems to be unavoidable...
+void level_msg()
+{
+	object p = this_player();
+	message("scan","\nLevel: "+target->query_level()+"\n",p);
+}
+
+void points_msg()
+{
+	object p = this_player();
+	message("scan","HP: "+target->query_hp()+" / "+
+	""+target->query_max_hp()+"\n",p);
+	message("scan","SP: "+target->query_sp()+" / "+
+	""+target->query_max_sp()+"\n",p);
+	message("scan","EP: "+target->query_ep()+" / "+
+	""+target->query_max_ep()+"\n",p);
+	message("scan","PSP: "+target->query_psp()+" / "+
+	""+target->query_max_psp()+"\n",p);
+}
+
+void df_msg()
+{
+	object p = this_player();
+	message("scan","Divine favor: "+target->query_free_dfavor()+"\n",p);
+}
+
+void bc_msg()
+{
+	object p = this_player();
+    message("scan","Bank credit: "+target->query_total_bank_balance()+"\n",p);
+}
+
+void wealth_msg()
+{
+	object p = this_player();	
+	message("scan","Money:\n",p);
+    message("scan",""+implode(target->query_wealth(),",")+"\n",p);
+}
+
+void stats_msg()
+{
+	object p = this_player();
+	message("scan","Stats:\n",p);
+	message("scan",""+implode(target->query_stats(),",")+"\n",p);	
+}
+
+void resistances_msg()
+{
+	object p = this_player();
+	message("scan","Resistances:\n",p);
+	message("scan",""+implode(target->query_resistances(),",")+"\n",p);
+}
+
+void skills_msg()
+{
+	object p = this_player();
+	message("scan","Skills:\n",p);
+	message("scan",""+implode(target->query_skills(),",")+"\n",p);
+}
+
+void spells_msg()
+{
+	object p = this_player();
+	message("scan","Spells:\n",p);
+	message("scan",""+implode(target->query_spells(),",")+"\n",p);
+}
+
+void extra_init()
+{
+add_action("judge_cmd","judge");
+add_action("spy_cmd","spy");
+add_action("scan_cmd","scan");
+}
+
+void extra_create()
+{ 
+set_short("Judgment Spire");
+set_long(wrap("You have reached the top of the tree, but what you find is not "+
+"quite what you expected...Rising from the very top of the oak, which you are "+
+"standing on, is a steep steel spire. Black clouds of foreboding whirl "+
+"beneath you in a frenzied dance of darkness. Lightning bolts flash "+
+"constantly, frequently striking the spire. You are so high up now that you "+
+"can easily see the stars and planets. It is so cold that the moisture from "+
+"your breath freezes and solidifies before it leaves your mouth. The air is "+
+"also so thin that you can barely breathe. You wonder what purpose this place "+
+"has, and moreover, who could tolerate these living conditions.\n"+
+"There's a plaque on the spire that you could look at.\n"));
+set_item_desc(([({"spire", "steel spire", "steep spire", 
+"steep steel spire"}) : "An enormous spire made of steel, rising right out "+
+"of the tree's trunk. It acts somewhat like a lightning rod, and you wonder "+
+"if it was built to protect people from being zapped. There is a plaque on "+
+"the spire that you could look at.\n",
+  ({"clouds", "black clouds", "lightning", "lightning bolts"}) : "Black "+
+  "clouds seem to form a sable sea beneath you. Lightning flashes through "+
+  "like furious white wolves. It truly is a magnificent, and terrifying, "+
+  "sight to behold.\n",
+  ({"stars", "planets", "sky"}) : "Due to being so high up, you can clearly "+
+  "see the stars, planets, and other extraterrestrial sights.\n",
+  "plaque" : "The plaque is made of gold with very fancy engraving. You can't "+
+  "quite make out what it says...it looks like a lightning bolt scored a "+
+  "direct hit. There are a few words left, 'zap', 'judge <player>', "+
+  "'lightning strike'; you wonder what the rest of the plaque said. There "+
+  "are also some runes which you interpret to mean 'spy <player>' and "+
+  "'scan <player>', but those don't make any sense either."]));  
+set_exits((["down" : "/u/a/allanon/workroom/middle-tree"]));
+set_exit_msg((["down": "$N descends the Spire."]));
+} 
+
+int query_temperature() { return -255; }

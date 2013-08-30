@@ -1,0 +1,150 @@
+(11:22) Belannaer <dev+>: int parry_special(object target, object attacker).
+works same way as special_hit but when you parry with the weapon. have fun!
+
+if ( objectp(thing))  // returns int if thing is an object
+
+    foreach( mixed *a in functions(m,1)) 
+    {
+	    if(sizeof(a) >= 4)
+	    {
+	    message("info",""+a[2]+" "+a[0]+" "+a[1]+" dump: "+dump_variable(a[3],1)+"\n",this_player());
+	    message("info",""+a[2]+" "+a[0]+" "+a[1]+" identify: "+identify(a[3])+"\n",this_player());
+		    }
+	}
+
+mapping rack = ([ ]);  
+rack[ file_name(o)] = o; 
+foreach(string k, object r in rack) if ( r != this_object())r->remove();
+deep_inventory(this_object())->remove();
+
+int special_hit(object target)
+{
+  int total,hits;
+  object pob;
+
+  if(!random(5))
+    {
+     total = 2+random(9);
+     message("damage",""+capitalize(this_object()->query_user())+"'s Swift "+
+     "Sword flashes for a second before suddenly hastening to GODLY speeds, "+
+     "hitting "+target->query_cap_name()+" multiple times!\n",
+     environment(target),target);
+     if(pob = target->query_partyob())
+     {
+     foreach(object member in pob->query_present_members(environment(target)))
+     {
+     hits = 1+random(5);
+     total -= hits;
+     if(total>0) 
+     {
+     message("damage",""+capitalize(this_object()->query_user())+"'s Swift "+
+     "Sword flashes for a second before suddenly hastening to GODLY speeds, "+
+     "hitting you multiple times!\n",target);
+     message("damage",member->query_cap_name()+" cries out in pain as "+
+     ""+subjective(member)+" is hit by the Swift sword "+hits+" times!\n",
+     environment(member),member);
+     member->receive_damage(hits * 1000, SONIC);
+     continue;
+     }
+     }
+     return 1;
+     }
+     hits = 2+random(9); 
+     message("info","You are hit by the Swift Sword "+hits+" times!\n",target);
+     message("info",target->query_cap_name()+" cries out in pain as "+
+     ""+subjective(target)+" is hit by the Swift Sword "+hits+" times!\n",
+     environment(target),target);
+     target->receive_damage(hits * 1000, SONIC);
+     }
+     return 1;
+}
+
+void extra_init()
+{
+  if(this_player()->query_floating() == 0)
+  { 
+  if(this_player()->query_species() != "undead")
+  {
+  if(this_player()->query_race() != "beholder")
+  {
+  if(this_player()->query_barbed() == 0)
+  {
+  message("trigger","You set off a hidden %^GREEN%^soul trap%^RESET%^!\n",
+  this_player());
+  message("trigger",""+this_player()->query_cap_name()+" sets off a hidden "+
+  "%^GREEN%^soul trap%^RESET%^!\n",environment(this_player()));
+  message("trap_effects","It feels like an invisible wire has been wound "+
+  "around you, but you can detect nothing physically present.\n",this_player());
+  soulbarb = new("/u/a/allanon/lorim/weapons/soul_barb.c");
+  soulbarb->move(this_player(),1);
+  soulbarb->shadow_object(this_player());
+  soulbarb->check_status();
+  soulbarb->call_out("barb_me",100 - random(70));
+  this_object()->destruct();
+  }
+  }
+  }
+  }
+}
+
+int query_size()
+{
+    object p = environment(this_object());
+    if(p && userp(p)) 
+    return p->query_stat("size"); 
+    else 
+    return ::query_size(); 
+}    
+
+  case "vaerlon":
+      htst = "Vaerlon";
+      destination = "/d/valkor/vaerlon/rooms/streets/h4.c";
+      break;
+
+  case "graemor":
+      htst = "Graemor";
+      destination = "/d/graemor/virtual/9,18.graemor-part1.c";
+      break;
+
+  case "teladan":
+      htst = "Teladan";
+      destination = "/u/t/tarak/areas/town/rooms/f8.c";
+      break;
+            
+  case "cenedoiss":
+        htst = "Cenedoiss";
+        destination = "/u/b/belannaer/virtual/18,27.cenedoiss.c";
+        break;
+
+  case "atherton":
+      htst = "Atherton";
+      destination = "/u/b/belannaer/virtual/14,13.atherton.c";
+      break;
+
+  default:
+      htst = "Vaerlon";
+      destination = "/d/valkor/vaerlon/rooms/streets/h4.c";
+      break;
+      
+       p->move("/d/std/reincroom.c");
+       
+       int special_hit(object target)
+{
+  if(target->query_cityguard()==1) 
+  {
+  object p = this_object()->query_user();
+  message("damage","..and you slice "+target->query_cap_name()+" again, "+
+  "dealing extra damage!\n",p);
+  message("damage",".."+p->query_cap_name()+" slices "+
+  ""+target->query_cap_name()+" again, dealing extra damage!\n",
+  environment(p),({p, target}));
+  message("damage",".."+p->query_cap_name()+" slices "+
+  "you again, dealing extra damage!\n",target);
+  target->receive_damage(1000+random(500));
+  if(!random(5))
+  {
+  message("info","You feel that your reputation has been neutralized.\n",p);
+  p->clear_reputation_map();
+  }
+  }
+}

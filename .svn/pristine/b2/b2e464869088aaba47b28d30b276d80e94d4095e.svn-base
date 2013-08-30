@@ -1,0 +1,15 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "Allanon's toybox" );
+  set_long(wrap("This is Allanon's toybox. There is a chest on the floor that "+
+  "contains many toys and gadgets. Other than that, the room is barren.\n"));
+  add_object("/u/a/allanon/workroom/gt_chest.c");
+  set_exits(([
+           "out"  : "/u/a/allanon/workroom/connector",
+           "armoury" : "/u/a/allanon/workroom/armoury",
+           "weaponry" : "/u/a/allanon/workroom/weaponry"]) );
+}

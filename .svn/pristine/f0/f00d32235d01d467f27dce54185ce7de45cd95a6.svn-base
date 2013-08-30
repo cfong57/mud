@@ -1,0 +1,50 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int dirmap_command(string cmd)
+{
+  string *tmp;
+  mapping themap = ([]);
+  int i = 0;
+  if(cmd)
+  {
+    tmp = get_dir(cmd);
+    if(sizeof(tmp))
+    {
+      foreach(string file in tmp)
+      {
+        //object ob;     if we wanted to do stuff with the files
+        //ob = load_object(cmd + file);
+        themap[i] = file;
+        i++;
+      }
+      write_file("/u/a/allanon/logs/temp_log", ""+identify(themap)+"", 1);
+      message("info","Succeeded at mapping "+cmd+".\n",this_player());
+    }
+    else
+    {
+      message("info","Huh, failed to load directory.\n",this_player());	  
+    }
+    return 1;
+  }
+  return notify_fail("Usage: 'dirmap <directory>'.\n");
+}
+
+void extra_init()
+{
+  add_action("dirmap_command","dirmap");
+}
+
+void extra_create()
+{
+  set_short("The Mapper(tm)");
+  set_long(wrap("This object is used to generate a mapping of every file in a "+
+  "given directory. It doesn't work for the world map because 99.9% of those "+
+  "rooms are virtual. Note that this will only work on directories that you "+
+  "would normally have access to anyway.\n"));
+  set_name("the mapper");
+  set_id( ({ "the mapper", "mapper" }) );
+  set_mass(1);
+  set_bulk(1);
+}

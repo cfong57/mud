@@ -1,0 +1,82 @@
+#include <mudlib.h>
+#include <damage.h>
+
+inherit MONSTER;
+
+string type;
+string colour;
+string adj;
+
+void extra_create()
+{
+  switch(random(3))
+   {
+	case 0:
+	 type = "slime";
+	 colour = "orange";
+	 adj = "large";
+	 set_level(9);
+	break;
+	case 1:
+	 type = "ooze";
+	 colour = "green";
+	 adj = "bloated";
+	 set_level(12);
+	break;
+	case 2:
+	 type = "flan";
+	 colour = "red";
+	 adj = "small";
+	 set_level(5);
+	break;
+   }
+
+  if(!random(4))
+   {
+	if(random(2))
+	 adj = "angered";
+	else
+	 adj = "furious";
+
+	set_aggressive(1);
+   }
+
+  set_short(adj+", "+colour+" "+type);
+  set_long(wrap("Before you is "+article(adj)+" "+adj+" glob of "+colour+" "+type+". It wiggles and "+
+  "slides around slowly, leaving a trail of sticky slime behind it. You can "+
+  "detect no visible arms on it, and you wonder how it manages to survive. "+
+  "Then you notice that its jellylike body can be transformed into any shape "+
+  "it desires, including tiny arms or legs. It has two large, black eyelike "+
+  "slits that you can distinguish from the rest of its body.\n"));
+  set_name(colour+" "+type);
+  set_id(({colour+" "+type, type}));
+  set_friends( ({"/u/a/allanon/areas/caverns_of_slime/mon/slime"}) );
+  set_friend_message(query_cap_name()+" is distressed by you attacking its fellow slime!");
+  set_species("monster");
+  set_race("slime");
+  set_body_parts(({"body", 100, 1, "body"}));
+  set_stat("size",60);
+  set_gender("neuter");
+  set_skin_data("type", "none");
+  set_resistance("acid",30+query_level()*3);
+  add_treasure(10+random(query_level()*2));
+  set_following(0);
+  add_natural_weapon( "oozy tentacle", "bludgeoning",1);
+  set_hand_priorities(({"oozy tentacle"}));
+}
+
+int special_hit(object target)
+{
+  if(!random(15) && target)
+   {
+    message("damage",capitalize(colour)+" "+type+" squirts a strange fluid, hitting "+
+                     target->query_cap_name()+" with acid!\n",environment(target),target);
+    message("damage",capitalize(colour)+" "+type+" squirts a strange fluid, hitting "+
+                     "you with acid!\n",target);
+    target->receive_damage(35+random(10), ACID);
+    return 1;
+   }
+
+
+ return 1;
+}

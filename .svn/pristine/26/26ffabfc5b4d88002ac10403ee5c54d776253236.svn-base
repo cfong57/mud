@@ -1,0 +1,100 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int dirmap_command(string cmd)
+{
+  string *tmp;
+  mapping themap = ([]);
+  int i = 0;
+  if(cmd)
+  {
+    tmp = get_dir(cmd);
+    if(sizeof(tmp))
+    {
+      foreach(string file in tmp)
+      {
+        //object ob;     if we wanted to do stuff with the files
+        //ob = load_object(cmd + file);
+        themap[i] = file;
+        i++;
+      }
+      //write_file("/u/a/allanon/logs/temp_log", ""+identify(themap)+"", 1);
+      message("info","Succeeded at mapping "+cmd+".\n",this_player());
+    }
+    else
+    {
+      message("info","Huh, failed to load directory.\n",this_player());	  
+    }
+    return 1;
+  }
+  return notify_fail("Usage: 'dirmap <directory>'.\n");
+}
+
+int worldmap_command(string cmd)
+{
+  //1600 x 1200 = 1920000
+  object room;
+  int x;
+  int y;
+  if(cmd)
+  {
+	sscanf(cmd,"%d %d",x,y);
+	if(x >= 0 && y >= 0)
+	{
+	  for(int i = y; i < y + 10; i++)
+      {
+        for(int j = x; j < x + 10; j++)
+        {
+	      room = load_object(sprintf("/d/world/rooms/%d,%d.world",j,i));
+          if(!room)
+          {       
+            ;//message("info","Failed to find a room at "+j+","+i+".\n",
+            //this_player());  spammy, only need for debugging
+          }
+          else
+          {
+            if(room->query_outside() == "?")
+            {
+	          //message("info",""+identify(room->query_coordinates())+" "+
+	          //""+room->query_outside()+" ",
+	          //this_player());    more debugging
+	          write_file("/u/a/allanon/logs/temp_log", 
+	          ""+identify(room->query_coordinates())+"\n");
+            }
+          }
+        }
+      }
+      message("info","Finished mapping 10x10 world map starting at "+
+      ""+x+","+y+".\n",this_player());
+    }
+    else
+    {
+	  message("info","Failed to get a positive x and/or y.\n",this_player());   
+    }
+    return 1;
+  }
+  return notify_fail("Usage: 'worldmap <x> <y>'.\n");
+}
+
+void extra_init()
+{
+  add_action("dirmap_command","dirmap");
+  add_action("worldmap_command","worldmap");
+}
+
+void extra_create()
+{
+  set_short("The Mapper(tm)");
+  set_long(wrap("This object is used to generate a mapping of every file in a "+
+  "given directory. It doesn't work for the world map because 99.9% of those "+
+  "rooms are virtual. Note that this will only work on directories that you "+
+  "would normally have access to anyway. Command is 'dirmap <directory>.\n"+
+  "There is also experimental 'worldmap <x> <y>' command which attempts to "+
+  "generate coordinates of '?' on the world map, scanning a 10x10 block "+
+  "starting at x,y.\n"));
+  set_name("the mapper");
+  set_id( ({ "the mapper", "mapper" }) );
+  set_mass(1);
+  set_bulk(1);
+}

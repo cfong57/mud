@@ -1,0 +1,134 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit ROOM;
+
+//"category" : (["owner1" : ({thing1, thing2, ...})])
+mapping foyer = ([]);
+mapping items = ([]);
+mapping hats = ([]);
+mapping weapons = ([]);
+mapping shields = ([]);
+mapping armours = ([]);
+
+mapping contents = (["foyer" : foyer, "items" : items, "hats" : hats, 
+"weapons" : weapons, "shields" : shields, "armours" : armours]);
+
+object *things = ({}); //temp array of objects
+
+string query_mapping_contents(string category) //for debug
+{
+  if(category == "all")
+  {
+	return identify(contents);
+  }
+  else
+  {
+    return identify(contents[category]);		
+  }
+}
+
+string query_contents(string category) //actual function to be used in-game
+{
+  string returnme = "";
+  foreach(string owner in keys(contents[category]))
+  {
+	returnme += ""+capitalize(owner)+"'s things:\n";
+    foreach(object ob in contents[category][owner])
+    {
+	  returnme += ""+capitalize(ob->query_short())+"\n";  
+    }
+  }
+  return returnme;	
+}
+
+int check_for_stuff(string category, string owner)
+{
+  //iterate through the owners already in the mapping. if owner is already in
+  //the mapping, get owner's already-stored stuff and add to things array.
+  int returnme = 0;
+  foreach(string x in keys(contents[category]))
+  {
+    if(x == owner)
+    {
+	  things = contents[category][owner];
+	  returnme = 1;
+    }	  
+  }
+  return returnme;
+}
+
+void add_thing(string category, string owner, object thing)
+{
+  things = ({}); //reset things array
+  check_for_stuff(category, owner);
+  things += ({thing}); //add newest thing to things array
+  //overwrite previous value with new things array
+  contents[category][owner] = things;
+}
+
+int remove_thing(string category, object owner, string thing)
+{
+  int returnme = 0;
+  string name = owner->query_name();
+  //check if player actually has stuff stored
+  if(check_for_stuff(category, name))
+  {
+	if(thing == "all")
+	{
+	  //move all the things, then delete the owner and stuff from mapping
+      foreach(object ob in contents[category][name])
+      {
+	    ob->move(owner, 1);
+	    map_delete(contents[category], name);
+      }
+      returnme = 1;
+    }
+    else
+    {
+	  //get just 1 thing, referenced by either id or short desc
+	  //iterate through object array of owner's stuff
+	  //stop when found the object, or reached end of the array
+      int max = sizeof(contents[category][name]);
+      int index = 0;
+      for(int quit = 0; quit == 0; index++)
+      {
+        if(index < max)
+        {
+          if(contents[category][name][index]->id(thing) ||
+          contents[category][name][index]->query_short() == thing)
+          {        
+	        contents[category][name][index]->move(owner, 1);
+	        contents[category][name] -= contents[category][name][index];
+            quit++;
+            returnme = 1;
+          }
+        }
+        else
+        {
+          quit++;
+        }
+      }	   
+    }
+  }
+  return returnme;
+}
+
+int clean_up(int inh) 
+{ 
+  return 1; 
+}
+
+void reset() 
+{ 
+  return; 
+}
+
+void extra_create()
+{
+  seteuid(getuid());
+  set_short("Storeroom of Wildcat Cafe");
+  set_long(wrap("This is the room where objects are stored during player's "+
+  "adventures in Wildcat Cafe. Don't touch anything.\n"));
+  ::reset();
+}

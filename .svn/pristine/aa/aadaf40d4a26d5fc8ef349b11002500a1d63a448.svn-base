@@ -1,0 +1,139 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit ROOM;
+
+int dug = 0;
+object mole;
+
+int dig_command(string cmd)
+{
+  if ( cmd == "grass" ) {
+    if (!this_player()->query_battleob()) {
+      if (present("shovel", this_player())) {
+        //don't check for ep. let players exhaust themselves if they want.      
+        switch (dug)
+        { 
+        case 0:
+        message("info", "You dig the grass a bit, but only manage to unearth "+
+        "some disgruntled grubs.\n", this_player());
+        message("info", ""+this_player()->query_cap_name()+" digs at the "+
+        "grass a bit, but only unearths some disgruntled grubs.\n",
+        environment(this_player()), this_player());
+        this_player()->set_ep(this_player()->query_ep() - 15);
+        dug = 1;
+        break;
+        case 1:
+        message("info", "You dig the grass a bit, and manage to make some "+
+        "sizable divots before you stop to take a breath.\n", this_player());
+        message("info", ""+this_player()->query_cap_name()+" digs at the "+
+        "grass some more, and makes some sizable divots before taking a "+
+        "break.\n", environment(this_player()), this_player());
+        this_player()->set_ep(this_player()->query_ep() - 25);
+        dug = 2;
+        break;
+        case 2:
+        message("info", "You dig the grass with gusto, and accidentally hit "+
+        "a mole in the back!\n", this_player());
+        message("info", ""+this_player()->query_cap_name()+" digs the grass "+
+        "with gusto, and accidentally hits a mole in the back!\n",
+        environment(this_player()), this_player());
+        this_player()->set_ep(this_player()->query_ep() - 35);
+        mole = new("/u/a/allanon/areas/lumber_camp/mon/mole.c");
+        mole->move(this_object(), 1);
+        message("damage", "Mole opens its mouth in TORMENT but no sound "+
+        "comes out!\n", environment(this_player()));
+        mole->set_hp(1);
+        mole->kill_ob(this_player());
+        dug = 3;
+        break;
+        case 3:
+        message("info", "You dig the grass with vigor, and finally discover "+
+        "an iron ring set into a trapdoor! You grasp the ring firmly and tug "+
+        "mightily. With a rusty squeal of protest, the trapdoor opens. You "+
+        "can hear the sound of running water below.\n", this_player());
+        message("info", ""+this_player()->query_cap_name()+" digs the grass "+
+        "with vigor, and finally discovers something buried in the dirt. It "+
+        "looks like an iron ring. "+this_player()->query_cap_name()+" pulls "+
+        "on the ring with a strong tug, and uncovers a hidden trapdoor "+
+        "leading downwards! You hear the sound of rushing water coming from "+
+        "below.\n", environment(this_player()), this_player());
+        this_player()->set_ep(this_player()->query_ep() - 50);
+        set_long(wrap("The lumberjack camp has been built around a large, but "+
+        "rapidly-shrinking strand of trees. Goblin lumberjacks work hard to "+
+        "eliminate these last few stragglers before they turn their attention "+
+        "to the outlying trees. You almost feel sorry for those poor trees, "+
+        "they are surrounded by axes on all sides and have no chance of "+
+        "salvation. There's a rather large hole in the ground, with a "+
+        "trapdoor leading down. Clods of earth and grass surround the hole..."+
+        "it seems someone has dug here with a shovel.\n"));
+        set_item_desc(([
+        ({"strand of trees", "strand", "trees"}) : "A circular ring of trees, "+
+        "encompassing a massive oak. Goblins work frantically to chop down "+
+        "the trees, but you wonder at their eagerness to work. The oak looks "+
+        "really old and you feel a bit bad as you watch the goblins try to "+
+        "cut down such a majestic tree.\n",
+        "oak" : "A majestic oak tree, easily over a hundred years old. You "+
+        "feel a twinge of guilt watching its approaching doom.\n", 
+        ({ "large hole", "hole", "ground", "clods", "earth", "grass", 
+        "trapdoor"}) : 
+        "A large hole has been dug here with a shovel. The leftover dirt "+
+        "and grass is scattered around the hole. Inside the hole, a hidden "+
+        "trapdoor gapes open, inviting you down into the impenetrable "+
+        "darkness.\n"]));  
+        set_sounds(95 + (random(55)), ({ 
+        "The trapdoor is a bit frightening yet at the same time you feel an "+
+        "urge to go down and explore the hidden room below.\n",
+        "The goblins cheer as another tree from the strand is felled.\n"}) ); 
+        add_exit("trapdoor", "/u/a/allanon/areas/lumber_camp/rooms/river.c");
+        dug = 4;
+        break;
+        case 4:
+        message("info", "There is nothing to dig up anymore.\n", this_player());
+        break;
+        }
+      } else {
+        message("info", "You have no shovel to dig with!\n", this_player());   
+      }
+    } else {
+      message("info", "You are too busy fighting to do that!\n", this_player());
+    }
+    return 1;
+  }
+  return notify_fail("Usage: dig <hole | grave | for worms>\n");
+}  
+
+void extra_init() 
+{ 
+  add_action("dig_command", "dig");  
+} 
+
+void extra_create()
+{
+  set_outside("p"); 
+  set_outdoors("p");
+  set_short( "A dwindling strand of trees" );
+  set_long(wrap("The lumberjack camp has been built around a large, but "+
+  "rapidly-shrinking strand of trees. Goblin lumberjacks work hard to "+
+  "eliminate these last few stragglers before they turn their attention to "+
+  "the outlying trees. You almost feel sorry for those poor trees, they are "+
+  "surrounded by axes on all sides and have no chance of salvation. You note "+
+  "with curiosity that there's a very square-shaped patch of grass growing "+
+  "here...there is no other vegetation to be found anywhere in the camp.\n"));
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/goblins.c");
+  add_monster("/u/a/allanon/areas/lumber_camp/mon/goblins.c");
+  set_item_desc(([
+  ({"strand of trees", "strand", "trees"}) : "A circular ring of trees, "+
+  "encompassing a massive oak. Goblins work frantically to chop down the "+
+  "trees, but you wonder at their eagerness to work. The oak looks really "+
+  "old and you feel a bit bad as you watch the goblins try to cut down "+
+  "such a majestic tree.\n", 
+  ({ "patch of grass", "grass", "patch", "square"}) : "The grass has grown in "+
+  "almost a perfect square pattern. The ground on which it is growing is very "+
+  "soft and you wonder if maybe something was buried here. Maybe you could "+
+  "dig the grass with a shovel to test your hunch?\n"]));  
+  set_sounds(95 + (random(55)), ({ 
+  "The square patch of grass piques your curiosity.\n",
+  "The goblins cheer as another tree from the strand is felled.\n"}) ); 
+  set_exits((["south" : "/u/a/allanon/areas/lumber_camp/rooms/g2.c"]));
+}

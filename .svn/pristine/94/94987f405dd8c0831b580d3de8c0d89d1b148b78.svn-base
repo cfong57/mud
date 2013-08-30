@@ -1,0 +1,16 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit OBJECT;
+
+void extra_create() 
+{
+  call_out("make_mushroom", 0); //won't trigger when object is loaded
+}
+
+void make_mushroom()
+{
+  object mushroom = new("/u/b/belannaer/mushrooms/fly_agaric.c");
+  mushroom->move(environment(this_object()),1);
+  this_object()->remove();
+}

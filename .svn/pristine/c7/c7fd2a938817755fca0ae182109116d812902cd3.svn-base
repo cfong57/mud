@@ -1,0 +1,55 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+#define OFFICE "/u/c/cutter/areas/locker_office/locker_office.c"
+
+int has_locker(object player)
+{
+	/*  doesn't exist yet that I know of, so just return 1 and assume they do
+  if(player->has_locker())
+  {
+    return 1;	  
+  }
+  else
+  {
+    return 0;	  
+  }
+  */
+  return 1;
+}
+
+int apply_command(string cmd)
+{ 
+  if (this_object()->id(cmd) && environment(this_player()) = OFFICE &&
+  has_locker(this_player()))
+  {
+	message("info","You successfully redeem the coupon and increase the "+
+	"rental time of your locker by 1 year.\n",this_player());
+	mapping money = this_player()->query_wealth();
+	int mithril = money["mithril"];
+	money["mithril"] += 1095; //enough for a year of a large locker
+	environment(this_player())->pay_locker(365);
+	money["mithril"] = mithril;
+	return 1;
+  }
+}
+
+void extra_init()
+{
+  add_action("apply_command","apply");
+}
+
+void extra_create()
+{
+  set_short("Locker coupon for a year's rent");
+  set_long(wrap("This is an important-looking piece of paper stamped with the "+
+  "seal of the Vaerlon locker office. Reading it tells you that the bearer "+
+  "can 'apply' it in the locker office and receive a year's worth of credit "+
+  "towards their locker rent.\n"));
+  set_name("locker coupon");
+  set_id( ({ "locker coupon", "coupon" }) );
+  set_mass(1);
+  set_bulk(1);
+  set_value(0);
+}

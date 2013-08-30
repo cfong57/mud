@@ -1,0 +1,105 @@
+/* this monster is much more complex than the previous monsters you saw.
+
+   It could be an NPC with a quest, for example. Don't be scared of the
+   complexity of this monster, it is not that hard after all :)
+*/
+
+#include <mudlib.h>
+
+inherit MONSTER;
+
+int start_running();
+int stop_running();
+
+void extra_create()
+{
+  set_short("A very smart little orc"); 
+  set_long(
+      wrap("This is little orc-san is very wise, and fast too. "+
+	   "You should definetely greet him.\n"));
+
+  set_name("orc");
+  set_id( ({ "orc", "smart orc", "little orc", "smart litle orc"}) );
+  set_level(8);
+  set_species("humanoid"); 
+  set_race("orc");
+  set_stat("size",160); 
+  set_gender("male");
+
+  add_random_armour("random_random_boots",2);
+  add_random_armour("leather_random_random",3);
+  add_random_armour("copper_plate mail_gloves");
+  add_random_weapon("random_rssword",2); /* rssword -> Random Small Sword */
+
+  set_chat_chance(3); /* sets the chance for random chats, use values between
+			 2-10 (smaller = more rare) */
+  set_chat_output( ({ 
+    "Smart orc says: Very hurry, I'm in a hurry!\n",
+      "Smart orc hops around.\n" }) );
+
+  set_inquiry(
+	      ([
+		"$GREET" : "Greetings, $TPQCN! It's pretty boring in here. I could use a shovel tough. Also you can ask me about running if you feel like it.",
+
+		"running" : "Yes, I run around this place.. very much in "+
+		"hurry. If you want to, you can order me to stop or start "+
+		"again.\n"
+		]) );
+
+  set_say_triggers(
+		   ([ /* only accept stop! and start! 
+			 (: foo :) are function pointers,
+			 instead of saying stuff we execute the
+			 function */
+		     "^stop!$" : (: stop_running :), 
+		     "^start!$" : (: start_running :)
+		    ]) );
+
+  set_speed(30); /* moves every 30 seconds, remember to add some +random()
+		    if you have multiple monsters, otherwise they all move
+		    in the same time, which looks very stupid */
+
+  /* if set_patrol_route() is not set, the monster moves around randomly.
+     Remember to use set_forbidden_rooms() in such cases to prevent
+     it leaving your area!
+  */
+
+
+  /* still remember the room where you needed a torch to move forward?
+     Well, this guy needs it too :) */
+  add_object("/obj/torch");
+}
+
+/* the say triggers */
+
+int start_running()
+{
+  if(query_speed()) /* we are running now */
+    command("say I'm already running!");
+  else
+    {
+      command("say Ok, I'll start running now.");
+      set_speed(30);
+      call_out("move_around",query_speed()); 
+      /* call_out() is used to excecute functions with delay.
+	 This call_out() calls move_around() function after 30 seconds.
+      */
+    }
+    
+  return 1;
+}
+
+int stop_running()
+{
+  if(!query_speed()) /* we are not running now */
+    command("say But I'm not running at right now.");
+  else
+    {
+      command("say Ok, I'll stop running now.");
+      set_speed(0);
+      remove_call_out("move_around"); /* we have to remove the current
+					 call_out() */
+    }
+
+  return 1;
+}

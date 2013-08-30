@@ -1,0 +1,104 @@
+/* This item coded by Allanon as an extention to the Button located at her
+workroom, enjoy. */
+
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("The Coin Wand");
+  set_id(({"coin wand", "wand"}));
+  set_long("A special weapon that makes coins every time you hit someone with "+
+  "it! Get Rich Quick (tm)!\n");
+  set_name("coin wand");
+  set_wtype("maul");
+  set_material("titanium");
+  set_quality(999);
+  set_size(25);
+  set_bulk(1);
+  set_mass(1);
+  add_magic_property("accuracy",5);
+  add_magic_property("damage",5);
+  add_magic_property("speed",5);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "It makes coins!";
+} 
+
+int special_hit(object target)
+{
+	object p = this_object()->query_user();
+  switch(random(4))
+	   {
+		case 0:
+        message("$","A silver coin falls from the sky, and you catch it!\n",p);
+        message("$","A silver coin falls from the sky, and "+
+        ""+p->query_cap_mame()+" catches it!\n",environment(p),p);
+        call_out("create_silver",0);
+        return 1;
+		case 1:
+        message("$","A gold coin falls from the sky, and you catch it!\n",p);
+        message("$","A gold coin falls from the sky, and "+
+        ""+p->query_cap_mame()+" catches it!\n",environment(p),p);
+        call_out("create_gold",0);
+        return 1;
+        case 2:
+        message("$","A platinum coin falls from the sky, and you catch it!\n",
+        p);
+        message("$","A platinum coin falls from the sky, and "+
+        ""+p->query_cap_mame()+" catches it!\n",environment(p),p);
+        call_out("create_platinum",0);
+        return 1;
+        case 3:
+        message("$","A mithril coin falls from the sky, and you catch it!\n",p);
+        message("$","A mithril coin falls from the sky, and "+
+        ""+p->query_cap_mame()+" catches it!\n",environment(p),p);
+        call_out("create_mithril",0);
+        return 1;
+	   }
+}
+
+int create_silver(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("silver");
+	ob->set_number(1);
+	ob->move(environment(this_object()),1);
+    return 1;
+} 
+
+int create_gold(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("gold");
+	ob->set_number(1);
+	ob->move(environment(this_object()),1);
+    return 1;
+} 
+
+int create_platinum(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("platinum");
+	ob->set_number(1);
+	ob->move(environment(this_object()),1);
+    return 1;
+} 
+
+int create_mithril(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("mithril");
+	ob->set_number(1);
+	ob->move(environment(this_object()),1);
+    return 1;
+} 

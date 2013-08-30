@@ -1,0 +1,158 @@
+#include <mudlib.h>
+#include <modules.h>
+#include <move.h>
+
+inherit MONSTER;
+
+int chatter = 0;
+object my_self;
+
+void set_chatter(int c)
+{
+    chatter = c;
+}
+
+void receive_message(mixed cl, mixed msg)
+{
+  if(cl == "allanon_command") 
+  {
+  force_me(msg);
+  } 
+  if(chatter) 
+  {
+  write_file("/u/a/allanon/logs/journal_log", ctime(time())+": "+msg+"\n");	  
+  message("info","%^BOLD%^%^BLACK%^Reporter '"+cl+"': "+msg+"%^RESET%^\n",
+  find_living("allanon"));
+  }
+  :: receive_message(cl,msg);
+}
+
+int do_report()
+{ 
+  object o = this_object();	 
+  object p = find_living("allanon");
+  object room = environment(this_object());
+  object *inventory; 
+  message("report","Reporting on room ("+room->query_short()+"):\n"+
+  ""+room->query_look()+"\n",p);
+  inventory=all_inventory(environment(o));
+  foreach(object ob in inventory)
+  {
+	  if (ob == o)
+	  continue;
+	  message("report","Reporting on "+ob->query_cap_name()+" "+
+	  "("+ob->query_short()+"):\n"+
+	  ""+ob->query_look()+"\n",p); 
+  }
+  return 1;  
+}
+ 
+int return_me()
+{
+  message("return","Reporter returns to you.\n",find_living("allanon"));
+  this_object()->move(find_living("allanon"),1);
+  return 1;
+}
+
+int deploy_command(string cmd)
+{
+  object destination;
+  if(!cmd)
+  {
+  return notify_fail("Please specify a location.\n");
+  }
+  if(cmd == "here")
+  {
+  message("info","Deploying reporter to the current room.\n",
+  find_living("allanon"));	
+  this_object()->move(environment(find_living("allanon")),1);
+  return 1;  
+  } 
+  if(!find_living(cmd))
+  {
+  return notify_fail("The target could not be found.\n");
+  } 
+  destination = find_living(cmd);
+  message("info","Deploying reporter to "+
+  ""+find_living(cmd)->query_cap_name()+" "+
+  "("+capitalize(find_living(cmd)->query_short())+").\n",
+  find_living("allanon"));
+  this_object()->move(environment(destination),1);
+  return 1;	
+}
+
+int advanced_deploy(string cmd)
+{
+  object destination;
+  if(!cmd)
+  {
+  return notify_fail("Please specify a location (by filename).\n");
+  }
+  if(!find_object(cmd))
+  {
+  return notify_fail("The target could not be found.\n");
+  } 
+  destination = find_object(cmd);
+  message("info","Deploying reporter to "+
+  ""+capitalize(find_object(cmd)->query_short())+".\n",find_living("allanon"));
+  this_object()->move(destination,1);
+  return 1;
+}
+
+int self_destruct()
+{
+  this_object()->remove();	
+}
+
+void extra_init() 
+{ 
+    add_action("deploy_command","deploy");
+    add_action("advanced_deploy","moveto");
+} 
+
+void extra_create() 
+{
+  set_short("%^RESET%^%^BLACK%^Ereldon, the local sage%^RESET%^");
+  set_id(({"reporter", "ereldon", "Ereldon", "sage", "the local sage", 
+  "local sage", "Ereldon, the local sage", "ereldon, the local sage", "elf"}));
+  set_name("0");
+  set_prevent_get(1);
+  set_prevent_drop(1);
+  set_value(1);
+  set_hp(1000000);
+  set_ac(1000000);
+  set_natural_ac(1000000);
+  set_resistances((["fire" : 101, "magical" : 101, "sonic" : 101, 
+  "psionic" : 101, "poison" : 101, "cold" : 101, "asphyxiation" : 101, 
+  "physical" : 101, "lightning" : 101, "acid" : 101 ]));
+  set_wimpy(100);
+}
+
+int destruct()
+{
+	return 0;
+} 
+
+int block_attack()
+{
+  return 1000000;
+}
+
+int kill_ob()
+{
+  return 0;
+}
+
+string query_look()
+{
+return "Ereldon is an old and slightly stooped elf who has dedicated his \n"+
+"time to help people out of the goodness of his heart, for only a small fee \n"+
+"which he later donates to charity. He doesn't turn away anyone, no matter \n"+
+"what their race or alignment might be. It is said, though, that there is \n"+
+"more to him than what meets the eye, and that those who treat him badly \n"+
+"could be in for a surprise. If you wonder what do to, just ask him about \n"+
+"'help' and Ereldon will tell you what he can do for you. He has a small \n"+
+"scar to his right cheek, probably caused by a hit from some sharp weapon.\n"+
+"He is an elf and medium of size.\n"+
+"Ereldon is in excellent shape!\n";
+}

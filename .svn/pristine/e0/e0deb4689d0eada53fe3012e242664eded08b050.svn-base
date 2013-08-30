@@ -1,0 +1,19 @@
+#include <mudlib.h>  
+
+inherit SHADOW; 
+
+int query_power()
+{
+  return shadowed_object()->power;	
+}
+
+/*
+varargs int receive_damage(int damage, int type, string slot, int precalculated)
+{
+  if (slot == "hand")
+  {
+    message("success","Hit shadowed object for "+damage+" of "+type+" in "+
+    ""+slot+".\n",environment(shadowed_object()));
+  }
+  shadowed_object()->receive_damage(damage, type, slot, precalculated);	  
+}*/

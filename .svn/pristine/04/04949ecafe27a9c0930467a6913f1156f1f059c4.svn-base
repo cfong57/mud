@@ -1,0 +1,64 @@
+/*Abusable item coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit ARMOR;
+
+void extra_create() 
+{
+  set_identified(1);
+  set_short("The Reinc Ring");
+  set_long(wrap("This unique ring takes you to /d/std/reincroom.c when you "+
+  "wear it. In other words...it lets you reinc yourself for free, and no exp "+
+  "or df loss! Wizards and other immortals use these when they can't "+
+  "remember the filename of the reinc room.\n"));
+  set_id(({"reinc ring", "ring"}));
+  set_name("Reinc Ring");
+  set_slots(({"finger"}));
+  set_material("gold");
+  set_type("full plate");
+  set_type_desc("ring");
+  set_quality(999);
+  set_size(175);
+  set_wear_func("wear_me");
+  armour_setup();
+}
+
+string query_special_feature() 
+{ 
+return "This ring reincs you when you wear it.";
+} 
+
+int wear_me()
+{
+  object p = this_player();
+  message("wear","You wear the Reinc Ring. Suddenly the room begins to "+
+  "spin, and you close your eyes...\n",p);
+  message("wear",""+p->query_cap_name()+" wears "+possessive(p)+" Reinc Ring. "+
+  "The air around "+objective(p)+" starts to distort, and suddenly in the "+
+  "blink of an eye "+subjective(p)+" disappears.\n",environment(p),p);
+  p->move("/d/std/reincroom.c");
+  message("move","You open your eyes and find yourself Elsewhere.\n",p);
+  call_out("destruct_me",5);
+  return 1;
+}
+
+void destruct_me()
+{
+  object p = this_player();
+  message("destruct","Your Reinc Ring gives off a bright pulse of light and "+
+  "slowly fades away to nothingness.\n",p);
+  message("destruct",""+p->query_cap_name()+"'s Reinc Ring gives off a bright "+
+  "pulse of light and slowly fades away to nothingness.\n",environment(p),p);
+  this_object()->remove();
+}
+
+int query_size()
+{
+    object p = environment(this_object());
+    if(p && userp(p)) 
+    return p->query_stat("size"); 
+    else 
+    return ::query_size(); 
+}    

@@ -1,0 +1,154 @@
+/*Most people will get a laugh out of this. Coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+
+inherit OBJECT;
+
+object mon;
+int check = 0;
+int wet = 0;
+
+int smack_command(string cmd)
+{ 
+	  {
+  object p = this_player();	 
+  object *inventory; 
+  inventory=filter_array(all_inventory(environment(environment(this_object()))), 
+  (:living($1):));  
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+  {
+  if ( p->query_battleob())
+     {
+	  message("maneuver","You ready your Towel of Justice and start looking "+
+	  "for a good place to deliver a deadly strike.\n",p); 
+	  message("maneuver",""+p->query_cap_name()+" readies "+possessive(p)+" "+
+	  "towel and starts looking for a good place to deliver a deadly strike.\n",
+	  environment(p),p);
+      call_out("damage_func",7+random(13));
+      mon = ob;
+	  return 1;
+     }
+     else
+     {
+	  message("cannot_do","You can't use combat maneuvers outside of battle!\n",
+	  p);
+	  return 1; 
+     }
+ }
+  return notify_fail("Smack what?\n"); 
+  }  
+}
+
+int wet_command(string cmd)
+{
+	{
+    object p = this_player();	 
+    object *inventory; 
+    inventory=all_inventory(environment(p));
+    filter_array(inventory,(:!$1->query_drinkable():));   
+    foreach(object ob in inventory)
+    if ( ob->id(cmd))
+    {
+	message("info","You wet your Towel of Justice from the "+
+	"'"+capitalize(ob->query_short())+"'.\n",p);
+	message("info",""+p->query_cap_name()+" wets "+possessive(p)+" Towel of "+
+	"Justice from the '"+capitalize(ob->query_short())+"'.\n",environment(p),p);
+    this_object()->set_short("The Towel of Justice (wet) %^ORANGE%^<law-giving glow>%^RESET%^");
+    this_object()->set_long(wrap("This is a finely made white towel. "+
+    "Arcane runes of power have been sewn into it and the whole towel "+
+    "radiates an intense aura of Justice. Towels like this are generally used "+
+    "to dry yourself off. The towel is currently wet.\n"+
+    "SYNTAX: wet <watersource>\n"+
+    "        smack <monster>\n"+
+    "Note that you can only smack while you are in battle.\n"));
+	wet = 1;
+	return 1;
+    }
+    return notify_fail("You can't wet your Towel of Justice from that, it is "+
+    "not a water source.\n");
+    }
+}
+    
+
+void extra_init() 
+{ 
+    add_action("smack_command","smack"); 
+    add_action("wet_command","wet");
+} 
+
+void extra_create() 
+{
+  set_short("The Towel of Justice %^ORANGE%^<law-giving glow>%^RESET%^");
+  set_long(wrap("This is a finely made white towel. Arcane runes of "+
+  "power have been sewn into it. Towels like this are generally used to dry "+
+  "yourself off, and it looks like it could hold a lot of water. The towel "+
+  "would probably cause more damage when wet.\n"+
+  "SYNTAX: wet <watersource>\n"+
+  "        smack <monster>\n"+
+  "Note that you can only smack while you are in battle.\n"));
+  set_id( ({"a towel", "towel",}) );
+  set_name("Towel of Justice");
+  set_value(50000);
+  set_mass(3500);
+  set_bulk(5000);
+}
+
+void damage_func()
+{
+object p = this_player();	
+if ( p->query_battleob())
+{
+if (wet == 1)
+{
+	message("start","%^BOLD%^%^GREEN%^You decide to try a combat "+
+	"maneuver!%^RESET%^\n",p);
+	message("damage","You WILDLY swing your Towel of Justice, smacking "+
+	""+mon->query_cap_name()+"!\n",p);
+	message("damage",""+p->query_cap_name()+" WILDLY swings "+possessive(p)+" "+
+	"Towel of Justice, smacking "+mon->query_cap_name()+"!\n",environment(p),p);
+	message("damage","You scream in pain as "+p->query_cap_name()+" slaps you "+
+	"with "+possessive(p)+" wet Towel of Justice!\n",mon);
+	mon->receive_damage((p->query_stat("strength")) * 100);
+	if(mon->query_stunned()) 
+      {  
+        mon->add_stun_duration(99999); 
+      } 
+      else 
+      { 
+        object ss = new("/obj/battle/stun_shadow",mon); 
+        if(mon->query_stunned()) 
+        mon->add_stun_duration(99999-ss->query_stun_duration()); 
+      }
+      message("info","The force of your blow dries out the Towel.\n",p);   
+      message("info",""+p->query_cap_name()+"'s blow was so strong that now "+
+      ""+possessive(p)+" Towel is dry again.\n",environment(p),p);      
+      wet = 0;
+      this_object()->set_short("The Towel of Justice %^ORANGE%^<law-giving glow>%^RESET%^");
+      this_object()->set_long(wrap("This is a finely made white towel. Arcane "+
+      "runes of power have been sewn into it. Towels like this are generally "+
+      "used to dry yourself off, and it looks like it could hold a lot of "+
+      "water. The towel would probably cause more damage when wet.\n"+
+      "SYNTAX: wet <watersource>\n"+
+      "        smack <monster>\n"+
+      "Note that you can only smack while you are in battle.\n"));
+}
+else
+{
+	message("start","%^BOLD%^%^GREEN%^You decide to try a combat "+
+	"maneuver!%^RESET%^\n",p);
+	message("damage","You WILDLY swing your Towel of Justice, smacking "+
+	""+mon->query_cap_name()+"!\n",p);
+	message("damage",""+p->query_cap_name()+" WILDLY swings "+possessive(p)+" "+
+	"Towel of Justice, smacking "+mon->query_cap_name()+"!\n",environment(p),p);
+	message("damage","You scream in pain as "+p->query_cap_name()+" slaps you "+
+	"with "+possessive(p)+" Towel of Justice!\n",mon);
+	mon->receive_damage((p->query_stat("strength")) * 50);
+}
+}
+else
+{
+	message("fail","You are no longer in combat and thus cannot perform the "+
+	"maneuver!\n",p);
+}
+}

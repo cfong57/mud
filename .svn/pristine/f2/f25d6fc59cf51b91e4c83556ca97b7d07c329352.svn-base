@@ -1,0 +1,62 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit MONSTER;
+
+int receive_coins(object coins);
+
+string ctype;
+string nstr;
+string vstr;
+int cvalue;
+int value;
+int number;
+
+void extra_create()
+{
+  set_short("An undead bank teller");
+  set_long(wrap("An undead bank teller stands here wearing a striped suit. "+
+  "It seems to be waiting for someone to give it some coins to count. Even "+
+  "in death it continues just as before: counting currency for all time.\n"));
+  set_name("Bank teller");
+  set_id( ({ "an undead bank teller", "undead bank teller", "bank teller", 
+  "teller", "undead"}) );
+  set_level(50);
+  set_species("undead");
+  set_race("gnome");
+  set_gender("neuter");
+  set_receive_object( (["/std/coins.c" : "receive_coins" ]) );
+}
+
+int receive_coins(object coins)
+{
+  switch(coins->query_type())
+  {
+  case "silver":
+  ctype = "silver";
+  cvalue = 1;
+  break;
+  case "gold":
+  ctype = "gold";
+  cvalue = 10;
+  break;
+  case "platinum":
+  ctype = "platinum";
+  cvalue = 100;	 
+  break;
+  case "mithril":
+  ctype = "mithril";
+  cvalue = 1000;
+  break;
+  }
+ number = coins->query_number();
+ nstr = ""+number+"";
+ value = number*cvalue;
+ vstr = ""+value+""; 
+ force_me("say Received "+nstr+" "+ctype+" coin(s), worth "+vstr+"...");
+ if(value > 10000) //receives more than 10k worth of money
+ force_me("say I got over 10,000 worth of money, I'm rich now!"); 
+ if(ctype == "gold") //receives gold coins
+ force_me("say I love gold coins!");
+ coins->remove(); 
+}

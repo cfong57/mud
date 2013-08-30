@@ -1,0 +1,60 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+void extra_create()
+{
+  set_short( "Southeastern hallway in the Bastion" );
+  set_long(wrap("This hallway has seen better times. A ruined carpet lines "+
+  "the center of the floor, long since eaten away by mold. There are some "+
+  "frames hanging on the walls, some containing portraits, and others "+
+  "simply empty. It seems like this was a well-travelled room in the past, "+
+  "as the floor on either side of the carpet has a pattern of regular marks "+
+  "from what you suspect were hobnailed boots. The tracks originate from the "+
+  "south, where you can see a room that appears to be a barracks of some "+
+  "sort.\n"));
+  add_monster("/u/a/allanon/area/ity/mon/ghost.c");
+  set_item_desc(([
+  ({"ruined carpet", "carpet", "center"}) : "This carpet was probably made "+
+  "of plush and cushy velvet once, but as with the rest of the Bastion it "+
+  "has decayed over time. Here and there some brilliant red spots still "+
+  "shine through, but most of the carpet has been destroyed by mold and "+
+  "water damage.\n",
+  ({"mold", "water damage", "discolored spots", "spots", "fuzzy growths", 
+  "growths"}) : "The carpet must have been quite grand when it "+
+  "was new, but time and the elements have not been kind to it. Discolored "+
+  "spots and some fuzzy growths indicate that water and mold have been the "+
+  "primary assailants.\n",
+  ({"frames", "walls", "wall", "frame", "portrait", "portraits", "picture",
+  "picture frames", "pictures"}) : "All along the walls there are various "+
+  "sized picture frames. Some of them contain pictures of people, and others "+
+  "are empty. The portraits probably depict people who were important to the "+
+  "Bastion, but they are long since forgotten.\n",
+  ({"floor", "pattern", "regular marks", "marks", "tracks"}): "On either side "+
+  "of where the carpet used to be, the stone floor is marked by a regular "+
+  "pattern of indentations roughly outlining the shape of a human foot. The "+
+  "marks come from a room to the south that appears to be a barracks, so "+
+  "perhaps they were left behind from generations of soldiers marching "+
+  "through.\n",
+  ({"south", "barracks"}) : "To the south is a room full of stone bunks and "+
+  "weapon racks. It was probably a barracks in ages past.\n"]));
+  set_sounds(150 + random(45), ({ 
+  "You hear the far-off squeak of a rodent echoing down the hallway.\n"}) ); 
+  set_exits(([
+  "west" : "/u/a/allanon/area/ity/rooms/bastion.c",
+  "east" : "/u/a/allanon/area/ity/rooms/towerse1.c",
+  "south" : "/u/a/allanon/area/ity/rooms/barracks.c"]));
+
+  create_door("west", "east",
+  (["short" : "ornate door",
+  "long" : "An ornate door made of iron leads to the west. It is easily tall "+
+  "enough for a b'rogh to use. There are intricate etchings on the door which "+
+  "depict ancient historical events that no one alive today would remember.\n",
+  "status" : "unlocked",
+  "autoclose" : 45,
+  "quality" : 50,
+  "material" : "iron",
+  "close_msg" : "The ornate door swings shut.\n",
+  "open_msg" : "You open the ornate door.\n"]) );
+}

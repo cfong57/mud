@@ -1,0 +1,93 @@
+#include <mudlib.h> 
+#include <modules.h>
+
+inherit SHADOW; 
+inherit M_ABILITIES;
+
+object p;
+int maxhp;
+int hp;
+int maxsp;
+int sp;
+int maxep;
+int ep;
+int maxpsp;
+int psp;
+
+int vulnerable = 0;
+
+int check_status()
+{
+  if(!shadowed_object()) 
+  destruct(this_object()); 
+  call_out("check_status",5);
+}
+
+int remove_shadow_2()
+{
+	destruct(this_object()); 
+}
+
+int query_breath_underwater()
+{
+  return 1;
+}
+
+string query_short(int flag) 
+{ 
+if(flag) 
+return shadowed_object()->query_short(flag); 
+else
+return "Lady Allanon, a young woman <RogueCoder>";
+} 
+
+int query_level() {return 100;}
+
+mapping query_stats() 
+{return ([ "charisma" : 75,"intelligence" : 150, "strength" : 150, 
+"constitution" : 150, "dexterity" : 150, "wisdom" : 150, "size" : 175 ]);}
+
+int query_volume() {return 2500000;}
+int query_capacity() {return 2500000;}
+int query_ac() {return 100000;}
+int query_natural_ac() {return 100000;}
+int query_floating() {return 1;}
+
+mapping query_resistances()
+{return ([ "fire" : 99, "magical" : 99, "sonic" : 99, "psionic" : 99, 
+"poison" : 99, "asphyxiation" : 99, "cold" : 99, "physical" : 99, "acid" : 99, 
+"lightning" : 99 ]);}
+
+int heal_me()
+{
+  p = shadowed_object();
+  maxhp = p->query_max_hp();
+  hp = p->query_hp();
+  maxsp = p->query_max_sp();
+  sp = p->query_sp();
+  maxep = p->query_max_ep();
+  ep = p->query_ep();
+  maxpsp = p->query_max_psp();
+  psp = p->query_psp();
+  if(hp < maxhp || sp < maxsp || ep < maxep || psp < maxpsp)
+  {
+  p->receive_healing(maxhp,"hp");
+  p->receive_healing(maxsp,"sp");
+  p->receive_healing(maxep,"ep");
+  p->receive_healing(maxpsp,"psp");
+  }
+  call_out("heal_me",5);
+}
+
+varargs int receive_damage(int damage, int type, string slot, int precalculated)
+{
+  if (vulnerable != 0)
+  {
+    shadowed_object()->receive_damage(damage, type, slot, precalculated);	 
+  } 
+}
+
+void set_vulnerable(int foo)
+{
+  vulnerable = foo;
+}

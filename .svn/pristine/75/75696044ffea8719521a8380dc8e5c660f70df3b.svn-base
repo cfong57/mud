@@ -1,0 +1,42 @@
+#define STOREROOM "/u/a/allanon/area/cafe/rooms/storeroom"
+
+void move_to_store(string category, string player, object ob)
+{
+  ob->move(STOREROOM, 1);
+  STOREROOM->add_thing(category, player, ob);
+  write_file("/u/a/allanon/area/cafe/log.txt",
+  "To store: "+ob->query_cap_name()+" ("+base_name(ob)+"), "+
+  ""+capitalize(player)+", "+category+", "+ctime(time())+"\n");
+}
+
+int get_from_store(string category, object player, string ob)
+{
+  if(STOREROOM->remove_thing(category, player, ob))
+  {
+    write_file("/u/a/allanon/area/cafe/log.txt",
+    "From store: "+ob+", "+player->query_cap_name()+", "+category+", "+
+    ""+ctime(time())+"\n");
+    return 1;
+  }
+  return 0;
+}
+
+string query_contents(string category)
+{
+  return STOREROOM->query_contents(category);
+}
+
+int kept(object ob)
+{
+  object *klist;
+  klist = this_player()->query("keep");
+  if(!klist)
+  {
+    klist = ({});
+  }
+  if(member_array(ob,klist) != -1)
+  {
+    return 1;
+  }
+  return 0;
+}

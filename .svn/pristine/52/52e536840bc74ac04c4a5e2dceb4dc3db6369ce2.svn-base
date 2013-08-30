@@ -1,0 +1,52 @@
+/* Vortex coded 99% by Zaltaiz, credits to him. */
+
+#include <mudlib.h>
+
+inherit CONTAINER;
+
+int break_command(string cmd) 
+{ 
+  if (cmd == "bottle" || cmd == "miniscule glass bottle" || 
+  cmd == "miniscule bottle" || cmd == "glass bottle") { 
+    object p = this_player();
+    object vortex;
+    message("info", "You smash the bottle on the ground, releasing the "+
+    "vortex contained within.\n", p); 
+    message("info", ""+p->query_cap_name()+" smashes "+possessive(p)+" "+
+    "bottle on the ground, releasing the vortex contained within.\n",
+    environment(p), p);           
+    vortex = new("/u/a/allanon/areas/lumber_camp/obj/vortex.c");
+    vortex->move(environment(p), 1);
+    vortex->calculate_bonus(p);
+    //removes the vortex already inside of the bottle
+    deep_inventory(this_object())->remove(); 
+    this_object()->remove();        
+    return 1; 
+  } 
+  return notify_fail("Break what?\n"); 
+} 
+  
+void extra_init() 
+{ 
+  add_action("break_command", "break"); 
+} 
+
+void extra_create()
+{ 
+  set_short("Miniscule glass bottle with something whirling inside");
+  set_long(wrap("This is a clear glass bottle. Inside it you see a small "+
+  "%^BOLD%^%^GREEN%^vortex%^RESET%^ of energies. You could probably 'break' "+
+  "the bottle to set the vortex free. The bottle is very, very small - it "+
+  "looks like even a single coin would be too large for it. Despite being "+
+  "made of glass, it seems somehow very hard, so it shouldn't break from the "+
+  "duress of combat.\nThere is a label on the bottle that reads: 'Vortex'.\n"));
+  set_id( ({ "miniscule glass bottle", "miniscule bottle", 
+  "glass bottle", "bottle"}) );
+  set_mass(1);
+  set_bulk(1);
+  set_capacity(0);
+  set_volume(0);
+  set_dynamic_bulk(0);
+  set_value(0); //no selling or sacrifice - causes problems with vortex
+  set_start_contents((["/u/a/allanon/areas/lumber_camp/obj/vortex.c": 1 ]));
+}

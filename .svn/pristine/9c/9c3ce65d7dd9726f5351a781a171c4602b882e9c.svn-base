@@ -1,0 +1,48 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit OBJECT;
+
+int plant_command(string cmd)
+{
+	if ( cmd == "seed" )
+	{
+    object p = this_player();
+    object b = this_object(); 
+    object seedling;
+    message("info","You decide to plant your "+
+    "%^RESET%^%^ORANGE%^Golden Seed%^RESET%^ here.\n",p); 
+    message("info",""+p->query_cap_name()+" decides to plant "+
+    ""+possessive(p)+" %^RESET%^%^ORANGE%^Golden Seed%^RESET%^ in this "+
+    "room.\n",environment(p),p);
+    seedling = new("/u/a/allanon/garden/golden_tree.c");
+    seedling->move(environment(p),1);
+    seedling->set_planter(p->query_cap_name());
+    seedling->refresh_messages();
+    message("instructions","%^RESET%^%^BOLD%^%^GREEN%^You need to "+
+    "'start_tree' after planting in order to get the tree to grow.%^RESET%^\n",
+    this_player());
+	b->remove();
+	return 1;
+    }
+    return notify_fail("Plant what?\n");  
+}  
+
+void extra_init() 
+{ 
+    add_action("plant_command","plant"); 
+} 
+
+void extra_create()
+{
+  set_short("A %^RESET%^%^ORANGE%^Golden Seed%^RESET%^");
+  set_long(wrap("This is a Golden Seed, the humble beginnings of a "+
+  "Golden Tree. You can 'plant' it somewhere (even indoors) to start it "+
+  "growing. The seed sparkles like the sun, and you can feel it is just "+
+  "bursting to break out of its shell and start growing up.\n"));
+  set_name("Golden Seed");
+  set_id( ({ "seed", "golden seed"}) );
+  set_mass(1);
+  set_bulk(1);
+  set_value(25000);
+}

@@ -1,0 +1,113 @@
+/* 'The Button', located at Allanon's workroom.
+This item is original in that it creates coins and exp directly to the player.
+Coded by Allanon, enjoy. */
+
+#include <mudlib.h>
+
+inherit OBJECT;
+
+int press_command(string cmd)
+{
+	if ( cmd == "button" )
+	{
+	switch(random(2))
+	{
+	case 0:
+	{
+    object p = this_player();
+    message("info","You press the button, and receive coins.\n",p); 
+    message("info",""+p->query_cap_name()+" presses the button and receives "+
+    "coins.\n",environment(p),p);
+    switch(random(4))
+    {
+    case 1:
+    call_out("create_silver",0);
+    return 1;
+    case 2:
+    call_out("create_gold",0);
+    return 1;
+    case 3:
+    call_out("create_platinum",0);
+    return 1;
+    case 4:
+    call_out("create_mithril",0);
+    return 1;
+    }
+    }
+    break;
+    case 1:
+    {
+    object p = this_player();
+    message("info","You press the button, and receive exp.\n",p); 
+    message("info",""+p->query_cap_name()+" presses the button and receives "+
+    "exp.\n",environment(p),p);
+    call_out("give_exp",0);
+    return 1;
+    }
+    }     
+    }
+    return notify_fail("Press what?\n");  
+}
+
+void extra_init() 
+{ 
+    add_action("press_command","press"); 
+} 
+
+void extra_create()
+{
+  set_short("A button labeled 'Press for goodies!'");
+  set_long(wrap("A big button. Use 'press button' to get coins or exp!\n"));
+  set_name("button");
+  set_id( ({ "button" }) );
+  set_mass(1);
+  set_bulk(1);
+  set_prevent_get(1);
+  set_prevent_drop(1);
+}
+
+int give_exp() 
+{
+	this_player()->set_exp(this_player()->query_exp()+(random(1000000)));
+    return 1;
+} 
+
+int create_silver(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("silver");
+	ob->set_number(random(100));
+	ob->move(this_player(),1);
+    return 1;
+} 
+
+int create_gold(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("gold");
+	ob->set_number(random(100));
+	ob->move(this_player(),1);
+    return 1;
+} 
+
+int create_platinum(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("platinum");
+	ob->set_number(random(100));
+	ob->move(this_player(),1);
+    return 1;
+} 
+
+int create_mithril(string type,int amount) 
+{
+	object ob;
+	ob=clone_object("/std/coins.c");
+	ob->set_type("mithril");
+	ob->set_number(random(100));
+	ob->move(this_player(),1);
+    return 1;
+} 

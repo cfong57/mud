@@ -1,0 +1,49 @@
+#include <mudlib.h>
+#include <damage.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Black javelin 'The Elfslayer'");
+  set_id(({"The Elfslayer", "Elfslayer", "black javelin", "crystal javelin", 
+  "javelin"}));
+  set_long(wrap("It is said that long ago, the Dark Elves of Graemor founded a"+
+  " mining post in a last-ditch attempt to make money. The mine failed to "+
+  "produce anything of great value...only a strange type of black crystal "+
+  "came out. Once forged into weapons and wielded on the field, however, "+
+  "the black crystal became known as a deadly weapon against the Dark Elves' "+
+  "hated enemies, the Elves. It was said that a single cut from a black "+
+  "crystal would elict such pain that the poor victim would scream and writhe "+
+  "in agony for days before perishing. This javelin seems to be one of those "+
+  "foul weapons, an evil relic from the past.\n"));
+  set_name("Elfslayer");
+  set_wtype("javelin");
+  set_material("crystal");
+  set_quality(45);
+  add_magic_property("speed",1);
+  add_magic_property("accuracy",1);
+  add_magic_property("dexterity",1);
+  add_magic_property("lightning",3);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "It is especially effective against Elves.";
+} 
+
+int special_hit(object target)
+{
+  if(target->query_race()=="elf")
+  if(!random(5))
+  {
+      message("damage","The javelin's blade %^BOLD%^%^RED%^BURNS%^RESET%^ "+
+      "as it makes contact with your flesh!\n",target);
+      message("damage",""+target->query_cap_name()+" screams in pain as the "+
+      "javelin's point touches "+possessive(target)+" flesh!\n",
+      environment(target),target);
+      target->receive_damage(1500+random(1000), LIGHTNING);
+  }
+}

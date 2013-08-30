@@ -1,0 +1,151 @@
+/* This item coded by Allanon, enjoy :) */
+
+#include <mudlib.h>
+#include <damage.h>
+#include <move.h>
+
+inherit OBJECT;
+
+int timer = 15;
+int lit = 0;
+string time;
+object *inventory; 
+object p;
+object b = this_object();
+
+int light_command(string cmd)
+{
+	if ( cmd == "bomb" )
+	{
+    p = this_player();//ONLY PLAYERS CAN USE THIS ITEM
+    if(lit == 1)
+    {
+	message("doh","The BobOmb is already lit, stupid!\n",p);
+	message("doh",""+p->query_cap_name()+" looks silly as "+subjective(p)+" "+
+	"tries to light "+possessive(p)+" already-lit BobOmb.\n",environment(p),p);
+	return 1;
+    }
+    else
+    {
+    message("info","You light the fuse of the Bob-Omb. It will explode in "+
+    "about...15 seconds! Better run before that happens!\n",p); 
+    message("info",""+p->query_cap_name()+" lights the fuse of "+
+    ""+possessive(p)+" Bob-Omb. It will explode in about...15 seconds! Better "+
+    "run, and fast!\n",environment(p),p);
+    set_short("Small black BobOmb "+
+    "(set by "+p->query_cap_name()+") %^RESET%^%^BOLD%^%^RED%^<lit>%^RESET%^");
+    set_long(wrap("It looks a lot like your standard bomb...except it has "+
+    "legs and two white eyes. You are not really sure if it is alive or not, "+
+    "since it does not seem to react to anything. You notice also that it has "+
+    "a winder in it, sort of like a clock, but it appears to be broken. "+
+    "There's a large fuse on the bomb, and it's already been lit! You'd "+
+    "better move, NOW, unless you want to get caught in the explosion!\n"+
+    "The bomb looks like it will explode in "+
+    "%^RESET%^%^BOLD%^%^WHITE%^15 seconds!%^RESET%^\n"+
+    "You notice a small warning label on the bottom which reads:\n"+
+    "'EMERGENCY STOP PROCEDURES'\n"+
+    "'In the event that this bomb is lit accidentally, simply stuff it into "+
+    "any container and the explosion will be contained. The container will "+
+    "not suffer any damage.'\n"+
+    "'-The Management'\n"));
+    call_out("define_targets",15);
+    call_out("time_me",1);
+    lit = 1;
+	return 1;
+    }
+    }
+  return notify_fail("Light what?\n");  
+}
+  
+void extra_init() 
+{ 
+    add_action("light_command","light"); 
+} 
+
+// Notice how there's no 'extinguish' command. Kjeh kjeh.
+
+void extra_create()
+{
+  set_short("Small black BobOmb <unlit>");
+  set_long(wrap("It looks a lot like your standard bomb...except it has legs "+
+  "and two white eyes. You are not really sure if it is alive or not, since "+
+  "it does not seem to react to anything. You notice also that it has a "+
+  "winder in it, sort of like a clock, but it appears to be broken. There's a "+
+  "large fuse on the bomb, and if you wanted to cause some Major Damage!, you "+
+  "could 'light' it. It doesn't look like you could stop it once it is lit, "+
+  "though...better be careful.\n"+
+  "You notice a small warning label on the bottom which reads:\n"+
+  "'EMERGENCY STOP PROCEDURES'\n"+
+  "'In the event that this bomb is lit accidentally, simply stuff it into any "+
+  "container and the explosion will be contained. The container will not "+
+  "suffer any damage.'\n"+
+  "'-The Management'\n"+
+  "You notice another small label which reads: 'For player use only'.\n"));
+  set_name("BobOmb");
+  set_id( ({ "small black bobomb", "black bobomb", "small bobomb", "bobomb",
+  "BobOmb", "bomb"}) );
+  set_mass(750);
+  set_bulk(300);
+  set_value(25000);
+}
+
+void define_targets()
+{
+	if(environment(b)->query_living() || environment(b)->query_npc() || 
+	environment(b)->query_monster())
+    call_out("creature_explosion",1);	
+	else
+	call_out("room_explosion",1);
+}
+
+
+void creature_explosion()
+{  
+  message("info","You feel that your BobOmb just exploded.\n",p);
+  inventory=all_inventory(environment(environment(b)));
+  foreach(object ob in inventory)
+  {	   
+	  message("explode","The fuse on "+p->query_cap_name()+"'s BobOmb reaches "+
+	  "its end! It glows red for a moment before suddenly "+
+	  "%^RESET%^%^BOLD%^%^RED%^EXPLODING%^RESET%^, damaging everything in "+
+	  "the room with a MASSIVE explosion!\n",ob);	  
+      ob->receive_damage(100000, FIRE);	 	  
+  }
+  b->remove();
+}  
+
+void room_explosion()
+{ 	 
+  message("info","You feel that your BobOmb just exploded.\n",p);
+  inventory=all_inventory(environment(b));
+  foreach(object ob in inventory)
+  {	   
+	  message("explode","The fuse on "+p->query_cap_name()+"'s BobOmb reaches "+
+	  "its end! It glows red for a moment before suddenly "+
+	  "%^RESET%^%^BOLD%^%^RED%^EXPLODING%^RESET%^, damaging everything in "+
+	  "the room with a MASSIVE explosion!\n",ob);	  
+      ob->receive_damage(100000, FIRE);	 	  
+  }  
+  b->remove();
+}
+
+void time_me()
+{
+  time = ""+timer+"";
+  set_long(wrap("It looks a lot like your standard bomb...except it has "+
+  "legs and two white eyes. You are not really sure if it is alive or not, "+
+  "since it does not seem to react to anything. You notice also that it has "+
+  "a winder in it, sort of like a clock, but it appears to be broken. "+
+  "There's a large fuse on the bomb, and it's already been lit! You'd "+
+  "better move, NOW, unless you want to get caught in the explosion!\n"+
+  "The bomb looks like it will explode in "+
+  "%^RESET%^%^BOLD%^%^WHITE%^"+time+" seconds!%^RESET%^\n"+
+  "You notice a small warning label on the bottom which reads:\n"+
+  "'EMERGENCY STOP PROCEDURES'\n"+
+  "'In the event that this bomb is lit accidentally, simply stuff it into any "+
+  "container and the explosion will be contained. The container will not "+
+  "suffer any damage.'\n"+
+  "'-The Management'\n"));
+  timer--; //Seems to count by two's. :S
+  call_out("time_me",1);
+}

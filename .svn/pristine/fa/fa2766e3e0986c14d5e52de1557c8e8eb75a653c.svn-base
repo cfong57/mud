@@ -1,0 +1,166 @@
+#include <mudlib.h>
+#include <move.h>
+
+inherit FOOD;
+int cooked = 0;
+object seed;
+
+int query_cookable()
+{
+  if(cooked == 0)
+  {
+  return 1;
+  }
+  else
+  {
+  return 0;
+  }	
+}
+
+
+int plant_command(string cmd)
+{
+	if ( cmd == "fruit" )
+	{
+	if(cooked == 0)
+	{
+    object p = this_player();
+    object b = this_object(); 
+    object seedling;
+    message("info","You decide to plant your "+
+    "%^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ instead of eating it.\n",p); 
+    message("info",""+p->query_cap_name()+" decides to plant "+
+    ""+possessive(p)+" %^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ in this "+
+    "room, instead of eating it.\n",environment(p),p);
+    seedling = new("/u/a/allanon/garden/golden_tree.c");
+    seedling->move(environment(p),1);
+    seedling->set_planter(p->query_cap_name());
+    seedling->refresh_messages();
+    message("instructions","%^RESET%^%^BOLD%^%^GREEN%^You need to "+
+    "'start_tree' after planting in order to get the tree to grow.%^RESET%^\n",
+    this_player());
+	b->remove();
+	return 1;
+    }
+    else
+    {
+	return notify_fail("You can't plant a fried fruit.\n");
+    }
+    }
+    return notify_fail("Plant what?\n");  
+}  
+
+void extra_init() 
+{ 
+    add_action("plant_command","plant"); 
+} 
+
+void extra_create()
+{
+  set_short("A %^RESET%^%^ORANGE%^Golden Fruit%^RESET%^");
+  set_long(wrap("A fruit picked from the Golden Tree. It shines like the sun "+
+  "and is nearly as bright. It has a firm texture on the outside, and the "+
+  "inside is probably crisp as well. It smells tantalizingly sweet with a "+
+  "hint of tanginess. You have heard that eating these fruits can make you "+
+  "stronger but you are not sure how.\n"+
+  "If you want to plant the fruit instead of eating it, you could "+
+  "'plant fruit'.\n"));
+  set_id(({"fruit", "golden fruit"}) );
+  set_name("Golden Fruit");
+  set_edible(1);
+  set_food_value(50);
+  set_ep_value(15);
+  set_water_value(35);
+  set_value(50000);
+  set_mass(1);
+  set_bulk(1);
+  call_out("rot_func",86400); //About equal to 1 real-life day, in seconds
+  set_eat_func("empower_me"); 
+  set_cook_func("cook_me");
+}
+
+void empower_me()
+{
+  if(!random(1000000))
+  {
+  message("eat","Wow! That %^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ tasted "+
+  "like nothing you've ever eaten before. You feel empowered, and a golden "+
+  "light briefly obscures your vision. You suddenly feel brave, as if you "+
+  "could take on the entire world!\n",this_player());
+  message("eat",""+this_player()->query_cap_name()+" eats the "+
+  "%^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ and suddenly looks invincible!\n",
+  environment(this_player()),this_player());
+  this_player()->set_resistance("fire",						//A
+  this_player()->query_resistance("fire") + 101);			//B
+  this_player()->set_resistance("magical",					//U
+  this_player()->query_resistance("magical") + 101);		//S
+  this_player()->set_resistance("sonic",					//E
+  this_player()->query_resistance("sonic") + 101);			//!
+  this_player()->set_resistance("psionic",
+  this_player()->query_resistance("psionic") + 101);
+  this_player()->set_resistance("poison",
+  this_player()->query_resistance("poison") + 101);
+  this_player()->set_resistance("cold",
+  this_player()->query_resistance("cold") + 101);
+  this_player()->set_resistance("asphyxiation",
+  this_player()->query_resistance("asphyxiation") + 101);
+  this_player()->set_resistance("physical",
+  this_player()->query_resistance("physical") + 101);
+  this_player()->set_resistance("lightning",
+  this_player()->query_resistance("lightning") + 101);
+  this_player()->set_resistance("acid",
+  this_player()->query_resistance("acid") + 101);
+  }
+  else
+  {
+  message("eat","Mmm...The %^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ tasted "+
+  "pretty good. You feel stronger all of a sudden!\n",this_player());
+  message("eat",""+this_player()->query_cap_name()+" eats the "+
+  "%^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ and suddenly looks stronger!\n",
+  environment(this_player()),this_player());
+  this_player()->set_max_hp(this_player()->query_max_hp() + 250);
+  this_player()->set_hp(this_player()->query_max_hp());
+  this_player()->set_max_sp(this_player()->query_max_sp() + 250);
+  this_player()->set_sp(this_player()->query_max_sp()); 
+  this_player()->set_max_ep(this_player()->query_max_ep() + 250);
+  this_player()->set_ep(this_player()->query_max_ep()); 
+  this_player()->set_max_psp(this_player()->query_max_psp() + 250);
+  this_player()->set_psp(this_player()->query_max_psp());   
+  }
+}
+
+void cook_me()
+{
+  set_short("A %^RESET%^%^ORANGE%^Golden Fruit%^RESET%^ (fried)");
+  set_long(wrap("A fruit picked from the Golden Tree. It has been fried over "+
+  "an open flame, turning the skin slightly less golden in colour. The "+
+  "texture is a bit softer, and since it's cooked it is probably sweeter as "+
+  "well. The fragrance of the fruit is overpowering, you can barely keep "+
+  "yourself from eating it! It must taste absolutely delicious...\n"+
+  "After cooking the fruit has been rendered 'sterile', in other words you "+
+  "can no longer plant it.\n"));
+  set_id(({"fruit", "golden fruit", "fried fruit", "fried golden fruit"}) );
+  set_name("Fried Golden Fruit");
+  set_food_value(750);
+  set_ep_value(1000);	
+  set_water_value(10);
+  set_value(55000);
+  cooked = 1;
+}
+
+void rot_func()
+{
+  if(!environment())
+  {
+  call_out("rot_func",86400);
+  }
+  else
+  {
+  message("rot","The Golden Fruit suddenly shrivels and dries up, falling "+
+  "apart and revealing a Golden Seed at its center instead.\n",
+  environment(this_object()));	
+  seed = new("/u/a/allanon/garden/gseed.c");
+  seed->move(environment(this_object()),1);
+  this_object()->remove();
+  }
+}

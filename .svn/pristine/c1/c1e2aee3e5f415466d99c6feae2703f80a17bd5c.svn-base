@@ -1,0 +1,50 @@
+/*Odd concept for a weapon, might inspire ideas. Coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Brigand's sword 'Lawbreaker'");
+  set_id(({"Lawbreaker", "lawbreaker", "brigand's sword", "sword", "sabre", 
+  "steel sabre"}));
+  set_long("This is the sword once wielded by the bandit's leader, Glasm. It "+
+  "is basically an ordinary steel sabre, with some minor inlays of gold and "+
+  "silver here and there. Other than that you can't detect any special "+
+  "properties. You have a nagging suspicion that there's something not "+
+  "quite normal about the sword, but you can't figure it out.\n");
+  set_name("Lawbreaker");
+  set_wtype("sabre");
+  set_material("steel");
+  set_quality(45);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "This sword has the power to negate all of your reputation. It is "+
+"also effective against city guards.\n";
+} 
+
+int special_hit(object target)
+{
+  if(target->query_cityguard()==1) 
+  {
+  object p = this_object()->query_user();
+  message("damage","..and you slice "+target->query_cap_name()+" again, "+
+  "dealing extra damage!\n",p);
+  message("damage",".."+p->query_cap_name()+" slices "+
+  ""+target->query_cap_name()+" again, dealing extra damage!\n",
+  environment(p),({p, target}));
+  message("damage",".."+p->query_cap_name()+" slices "+
+  "you again, dealing extra damage!\n",target);
+  target->receive_damage(1000+random(500));
+  if(!random(5))
+  {
+  message("info","You feel that your reputation has been neutralized.\n",p);
+  p->clear_reputation_map();
+  }
+  }
+}

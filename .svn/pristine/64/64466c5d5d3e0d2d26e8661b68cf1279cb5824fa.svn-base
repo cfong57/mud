@@ -1,0 +1,38 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+#define GUARDROOM "/u/a/allanon/area/ity/rooms/towernw1.c"
+
+int speak_command(string str)
+{
+  if(str)
+  {
+    message("info","You lean in close to the tube and say: '"+str+"'.\n",
+    this_player());
+    message("info",""+this_player()->query_cap_name()+" leans in close to the "+
+    "tube and says: '"+str+"'.\n",this_object(),this_player());
+    GUARDROOM->receive_speak(str);
+    return 1;
+  }
+  return notify_fail("You could 'speak <message>'.\n");	
+}
+
+void extra_init()
+{
+  add_action("speak_command","speak");	
+}
+
+void extra_create()
+{
+  set_short( "Throne room of the Bastion" );
+  set_long(wrap("Another temporary room.\n"));
+  set_exits(([
+  "out": "/u/a/allanon/area/ity/rooms/towernw1.c"]));
+}
+
+void receive_speak(string message)
+{
+  message("speak","You hear a voice from the tube. It says: '"+message+"'.\n",
+  this_object());	
+}

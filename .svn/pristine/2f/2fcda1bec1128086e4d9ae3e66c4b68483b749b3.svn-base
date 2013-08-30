@@ -1,0 +1,71 @@
+#include <mudlib.h>
+
+inherit WEAPON;
+inherit UNIQUE;
+
+int power;
+int mod = 1; //this is for tuning purposes
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Lord Tannig's rapier");
+  set_id(({"rapier", "lord's rapier", "tannig's rapier", "lord tannig's rapier",
+  "brass rapier"}));
+  set_long(wrap("A highly decorated ceremonial weapon. The brass blade is "+
+  "lovingly polished to an almost mirrorlike sheen. Even though it is "+
+  "expertly crafted, it was intended more as a display of wealth than "+
+  "anything else, and hence it is not very suitable for battles. Still, you "+
+  "might find some use in the item by selling it.\n"));
+  set_name("rapier");
+  set_wtype("rapier");
+  set_material("brass");
+  set_quality(75);
+  set_wield_func("calculate_power");
+  set_remove_func("undo_power");
+  weapon_setup();
+  set_unique_name("Lord Tannig's Rapier");
+  unique_setup();
+}
+
+string query_special_feature() 
+{ 
+return wrap("It is a much-treasured weapon, and holds the essence of its "+
+"original owner, Lord Tannig of Lorim.\n");
+} 
+
+int special_hit(object target, int damage, string bodypart)
+{
+  if(target->query_name() != "Prince Asmarte")
+  {
+  target->set_hp(target->query_hp() - power);
+  message("debug","Hit Asmarte for %^BOLD%^"+damage+"%^RESET%^ damage.\n",
+  this_object()->query_user());
+  return 1;
+  }
+  return 0;
+}
+
+int calculate_power()
+{  
+  object p = this_player();
+  if(p->query_player() == 0)
+  {
+  power = 1000;
+  return 1;	  
+  }
+  else
+  {
+  message("info",wrap("You get the funniest feeling as you reach towards the "+
+  "rapier. It's almost as if you can sense the rapier's 'feelings'. It feels "+
+  "sad, perhaps in mourning of its original owner, Lord Tannig of Lorim.\n"),p);
+  power = (this_object()->query_damage()) * (p->query_stat("strength")) * mod;
+  return 1;
+  }
+}
+
+int undo_power()
+{
+  power = 0;
+  return 1;	
+}

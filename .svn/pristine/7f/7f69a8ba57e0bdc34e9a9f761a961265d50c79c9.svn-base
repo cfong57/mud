@@ -1,0 +1,80 @@
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Legendary knife 'Nanatsu-Yoru' - 'Seven Nights'");
+  set_id(({"knife", "legendary knife", "seven nights", "nanatsu-yoru"}));
+  set_long("This blade looks like an ordinary fruit knife upon initial "+
+  "observation. The handle is make of some sort of wood, and there is a "+
+  "button which unlocks the blade, like a switchblade. The material of the "+
+  "blade is mithril, which is quite rare and precious, but there is nothing "+
+  "particularly fancy or even magical about the weapon which would seem to "+
+  "warrant such a treasure. Some Japanese kanji have been inscribed to the "+
+  "handle, reading 'Nanatsu-Yoru', or 'Seven Nights'.\n");
+  set_name("Seven Nights");
+  set_wtype("knife");
+  set_material("mithril");
+  set_quality(100);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "This ancient knife once belonged to the Nanayas, a clan of brutal "+
+"murderers and assassins. It is well suited for killing.";
+}
+
+int query_not_offensive() 
+{ 
+  return 1; 
+}
+
+int query_casterweapon()
+{
+  return 1;
+} 
+
+int query_damage() 
+{ 
+  return 215; 
+} 
+
+int query_speed() 
+{ 
+  return 1; 
+}
+
+int query_mass() 
+{
+  return 1; 
+}
+
+int query_bulk() 
+{
+  return 1; 
+}
+
+int special_hit(object target, int damage, string bodypart) 
+{
+  target->wound(bodypart, damage, "magical");
+  target->wound_loop();     	
+  return 1;
+}
+
+int parry_special(object target, object attacker)
+{
+  message("parry","Nanatsu-Yoru reacts violently to being struck!\n",
+  environment(target));
+  if(attacker->query_stunned()) 
+  {  
+    attacker->add_stun_duration(10); 
+  } 
+  else 
+  { 
+    attacker->stun(10); 
+  }
+  attacker->interrupt();
+}

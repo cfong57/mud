@@ -1,0 +1,40 @@
+#include <mudlib.h> 
+
+inherit SHADOW; 
+
+int init_shadow() 
+{ 
+ call_out("deal_damage",5); 
+ call_out("check_status",5);
+} 
+
+int check_status()
+{
+  if(!shadowed_object()) 
+  destruct(this_object()); 
+
+  if(shadowed_object()->query_dead()) 
+  destruct(this_object()); 
+
+  if(shadowed_object()->query_linkdead()) 
+  { 
+   call_out("damage",5);    
+   return 1; 
+  } 
+  call_out("check_status",5);
+}
+
+int deal_damage() 
+{ 
+ message("info", "The curse damages you slightly.\n",shadowed_object()); 
+ message("info", shadowed_object()->query_cap_name()+ " gets damaged "+
+ "slightly from "+possessive(shadowed_object())+" curse.\n",
+ environment(shadowed_object()),shadowed_object()); 
+ shadowed_object()->set_hp(shadowed_object()->query_hp()-50);
+ call_out("deal_damage",5); 
+} 
+
+int remove_al_curse()
+{
+	destruct(this_object());
+}

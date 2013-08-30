@@ -1,0 +1,70 @@
+#define STOREROOM "/u/a/allanon/area/cafe/rooms/storeroom"
+#define LOG "/u/a/allanon/area/cafe/log"
+
+void move_to_store(string category, string player, object ob)
+{
+  ob->move(STOREROOM, 1);
+  STOREROOM->add_thing(category, player, ob);
+  LOG->add_event("add", player, ob);
+}
+
+int get_from_store(string category, object player, string ob)
+{
+  object temp = STOREROOM->remove_thing(category, player, ob);
+  if(temp)
+  {
+    LOG->add_event("remove", player->query_name(), temp);
+    return 1;
+  }
+  return 0;
+}
+
+//for now, only things in foyer can be stolen. but leave this in the header
+//file, since it makes things easier to change if more steals are wanted later
+void steal_from_store(object player, string owner, string thing)
+{
+  object temp = STOREROOM->steal_thing(player, owner, thing);
+  LOG->add_event("steal", player->query_name(), temp);
+}
+
+int is_thing_stored(string thing)
+{
+  if(present(thing, get_object(STOREROOM)))
+  {
+	return 1;
+  }
+  else
+  {
+    return 0;	  
+  }
+}
+
+int is_an_owner(string who) //just a pass function
+{
+  return STOREROOM->is_an_owner(who);
+}
+
+int owner_has_thing(string who, string thing) //another pass function
+{
+  return STOREROOM->owner_has_thing(who, thing);	
+}
+
+string query_contents(string category) //yet another pass function
+{
+  return STOREROOM->query_contents(category);
+}
+
+int kept(object ob) //function to check if an object is kept
+{
+  object *klist;
+  klist = this_player()->query("keep");
+  if(!klist)
+  {
+    klist = ({});
+  }
+  if(member_array(ob,klist) != -1)
+  {
+    return 1;
+  }
+  return 0;
+}

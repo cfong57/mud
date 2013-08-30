@@ -1,0 +1,214 @@
+#include <mudlib.h>
+#include <daemons.h>
+#include <move.h>
+#include "storage.h"
+
+inherit ROOM;
+inherit DOOR;
+
+//don't know if I need the door_func on both sides, but can't hurt
+void door_func()
+{
+  string look_msg = WEATHER_D->query_current_day_phase();
+  mapping doors = this_object()->query_doors();
+  if(!doors || !sizeof(keys(doors)))
+  {
+    message("bug","Something has bugged in this room - couldn't find the "+
+    "door. Contact a wiz.\n",this_object());  
+  }
+  foreach(string dir, mapping data in doors)
+  { //locked during day, open during night
+    if(strsrch(look_msg, "sun")>-1)
+	{
+	  data["status"] = "locked"; 
+    }
+    else
+    {
+	  data["status"] = "open"; 
+    }
+  }
+}
+
+void phase_changed(mapping map)
+{ 
+  door_func();
+}
+
+string hookfunc()
+{
+  string returnme = "Some steel hooks have been set into the walls near the "+
+  "doors. Patrons could hang their coats here while they dine.\n";
+  string temp = query_contents("items");
+  if(temp != "")
+  {
+    returnme += temp;
+  }
+  else
+  {
+    returnme += "The hooks are empty right now.\n";		  
+  }
+  return returnme;
+}
+
+int store_action(string cmd)
+{
+  if(cmd)
+  {
+    int max = sizeof(all_inventory(this_player()));
+    int index = 0;
+    for(int quit = 0; quit == 0; index++)
+    {
+      if(index < max)
+      {
+        if(all_inventory(this_player())[index]->id(cmd) ||
+        all_inventory(this_player())[index]->query_short() == cmd)
+        {        
+	      if(kept(all_inventory(this_player())[index]))
+	      {
+		    message("info","You don't want to relinquish your hold on "+
+		    ""+all_inventory(this_player())[index]->query_short()+" even for "+
+		    "a moment.\n",this_player());  
+	      }
+	      else if(all_inventory(this_player())[index]->query_prevent_drop())
+	      {
+		    message("info","You can't move the "+
+		    ""+all_inventory(this_player())[index]->query_short()+"!\n",
+		    this_player());
+	      }
+	      else
+	      {
+		    message("info","You store your "+
+		    ""+all_inventory(this_player())[index]->query_short()+" in the "+
+		    "chest. Make sure to 'retrieve' it later.\n",this_player());
+		    message("info",""+this_player()->query_cap_name()+" stores "+
+		    ""+possessive(this_player())+" "+
+		    ""+all_inventory(this_player())[index]->query_short()+" in the "+
+		    "chest.\n",this_object(),this_player());
+		    move_to_store("items", this_player()->query_name(), 
+		    all_inventory(this_player())[index]);
+	      }	      
+          quit++;
+        }
+      }
+      else
+      {
+	    message("info","You don't have a "+cmd+" to store.\n",this_player());
+        quit++;
+      }
+    }
+    return 1;
+  }
+  return notify_fail("Store what?\n"); 	 
+}
+
+int retrieve_action(string cmd)
+{
+  if(cmd)
+  {
+	if(get_from_store("items", this_player(), cmd))
+	{
+	  if(cmd == "all")
+	  {
+	    message("info","You retrieve all your things from the chest.\n",
+	    this_player());
+	    message("info",""+this_player()->query_cap_name()+" retrieves all "+
+	    ""+possessive(this_player())+" things from the chest.\n",
+	    this_object(),this_player());
+	  }
+	  else
+	  {
+	    message("info","You retrieve your "+cmd+" from the hook.\n",
+	    this_player());
+	    message("info",""+this_player()->query_cap_name()+" retrieves "+
+	    ""+possessive(this_player())+" "+cmd+" from the chest.\n",
+	    this_object(),this_player()); 
+	  }	
+	}
+	else
+	{
+	  if(cmd == "all")
+	  {
+		message("info","But you don't have anything in the chest.\n",
+		this_player());  
+	  }
+	  else
+	  {
+	    message("info","You don't have a "+cmd+" in the chest.\n",
+	    this_player());
+      }
+	}
+	return 1;
+  }
+  return notify_fail("Retrieve <thing|all>\n"); 	
+}
+
+void extra_init()
+{
+  add_action("store_action","store");
+  add_action("retrieve_action","retrieve");	
+}
+
+void extra_create()
+{
+  set_short("Entrance to the Member's Area of Wildcat Cafe");
+  set_long(wrap("This is the foyer of Wildcat Cafe. There are some hooks set "+
+  "into the walls near the doors for patrons to hang their coats on. Lush red "+
+  "carpeting covers the floor, and there are some pleasant potted ferns in "+
+  "the corners of the room. A receptionist's desk is set up in the middle. "+
+  "There are two arrow-shaped signs attached to the receptionist's desk, one "+
+  "pointing west and one pointing east. To the west is a spacious-looking "+
+  "dining room; a door to the east hides whatever is in that room.\n"));
+  set_item_desc(([
+  ({"hooks", "walls", "coats"}) : (: hookfunc :),
+  ({"lush red carpeting", "red carpeting", "carpeting", "lush carpeting"}) : 
+  "The carpet is very plush; it looks brand-new. You are not sure what type "+
+  "of fiber it is made of, but it is dyed a familiar blood-red.\n",
+  "floor" : "The floor is covered with red carpet in most places. The exposed "+
+  "areas are richly done with tiles, also in red.\n",
+  ({"exposed areas", "areas", "tiles", "tile"}) : "You are not sure what kind "+
+  "of rock was used to make these tiles so red. It certainly seems to be a "+
+  "popular color with the decorators here.\n",
+  ({"potted ferns", "ferns"}) : "There are some pots in the corners of the "+
+  "room, housing nondescript ferns. The green of the ferns is a welcome "+
+  "contrast to the red covering much of the room.\n",
+  "corners": "Some potted ferns reside in the corners of the room. Otherwise, "+
+  "they are empty - and immaculately dust-free.\n",
+  ({"receptionist's desk", "receptionist desk", "desk"}) : "This desk is made "+
+  "of maple, and it has been polished to a shiny finish. A book of records "+
+  "lies open on top, with a quill and inkwell sitting next to it. There are "+
+  "two arrow-shaped signs attached to the receptionist's desk.\n",
+  ({"book of records", "book", "records"}) : "The book is full of names. Next "+
+  "to each name is written a time and date, and sometimes the word 'member'. "+
+  "Looks like this is the log of all the comings and goings of patrons.\n",
+  ({"quill", "inkwell"}) : "A quill and inkwell sit next to the book of "+
+  "records. The quill is from some bird with red plumage, and the ink in the "+
+  "inkwell is, unsurprisingly, also red.\n",
+  "ink" : "The ink has the same shade as blood.\n",
+  ({"arrow-shaped signs", "signs"}) : "The sign pointing to the west says "+
+  "'Dining'. The sign pointign to the east says 'Members Only'.\n"]));
+  set_sounds(180 + random(15), ({ 
+  "The receptionist flips through the book of records, checking for any "+
+  "inaccuracies.\n", 
+  "The smell of meat is in the air. It is coming from both the west and the "+
+  "east, but the aroma from the east is somehow more...appetizing. You wonder "+
+  "what kind of meat is in there.\n"})); 
+  set_exits(([
+  "west" : "/u/a/allanon/area/cafe/rooms/foyer.c",
+  "north" : "/u/a/allanon/area/cafe/rooms/members_hats.c"]));
+  create_door("west", "east",
+  (["short" : "heavy iron door",
+  "long" : "This door is made of a solid slab of iron, several centimeters "+
+  "thick. Like the front doors, it has no lock, and is probably controlled by "+
+  "magic. The door has been kept immaculately free of rust, although like the "+
+  "rest of the building it looks quite new.\n",
+  "ids" : ({"door", "iron door", "heavy door", "heavy iron door"}),
+  "status" : "locked",
+  "autoclose" : 0,
+  "autolock" : 0,
+  "quality" : 1001,
+  "material" : "iron",
+  "close_msg" : "The heavy iron door SLAMS shut.\n",
+  "open_msg" : "The heavy iron door suddenly swings open.\n"]));
+  WEATHER_D->add_phase_listener(this_object());
+  door_func();
+}

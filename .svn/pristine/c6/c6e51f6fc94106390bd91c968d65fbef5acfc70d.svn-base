@@ -1,0 +1,55 @@
+#include <mudlib.h>
+
+inherit ROOM;
+inherit DOOR;
+
+void extra_create()
+{
+  set_short( "Northeastern hallway of the Bastion" );
+  set_long(wrap("This hallway is lavishly decorated with bold reds and royal "+
+  "purples. The carpet is velvet, and the curtains on the windows are made of "+
+  "silk. A mosaic picturing a dragon takes up the northern wall. You admire "+
+  "the effort involved, as each tiny tile is made of stained glass. From the "+
+  "ceiling hangs a chandelier made of real crystal. To the west is a "+
+  "spacious-looking room that appears to be the audience chamber.\n"));
+  set_item_desc(([
+  ({"bold reds", "royal purples", "reds", "purples"}) : "The shade of red is "+
+  "approximately the color of blood, while the purple reminds you of the deep "+
+  "night sky.\n",
+  ({"carpet", "curtains"}) : "The carpet and curtains are made of fine "+
+  "materials and are kept in excellent condition by someone.\n",
+  "windows" : "Pushing a curtain aside, you get a nice view of the outside.\n",
+  ({"mosaic", "dragon", "northern wall", "wall"}) : "The mosaic is composed "+
+  "of thousands of small stained glass tiles laid over a gold frame. Not a "+
+  "single one is missing.\n",
+  ({"tiles", "tile", "glass"}) : "Each tile is a different color of stained "+
+  "glass. It must have taken a very long time to make this mosaic.\n",
+  "chandelier" : "A crystal chandelier hangs from the ceiling. It is not lit, "+
+  "but that might be because cleaning wax deposits off the carpet is a lot of "+
+  "effort.\n",
+  ({"west", "audience chamber"}) : "A spacious room to the west filled with "+
+  "many pews would seem to be the audience chamber.\n"]));
+  set_sounds(165 + random(35), ({ 
+  "If the Double Dragon Inn was this decorated, you'd pay to stay there.\n"}) );
+  set_exits(([
+  "west" : "/u/a/allanon/area/ity/rooms/audience.c",
+  "east" : "/u/a/allanon/area/ity/rooms/towerne1.c",
+  "south" : "/u/a/allanon/area/ity/rooms/noblesroom.c"]));
+  create_door("south", "north",
+  (["short" : "ornate bronze door with a gilt plaque on it",
+  "long" : "This bronze door has been embellished with the figures of dragons "+
+  "embossed onto its surface. A golden plaque hanging on the door reads "+
+  "'Nobles Room'. This is probably where nobles and other prestigious guests "+
+  "got to stay. Not that anyone should be living here, but it would only be "+
+  "polite to knock before entering such a room.\n",
+  "ids" : ({ "ornate bronze door with a gilt plaque on it", 
+  "ornate bronze door", "gilt plaque", "plaque", "bronze door", "door" }),
+  "key" : "/u/a/allanon/area/ity/obj/key.c",
+  "status" : "locked",
+  "autolock" : 1,
+  "autoclose" : 15,
+  "material" : "bronze",
+  "quality" : 1001,
+  "close_msg" : "The bronze door swings shut.\n",
+  "open_msg" : "You open the bronze door.\n"]) );
+}

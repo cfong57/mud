@@ -1,0 +1,108 @@
+#include <mudlib.h> 
+
+inherit SHADOW; 
+
+int duration = 100 + random(50);
+
+int query_infected() {return 1;}
+
+int start_me()
+{
+  call_out("check_status",0);
+  call_out("effects_func",0);	
+}
+
+void set_duration(int d)
+{
+  	duration = d;
+}
+
+int check_status()
+{
+  if(!shadowed_object()) 
+  destruct(this_object()); 
+
+  if(shadowed_object()->query_dead()) 
+  destruct(this_object()); 
+
+  call_out("check_status",5);
+}
+
+int query_duration() {return duration;}
+
+int effects_func()
+{
+  if(duration < 13)
+  {
+  call_out("cure_me",0);	  
+  }
+  else
+  {
+  duration = query_duration() - 5 + random(3);
+  }
+  message("virulence","The infection rages through your system.\n",
+  shadowed_object());
+  message("virulence",""+shadowed_object()->query_cap_name()+" writhes in "+
+  "pain as the infection rages through "+possessive(shadowed_object())+" "+
+  "system.\n",environment(shadowed_object()),shadowed_object());
+  shadowed_object()->set_hp(shadowed_object()->query_hp()-shadowed_object()->
+  query_max_hp()/10+random(10));
+  call_out("effects_func",3 + random(3));
+  call_out("spread_me",1);
+}
+
+void spread_me()
+{
+  object virus;
+  object s = shadowed_object();
+  object *inventory=all_inventory(environment(s));
+  foreach(object ob in inventory)
+  {
+  if(ob->query_race() == s->query_race())
+  {
+  if(ob->query_infected() == 0)
+  {
+  message("spread","Your infection spreads to "+ob->query_cap_name()+"!\n",s); 
+  message("spread",""+s->query_cap_name()+"'s infection spreads to "+
+  ""+ob->query_cap_name()+"!\n",environment(s),({s,ob}));
+  message("spread",""+s->query_cap_name()+"'s infection spreads to "+
+  "you!\n",ob);
+  virus=new("/u/a/allanon/lorim/monsters/virulence.c");
+  virus->move(ob,1);
+  virus->shadow_object(ob);
+  virus->start_me();
+  }
+  }
+  else
+  {
+  if(!random(30))
+  {
+  if(ob->query_infected() == 0)
+  {
+  message("spread","Your infection spreads to "+ob->query_cap_name()+"!\n",s); 
+  message("spread",""+s->query_cap_name()+"'s infection spreads to "+
+  ""+ob->query_cap_name()+"!\n",environment(s),({s,ob}));
+  message("spread",""+s->query_cap_name()+"'s infection spreads to "+
+  "you!\n",ob);
+  virus=new("/u/a/allanon/lorim/monsters/virulence.c");
+  virus->move(ob,1);
+  virus->shadow_object(ob);
+  virus->start_me();
+  }
+  } 
+  }
+}
+}
+ 
+void cure_me()
+{
+	remove_call_out("effects_func");
+	remove_call_out("check_status");
+	remove_call_out("spread_me");
+	message("cure","You feel better as the infection finally ends.\n",
+	shadowed_object());
+	message("cure",""+shadowed_object()->query_cap_name()+" looks better "+
+	"as "+possessive(shadowed_object())+" infection ends.\n",
+	environment(shadowed_object()),shadowed_object()); 
+  	destruct(this_object()); 
+}

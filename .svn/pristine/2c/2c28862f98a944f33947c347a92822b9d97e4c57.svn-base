@@ -1,0 +1,122 @@
+/* Contains Allanon's weapons, located at her workroom. */
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit CONTAINER;
+
+object bow;
+object coin_wand;
+object excalibur1;
+object excalibur2;
+object lawbreaker;
+object ntr;
+object ridge;
+object rod;
+object seven1;
+object seven2;
+object shield1;
+object shield2;
+object shovel;
+object sleeper;
+object stunner;
+object swift;
+
+int refill_command(string cmd)
+{
+	if ( cmd == "rack" )
+	{
+        object p = this_player();
+        object b = this_object(); 
+        {
+      message("info","You poke the weapon rack, and suddenly a new set of "+
+      "weapons appears on it.\n",p); 
+      message("info",""+p->query_cap_name()+" pokes the weapon rack and "+
+      "suddenly a new set of weapons appears on it.\n",environment(p),p);
+      bow = new("/u/a/allanon/weapons/bow.c");
+      bow->move(b,1);
+      coin_wand = new("/u/a/allanon/weapons/coin_wand.c");
+      coin_wand->move(b,1);
+      excalibur1 = new("/u/a/allanon/weapons/excalibur.c");
+      excalibur1->move(b,1);
+      excalibur2 = new("/u/a/allanon/weapons/excalibur.c");
+      excalibur2->move(b,1);
+      lawbreaker = new("/u/a/allanon/weapons/lawbreaker.c");
+      lawbreaker->move(b,1);
+      ntr = new("/u/a/allanon/weapons/no_twin_rp.c");
+      ntr->move(b,1);
+      ridge = new("/u/a/allanon/weapons/ridge.c");
+      ridge->move(b,1);
+      rod = new("/u/a/allanon/weapons/rod.c");
+      rod->move(b,1);
+      seven1 = new("/u/a/allanon/weapons/seven_nights.c");
+      seven1->move(b,1);
+      seven2 = new("/u/a/allanon/weapons/seven_nights.c");
+      seven2->move(b,1);
+      shield1 = new("/u/a/allanon/weapons/shield.c");
+      shield1->move(b,1);
+      shield2 = new("/u/a/allanon/weapons/shield.c");
+      shield2->move(b,1);
+      shovel = new("/u/a/allanon/weapons/shovel.c");
+      shovel->move(b,1);
+      sleeper = new("/u/a/allanon/weapons/sleeper.c");
+      sleeper->move(b,1);
+      stunner = new("/u/a/allanon/weapons/stunner.c");
+      stunner->move(b,1);
+      swift = new("/u/a/allanon/weapons/swift_sword.c");
+      swift->move(b,1);
+	  return 1;
+       }
+  return notify_fail("Refill what?\n");  
+    }
+}  
+
+int clear_command(string cmd) 
+{        
+ if ( cmd == "rack" ) 
+ { 
+        object p = this_player();
+        object b = this_object(); 
+        mapping rack = ([ ]);  
+        foreach( object o in all_inventory(b))
+        {
+	    rack[ file_name(o)] = o; 
+        message("info","You clear the weapon rack.\n",p); 
+        message("info",""+p->query_cap_name()+" clears the weapon rack.\n",
+        environment(p),p);
+        foreach(string k, object r in rack) if ( r != this_object())r->remove();
+        deep_inventory(this_object())->remove();
+        return 1; 
+        }           
+ } 
+    return notify_fail("Clear what? -OR- The weapon rack is already empty.\n");        
+} 
+
+void extra_init() 
+{ 
+    add_action("refill_command","refill");  
+    add_action("clear_command","clear"); 
+} 
+
+/* Ie....Use Clear to clear the rack, and Refill to fill it up again. */
+
+void extra_create()
+{
+  set_short("A weapon rack");
+  set_long(wrap("It's a rack, bolted to the wall. Various weapons are "+
+  "attached to it.\n"+
+  "TO REPLENISH: 'refill rack'.\n"+
+  "TO CLEAR: 'clear rack'.\n"+
+  "Note: Technically you could put other stuff in the rack, but 'clear' will "+
+  "still delete them.\n"));
+  set_name("weapon rack");
+  set_id( ({ "weapon rack", "rack"}) );
+  set_mass(1);
+  set_bulk(1);
+  set_possible_to_close(1);
+  set_capacity(2147483647);
+  set_volume(2147483647);
+  set_dynamic_bulk(100);
+  set_prevent_get(1);
+  set_prevent_drop(1);
+}

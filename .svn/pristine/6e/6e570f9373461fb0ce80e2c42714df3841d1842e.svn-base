@@ -1,0 +1,18 @@
+#include <mudlib.h>
+
+inherit OBJECT;
+
+void extra_create()
+{
+  set_short("A pile of metal plates"); 
+  set_long(wrap("This seems to be a large pile of metal plates. Bloodstains "+
+  "still adorn much of the metal. Unless you could find some smith to forge "+
+  "these into something useful, the plates are of no use to you.\n"));
+  set_name("pile of metal plates");
+  set_id(({"a pile of metal plates", "a pile of metal", "a pile of plates", 
+  "a pile", "pile of metal plates", "pile of metal", "pile of plates", "metal plates",
+  "metal", "plates"}));
+  set_mass(35000);
+  set_bulk(50000);
+  set_value(1);
+}

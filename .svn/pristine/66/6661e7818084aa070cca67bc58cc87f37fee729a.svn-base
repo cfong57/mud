@@ -1,0 +1,37 @@
+/*Cheap weapon. Coded by Allanon, enjoy.*/
+
+#include <mudlib.h>
+
+inherit WEAPON;
+
+void extra_create()
+{
+  set_identified(1);
+  set_short("Stunner");
+  set_id(({"stunner", "knife"}));
+  set_long("Experimental weapon that stuns on contact.\n");
+  set_name("knife");
+  set_wtype("knife");
+  set_material("mithril");
+  set_quality(999);
+  weapon_setup();
+}
+
+string query_special_feature() 
+{ 
+return "It has a 100% chance of stunning the enemy.";
+} 
+
+int special_hit(object target)
+{
+      if(target->query_stunned()) 
+      {  
+        target->add_stun_duration(99999); 
+      } 
+      else 
+      { 
+        object ss = new("/obj/battle/stun_shadow",target); 
+        if(target->query_stunned()) 
+        target->add_stun_duration(99999-ss->query_stun_duration()); 
+      } 
+}

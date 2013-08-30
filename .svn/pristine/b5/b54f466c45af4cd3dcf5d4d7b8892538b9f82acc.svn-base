@@ -1,0 +1,63 @@
+#include <mudlib.h>
+
+inherit ROOM;
+
+void extra_create()
+{
+  set_short( "Bastion's barracks" );
+  set_long(wrap("This is the barracks of the Bastion. It is a rather long, "+
+  "yet narrow room. Stone beds line each of the walls, adding to the cramped "+
+  "feeling. Above each bed is a weapon rack; some are empty, and others "+
+  "continue to hold implements of war. While this place must not have been "+
+  "very comfortable, it is refreshingly practical and plain compared to some "+
+  "of the other rooms. That sense of faded grandeur doesn't exist here; the "+
+  "barracks probably look the same now as they did in ages long past.\n"));
+  set_item_desc(([
+  ({"stone beds", "beds", "bed", "stone bed"}) : "While austere and certainly "+
+  "not comfortable, these beds were built to last forever. The soldiers "+
+  "probably made the beds more manageable with soft furs, blankets, and other "+
+  "accessories.\n"]));
+  add_item(({"wall", "walls", "weapon racks", "weapon rack", "rack", "racks"}),
+  "All along the walls, there are weapon racks above each bed. Some of them "+
+  "still hold weapons, even though their wielders have long since perished.\n");
+  add_item_search(({"weapon rack", "weapon racks", "rack", "racks"}),
+  "search_racks");
+  set_sounds(100 + random(75), ({ 
+  "A faint breeze rattles the weapons on the racks.\n",
+  "Despite their age, some of the weapons still hold a razor-sharp edge.\n"}) ); 
+  set_exits((["north" : "/u/a/allanon/area/ity/rooms/hallwayse.c"]));
+}
+
+void search_racks()
+{
+  object weapon;
+  object shadow;
+  if(this_player()->query_weapons() < 5)
+  {
+    message("search","You search through the weapon racks and find one that "+
+    "isn't empty. No one is going to mind if you borrow what's inside...\n",
+    this_player());
+    message("search",""+this_player()->query_cap_name()+" searches through "+
+    "the weapon racks and finds one that isn't empty. No one is going to mind "+
+    "if "+subjective(this_player())+" borrows what's inside...\n",
+    environment(this_player()),this_player());
+    weapon = "adm/daemons/eq_d"->random_weapon(random(10)+1);
+    weapon->move(this_player(),1);
+    if(!this_player()->query_timer_shadow())
+    {
+      shadow = new("/u/a/allanon/area/ity/shadows/timer_shadow.c");
+      shadow->move(this_player(),1);
+      shadow->shadow_object(this_player());
+      shadow->start_me();
+    }
+    this_player()->increment_weapons();
+  }
+  else
+  {
+    message("info","On second thought, haven't you taken enough weapons for "+
+    "now? It's not like they are going anywhere.\n",this_player());
+    message("info",""+this_player()->query_cap_name()+"	reaches out for "+
+    "a weapon rack, but seems to reconsider.\n",environment(this_player()),
+    this_player());  
+  }
+}

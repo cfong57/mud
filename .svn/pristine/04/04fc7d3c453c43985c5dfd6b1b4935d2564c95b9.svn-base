@@ -1,0 +1,357 @@
+/*Based off The Shadowshot. Coded by Allanon; Enjoy.*/
+
+#include <mudlib.h>
+#include <move.h>
+
+inherit WEAPON;
+
+int ammo = 0;
+object mon;
+object dart;
+int shooting = 0;
+int obint;
+int obwis;
+int offcheck;
+int ready = 0;
+int loaded = 0;
+string monstr;
+string ammost;
+
+
+int reload_command(string cmd)
+{ 
+ if(cmd == "gun")
+ {
+ if(ammo == 5)
+ {
+ object p = this_player();
+ message("fail","Your spring-loaded dart gun is already loaded to the "+
+ "maximum, you'll need to 'unload' it or fire it first before reloading.\n",p);
+ return 1;	 
+ }
+ else
+ {
+ object p = this_player();
+ foreach(object ob in all_inventory(p))
+ {
+ if(base_name(ob) != "/u/a/allanon/objects/gun_ammo")
+ continue;
+ message("info","You reload your spring-loaded dart gun with a dart.\n",p);
+ message("info",""+p->query_cap_name()+" reloads "+possessive(p)+" "+
+ "spring-loaded dart gun with a dart.\n",environment(p),p);
+ ob->remove();
+ ammo=ammo+1;
+ ammost = ""+ammo+"";
+ this_object()->set_long(wrap("A spring-loaded dart gun. 'reload gun' with a "+
+ "dart, and then 'shoot' a monster. It can also be wielded like a club, "+
+ "though that's hardly its best usage. You can reload a maximum of five "+
+ "darts. Darts can be cloned from /u/a/allanon/objects/gun_ammo.c.\n"+
+ "Spring-loaded dart gun is currently loaded with "+ammost+" darts.\n"));
+ return 1;
+ }
+ }
+ message("fail","You don't seem to have any darts in your inventory.\n",
+ this_player());
+ return 1;
+ }
+ return notify_fail("Reload what?\n");
+}
+
+int unload_command(string cmd)
+{
+	if(cmd == "gun")
+	{
+	object p = this_player();
+	if(ammo == 0)
+	{
+	message("fail","Your spring-loaded dart gun isn't even loaded! So how can "+
+	"you unload it?\n",p);
+	return 1;	
+	}
+	else
+	{
+	message("unload","You unload a dart from your spring-loaded dart gun.\n",p);
+	message("unload",""+p->query_cap_name()+" unloads a dart from "+
+	""+possessive(p)+" spring-loaded dart gun.\n",environment(p),p);
+	ammo--;
+	if(ammo == 0)
+	{
+	loaded = 0;
+    }
+    dart = new("/u/a/allanon/objects/gun_ammo.c");
+	dart->move(p,1);	
+    ammost = ""+ammo+"";
+    this_object()->set_long(wrap("A spring-loaded dart gun. 'reload gun' with "+
+    "a dart, and then 'shoot' a monster. It can also be wielded like a club, "+
+    "though that's hardly its best usage. You can reload a maximum of five "+
+    "darts. Darts can be cloned from /u/a/allanon/objects/gun_ammo.c.\n"+
+    "Spring-loaded dart gun is currently loaded with "+ammost+" darts.\n"));
+	}
+    }
+    return notify_fail("Unload what?\n");
+}
+
+int shoot_command(string cmd)
+{ 
+	  {
+  object p = this_player();	 
+  object *inventory; 
+  inventory=filter_array(all_inventory(environment(environment(this_object()))), 
+  (:living($1):));  
+  foreach(object ob in inventory)
+  if ( ob->id(cmd))
+  {
+	  if(!ammo == 0)
+	  {
+	  loaded = 1;
+	  }
+	  if(!loaded > 0 || ammo == 0)
+	  {
+	  message("fail","You can't shoot the gun if it's not loaded!\n",p);
+	  return 1;
+	  }
+	  if(!p->query_asleep() == 0)
+	  {
+	  message("fail","You can't shoot your gun while you're asleep!\n",p);
+	  return 1;
+	  }
+	  if(p->query_stunned())
+	  {
+	  message("fail","You can't shoot your gun while you're stunned!\n",p);
+	  return 1;
+	  }
+	  if(!p->query_uncon() == 0)
+	  {
+	  message("fail","You can't shoot your gun while you're unconscious!\n",p);	
+	  return 1;  
+	  }
+	  if(!p->query_skilling() == 0)
+	  {
+	  message("fail","You can't shoot your gun and concentrate on your "+
+	  "skill at the same time!\n",p);  
+	  return 1;
+	  }
+	  if(!p->query_casting() == 0)
+	  {
+	  message("fail","You can't shoot your gun and cast your spell at the "+
+	  "same time!\n",p);  
+	  return 1;
+	  }	
+	  if(p->query_battleob())
+	  {
+	  message("fail","You can't concentrate on shooting your gun in the "+
+	  "middle of combat!\n",p);   
+	  return 1;
+	  }  
+	  if(!shooting == 0)
+	  {
+	  remove_call_out("present_check");
+	  message("change","You stop aiming at your old target to properly aim at "+
+	  ""+ob->query_cap_name()+" instead.\n",p);
+	  message("change",""+p->query_cap_name()+" stops aiming at "+
+	  ""+possessive(p)+" old target to properly aim at "+
+	  ""+ob->query_cap_name()+" instead.\n",environment(p),p);
+	  shooting = 1;
+	  mon = ob;
+	  monstr = ob->query_name();
+      obint = ob->query_stat("intelligence");
+      obwis = ob->query_stat("wisdom");
+      offcheck = ( (150+random(50)) - (obint+obwis) );    
+      if(ob->query_attacker() == !p)
+      {
+      if(!offcheck > 0)
+      {
+	  message("aggro",""+ob->query_cap_name()+" notices your offensive "+
+	  "actions and attacks!\n",p);
+	  message("aggro",""+ob->query_cap_name()+" notices "+
+	  ""+p->query_cap_name()+"'s offensive actions and attacks!\n",
+	  environment(p),p);
+	  ob->kill_ob(p);
+      }
+      }
+      call_out("present_check",4+random(8));
+	  return 1;   
+      }     
+      else      
+      {
+	  message("shoot","You start aiming at "+ob->query_cap_name()+" with "+
+	  "your spring-loaded dart gun.\n",p); 
+	  message("shoot",""+p->query_cap_name()+" starts aiming at "+
+	  ""+ob->query_cap_name()+" with "+possessive(p)+" spring-loaded dart "+
+	  "gun.\n",environment(p),p);
+	  shooting = 1;
+	  mon = ob;
+	  monstr = ob->query_name();
+      obint = ob->query_stat("intelligence");
+      obwis = ob->query_stat("wisdom");
+      offcheck = ( (150+random(50)) - (obint+obwis) );    
+      if(ob->query_attacker() == !p)
+      {
+      if(!offcheck > 0)
+      {
+	  message("aggro",""+ob->query_cap_name()+" notices your offensive "+
+	  "actions and attacks!\n",p);
+	  message("aggro",""+ob->query_cap_name()+" notices "+
+	  ""+p->query_cap_name()+"'s offensive actions and attacks!\n",
+	  environment(p),p);
+	  ob->kill_ob(p);
+      }      
+      }  
+      call_out("present_check",4+random(8));
+	  return 1;   
+      }   
+  }  
+  return notify_fail("Shoot what?\n");
+}
+}
+
+void extra_init() 
+{ 
+    add_action("shoot_command","shoot"); 
+    add_action("reload_command","reload");
+    add_action("unload_command","unload");
+} 
+
+void extra_create() 
+{
+  ammost = ""+ammo+"";
+  set_short("spring-loaded dart gun");
+  set_id(({"spring-loaded dart gun", "spring-loaded gun", "dart gun", "gun"}));
+  set_long(wrap("A spring-loaded dart gun. 'reload gun' with a dart, and then "+
+  "'shoot' a monster. It can also be wielded like a club, though that's "+
+  "hardly its best usage. You can reload a maximum of five darts. Darts can "+
+  "be cloned from /u/a/allanon/objects/gun_ammo.c.\n"+
+  "Spring-loaded dart gun is currently loaded with "+ammost+" darts.\n"));
+  set_name("spring-loaded dart gun");
+  set_material("steel");
+  set_wtype("club");
+  set_quality(45);
+  set_identified(1);
+  call_out("ready_check",1);
+  weapon_setup();
+}
+
+string query_type() 
+{
+return "fishing rod"; 
+}
+
+int query_not_offensive() 
+{ 
+return 1; 
+}
+
+int query_casterweapon()
+{
+	return 1;
+}
+
+string query_special_feature() 
+{ 
+return "Special feature(s): Read the long description! Also, you can fish "+
+"with this weapon...It also doesn't interfere with the casting process.\n";
+} 
+
+void present_check()
+{
+    object p = this_player();	 
+    object *array;
+    array=filter_array(all_inventory(environment(environment(this_object()))),(:living($1):));   
+    foreach(object ob in array)
+    if(present(monstr,environment(ob)) || present(capitalize(monstr)),environment(ob))
+    {
+    shooting = 0;
+    ready = 1;
+    }
+    else
+    {
+	message("fail","The target is no longer present!\n",p);
+    }
+      if(!ammo == 0)
+	  {
+	  loaded = 1;
+	  }
+      if(!loaded > 0)
+	  {
+	  message("fail","You can't shoot the gun if it's not loaded!\n",p);
+	  ready = 0;
+	  }
+      if(!p->query_asleep() == 0)
+	  {
+	  message("fail","You can't shoot your gun while you're asleep!\n",p);
+	  ready = 0;
+	  }
+	  if(p->query_stunned())
+	  {
+	  message("fail","You can't shoot your gun while you're stunned!\n",p);
+	  ready = 0;
+	  }
+	  if(!p->query_uncon() == 0)
+	  {
+	  message("fail","You can't shoot your gun while you're unconscious!\n",p);	
+	  ready = 0;
+	  }
+	  if(!p->query_skilling() == 0)
+	  {
+	  message("fail","You can't shoot your gun and concentrate on your skill "+
+	  "at the same time!\n",p); 
+	  ready = 0; 
+	  }
+	  if(!p->query_casting() == 0)
+	  {
+	  message("fail","You can't shoot your gun and cast your spell at the "+
+	  "same time!\n",p);  
+	  ready = 0;
+	  }	 
+	  if(p->query_battleob())
+	  {
+	  message("fail","You can't concentrate on shooting your gun in the "+
+	  "middle of combat!\n",p);   
+	  ready = 0;
+	  }
+}
+
+void ready_check()
+{
+	if(ready == 1)
+	{
+    call_out("shoot_func",0);
+	}
+	call_out("ready_check",1);
+}
+
+void shoot_func()
+{
+	object p = this_player();
+	ready = 0;
+    message("damage","%^BOLD%^%^BLACK%^You fire your gun at "+
+    ""+mon->query_cap_name()+", hitting "+objective(mon)+" in the "+
+    "head!%^RESET%^\n",p);
+	message("damage",""+p->query_cap_name()+" fires "+possessive(p)+" "+
+	"spring-loaded dart gun at "+mon->query_cap_name()+", hitting "+
+	""+objective(mon)+" in the head!\n",environment(p),p);
+	message("damage",""+p->query_cap_name()+" fires "+
+	""+possessive(p)+" spring-loaded dart gun at you, lodging a small dart "+
+	"into your head! It hurts!\n",mon);
+	dart = new("/u/a/allanon/objects/gun_ammo.c");
+	dart->move(mon,1);
+    p->set_ep((p->query_ep())-50+random(50));
+    call_out("check_ammo",0);
+    mon->kill_ob(p);
+	mon->receive_damage(1500+random(750));
+}   
+
+void check_ammo()
+{
+	ammo--;
+	if(ammo == 0)
+	{
+	loaded = 0;
+    }
+  ammost = ""+ammo+"";
+  this_object()->set_long(wrap("A spring-loaded dart gun. 'reload gun' with "+
+  "a dart, and then 'shoot' a monster. It can also be wielded like a club, "+
+  "though that's hardly its best usage. You can reload a maximum of five "+
+  "darts. Darts can be cloned from /u/a/allanon/objects/gun_ammo.c.\n"+
+  "Spring-loaded dart gun is currently loaded with "+ammost+" darts.\n"));
+} 
